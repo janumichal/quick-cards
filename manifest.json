@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Quick shortcuts",
+    "version": "1.0",
+    "description": "Changes the new tab page to customizable one.",
+
+
+     "chrome_url_overrides" : {
+      "newtab": "index.html"
+    },
+    "permissions":[
+      "bookmarks",
+      "tabs",
+      "storage"
+    ]
+  }
+  
