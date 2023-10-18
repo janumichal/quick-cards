@@ -1,5 +1,5 @@
 <template>
-    <a class="sc" :href="props.url">
+    <a class="sc" :class="isInteractive()" :href="props.url">
         <div class="sc_body">
             <RoundButton class="sc_edit" @click.stop="cardClicked($event)">
                 <img src="../assets/icons/edit.svg">
@@ -11,24 +11,34 @@
 </template>
 
 <script setup lang="ts">
-    import { ShortcutID } from '../Interfaces/ShortcutInterface';
-    import { useShortcutsStore } from '../store/Shortcuts';
+    import { iCard } from '../Interfaces/CardInterface';
+    import { useCardsStore } from '../store/Cards';
     import {useSettingsStore} from "../store/Settings"
     import RoundButton from './default/RoundButton.vue';
 
-    const props = defineProps<ShortcutID>()
-    const scStore = useShortcutsStore()
-    const stStore = useSettingsStore()
+    const props = defineProps<iCard>()
+    const cStore = useCardsStore()
+    const sStore = useSettingsStore()
 
-    function cardClicked(event: Event): void{
+
+    function isInteractive(): string {
+        return props.idx == -1 ? "noninteractive" : ""
+    }
+
+
+    function cardClicked(event: Event): void {
         event.preventDefault()
-        scStore.setEditedIdx(props.idx)
-        stStore.toggleEditWVisibility()
+        cStore.setEditedIdx(props.idx)
+        sStore.toggleEditWVisibility()
     }
 
 </script>
 
 <style lang="scss">
+    .noninteractive{
+        pointer-events: none;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
     .sc{
         width: 200px;
         height: fit-content;
@@ -88,4 +98,4 @@
             -1px  0   0 #000;
         }
     }
-</style>
+</style>../store/Cards../Interfaces/CardInterface

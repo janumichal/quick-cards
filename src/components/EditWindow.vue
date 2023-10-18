@@ -1,17 +1,42 @@
 <template>
     <div>
-        <ModalWindow @toggle-modal="stStore.toggleEditWVisibility()" :visible="stStore.isEditWVisibile()" :key="reloadModal">
+        <ModalWindow @toggle-modal="sStore.toggleEditWVisibility()" :visible="sStore.isEditWVisibile()" :key="reloadModal">
             <template v-slot:header>
                 <div class="title">
-                    {{ !card.url.length ? "Create" : "Edit" }} Shortcut
+                    {{ card.idx == -1 ? "Create" : "Edit" }} Shortcut
                 </div>
             </template>
             <template v-slot:content>
-                Name: 
-                <input type="text" :value="card.name">
-                <br />
-                URL: 
-                <input type="url" :value="card.url">
+                <div class="wrapper">
+                    <div class="content-wrapper">
+                        <div class="text-content-wrapper">
+                            <div class="edit-wrapper">
+                                <div class="subtitle">
+                                    Name 
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="text" v-model="card.name">
+                                </div>
+                            </div>
+                            <div class="edit-wrapper">
+                                <div class="subtitle">
+                                    URL
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="url" v-model="card.url">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-content-wrapper">
+                            <Card :idx="-1" :name="card.name" :url="card.url" class="noninteractable" />
+                        </div>
+                    </div>
+                    <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="save()">
+                        Save
+                    </NormalButton>
+                </div>
+
             </template>
         </ModalWindow>
     </div>
@@ -20,23 +45,34 @@
 
 <script setup lang="ts">
     import ModalWindow from "../components/default/ModalWindow.vue"
+    import Card from "./Card.vue";
+    import NormalButton from "./default/NormalButton.vue";
+
+
     import { ref, watch } from "vue";
     import type { Ref } from "vue"
     import { useSettingsStore } from "../store/Settings";
-    import { useShortcutsStore } from "../store/Shortcuts"
-    import { Shortcut } from "../Interfaces/ShortcutInterface";
+    import { useCardsStore } from "../store/Cards"
+    import { iCard } from "../Interfaces/CardInterface";
+    import { ButtonTypes } from "../enums"
 
-    const stStore = useSettingsStore()
-    const scStore = useShortcutsStore()
-
-    const card: Ref<Shortcut> = ref(scStore.getEditedContents(scStore.getEditedIdx()))
-    
+    const sStore = useSettingsStore()
+    const cStore = useCardsStore()
     const reloadModal: Ref<number> = ref(0)
 
+    const card: Ref<iCard> = ref(cStore.getCardContents(cStore.getEditedIdx()))
+
+
+    function save(): void {
+        cStore.updateCard(card.value)
+        sStore.toggleEditWVisibility()
+    }
+    
+
     watch(
-    () => stStore.isEditWVisibile(),
+    () => sStore.isEditWVisibile(),
         () =>{
-                card.value = scStore.getEditedContents(scStore.getEditedIdx())
+                card.value = cStore.getCardContents(cStore.getEditedIdx())
                 reloadModal.value++
         }
     )
@@ -44,8 +80,91 @@
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
+    @media only screen and (max-width: 592px) {
+        .divider{
+            display: none;
+        }
+        .wrapper{
+            max-width: 300px;
+        }
+    }
     .title{
         align-self: center;
     }
-</style>
+    .wrapper{
+        display: flex;
+        flex-flow: column;
+        width: fit-content;
+        gap: 20px;
+        .save-btn{
+            align-self: flex-end;
+            font-size: 16px;
+            padding: 10px 20px 10px 20px;
+            font-variation-settings: "wght" 500;
+        }
+
+        .content-wrapper{
+            display: flex;
+            flex-flow: row;
+            gap: 20px;
+            align-items: center;
+            min-width: 100%;
+            flex-wrap: wrap;
+            min-height: max-content;
+            justify-content: center;
+    
+            .divider{
+                height: 200px;
+                width: 3px;
+                border-radius: 5px;
+                background-color: #0000003b;
+                box-sizing: border-box;
+            }
+    
+            .text-content-wrapper{
+                min-width: 300px;
+                display: flex;
+                flex-flow: column;
+                gap: 10px;
+        
+                .edit-wrapper{
+                    .subtitle{
+                        width: 100%;
+                        padding-top: 5px;
+                        padding-left: 5px;
+                        padding-bottom: 2px;
+                        box-sizing: border-box;
+                        font-size: 18px;
+                        display: flex;
+                        justify-content: left;
+                        border-radius: 5px;
+                    }
+                    .input-wrapper{
+                        width: 100%;
+            
+                        input{
+                            border: none;
+                            outline: none;
+                            padding: 10px;
+                            box-sizing: border-box;
+                            width: 100%;
+            
+            
+                            font-size: 16px;
+                            color: #c5c5c5;
+                            background-color: #00000041;
+                            border-radius: 4px;
+                        }
+                        
+                    }
+                }
+            }
+            .card-content-wrapper{
+                width: max-content;
+                height: 100%;
+            }
+        }
+    }
+
+</style>../store/Cards../Interfaces/CardInterface

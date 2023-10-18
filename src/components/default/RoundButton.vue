@@ -11,8 +11,7 @@
 
 <style lang="scss" scoped>
     @use "../../scss/Colors" as *;
-    $opacity-static: .4;
-    $opacity-hover: .8;
+    @use "../../scss/Styles/Opacities" as *;
     .button-inner{
         display: flex;
         align-items: center;
@@ -23,11 +22,11 @@
         padding: 4px;
         margin: 0px;
         cursor: pointer;
-        background-color: rgba($default-btn-clr, $opacity-static);
+        background-color: rgba($default-btn, $static);
         transition: background-color ease-in-out 0.2s;
 
         &:hover{
-            background-color: rgba($default-btn-clr, $opacity-hover);
+            background-color: rgba($default-btn, $hover);
         }
     }
 </style>

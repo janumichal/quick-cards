@@ -3,7 +3,7 @@
     <div class="scs_wrapper">
 		<div class="scs">
 			<Card 
-				v-for="sc in scStore.getCards()" 
+				v-for="sc in cStore.getCards()" 
 				:url="sc.url"
 				:name="sc.name"
 				:idx="sc.idx"
@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
-    import { useShortcutsStore } from '../store/Shortcuts'
+    import { useCardsStore } from '../store/Cards'
 	import Card from "../components/Card.vue"
     import EditWindow from "../components/EditWindow.vue"
 
-	const scStore = useShortcutsStore()
+	const cStore = useCardsStore()
 </script>
 
 <style lang="scss" scoped>
@@ -40,4 +40,4 @@
 			margin-bottom: 20px;
 		}
 	}
-</style>
+</style>../store/Cards

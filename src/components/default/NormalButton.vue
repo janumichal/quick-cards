@@ -26,6 +26,7 @@
 
 <style lang="scss" scoped>
     @use "../../scss/Colors" as *;
+    @use "../../scss/Styles/Opacities" as *;
     
     .button{
         display: flex;
@@ -40,37 +41,28 @@
         color: #FFFFFF;
         transition: background-color ease-in-out 0.2s;
     }
-    $opacity-static:.4;
-    $opacity-hover:.8;
+
     .button-normal{
-        background-color: rgba($default-btn-clr, $alpha: $opacity-static);
+        background-color: rgba($default-btn, $alpha: $static);
 
         &:hover{
-            background-color: rgba($default-btn-clr, $alpha: $opacity-hover);
+            background-color: rgba($default-btn, $alpha: $hover);
         }
     }
     .button-warning{
-        background-color: rgba($warning-btn-clr, $alpha: $opacity-static);
+        background-color: rgba($warning-btn, $alpha: $static);
 
         &:hover{
-            background-color: rgba($warning-btn-clr, $alpha: $opacity-hover);
+            background-color: rgba($warning-btn, $alpha: $hover);
         }
     }
-    .button-normal-no-opacity{
-        background-color: $default-btn-nop-clr;
 
-        &:hover{
-            background-color: $default-btn-nop-clr-hover;
-        }
-    }
     .button-submit{
-        background-color: $submit-btn;
+        background-color: rgba($submit-btn, $alpha: $static);
+        color: #000000;
 
         &:hover{
-            background-color: $submit-btn-hover;
-        }
-        &:active{
-            background-color: $submit-btn-active;
+            background-color: rgba($submit-btn, $alpha: $hover);
         }
     }
 </style>

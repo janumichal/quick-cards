@@ -1,22 +1,24 @@
 import { defineStore } from 'pinia'
-import { ref } from "vue"
+import { ref, toRaw } from "vue"
 import type { Ref } from "vue"
-import { Shortcut } from '../Interfaces/ShortcutInterface'
-import { ShortcutID } from '../Interfaces/ShortcutInterface'
+import { iCard } from '../Interfaces/CardInterface'
 
 import default_json from "../assets/default.json"
 
-export const useShortcutsStore = defineStore("shortcuts", () => {
-    const cards: Ref<ShortcutID[]> = ref([])
+export const useCardsStore = defineStore("cards", () => {
+    const cards: Ref<iCard[]> = ref([])
     const editedCardIdx: Ref<number|null> = ref(null)
 
 
-    function getEditedContents(idx: number|null): Shortcut{
+    function updateCard(card: iCard){
+        cards.value[card.idx] = {idx: card.idx, name: card.name, url: card.url}
+    }
+
+    function getCardContents(idx: number|null): iCard{
         if(idx == null){
-            return {url: "", name: ""}
+            return {idx: -1, url: "", name: ""}
         }
-        var card: ShortcutID = cards.value[idx]
-        return {url: card.url, name: card.name}
+        return structuredClone(toRaw(cards.value[idx]))
     }
 
     function setEditedIdx(idx: number): void{
@@ -27,20 +29,20 @@ export const useShortcutsStore = defineStore("shortcuts", () => {
         return editedCardIdx.value
     }
 
-    function getCards(): ShortcutID[] {
+    function getCards(): iCard[] {
         if(!cards.value.length){
             loadPreset(default_json)
         }
         return cards.value
     }
 
-    function loadPreset(preset: Shortcut[]): void{
+    function loadPreset(preset: {url: string, name: string}[]): void{
         for (let index = 0; index < preset.length; index++) {
             const element = preset[index];
             cards.value.push({url: element.url, name: element.name, idx: index})
         }
     }
     return {
-        setEditedIdx, getEditedIdx, getCards, getEditedContents
+        setEditedIdx, getEditedIdx, getCards, getCardContents, updateCard
     }
 })

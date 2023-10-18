@@ -33,9 +33,6 @@
 
     const modalVisisble = ref(props.visible)
 
-    /**
-     * Toggles the modal window open/close
-     */
     function onClickClose(){
         modalVisisble.value = !modalVisisble.value
         nextTick(() => {
@@ -57,11 +54,13 @@
         left: 0;
         height: 100%;
         width: 100%;
-        backdrop-filter: blur(4px);
+        background-color: rgba(0, 0, 0, 0.498);
 
         .modal-inner{
             width: fit-content;
             height: fit-content;
+            max-width: 100%;
+            min-width: min-content;
             background-color: $primary-bg;
             display: flex;
             flex-direction: column;
