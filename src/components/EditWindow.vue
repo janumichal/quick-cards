@@ -32,9 +32,14 @@
                             <Card :idx="-1" :name="card.name" :url="card.url" class="noninteractable" />
                         </div>
                     </div>
-                    <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="save()">
-                        Save
-                    </NormalButton>
+                    <div class="button-wrapper">
+                        <NormalButton class="delete-btn" :btn-type="ButtonTypes.Warning" @click="deleteCard()">
+                            Delete
+                        </NormalButton>
+                        <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="saveCard()">
+                            Save
+                        </NormalButton>
+                    </div>
                 </div>
 
             </template>
@@ -49,8 +54,7 @@
     import NormalButton from "./default/NormalButton.vue";
 
 
-    import { ref, watch } from "vue";
-    import type { Ref } from "vue"
+    import { ref, watch, Ref } from "vue";
     import { useSettingsStore } from "../store/Settings";
     import { useCardsStore } from "../store/Cards"
     import { iCard } from "../Interfaces/CardInterface";
@@ -60,21 +64,24 @@
     const cStore = useCardsStore()
     const reloadModal: Ref<number> = ref(0)
 
-    const card: Ref<iCard> = ref(cStore.getCardContents(cStore.getEditedIdx()))
+    const card: Ref<iCard> = ref(cStore.getEditedCard())
 
+    function deleteCard(): void {
+        cStore.deleteCard(card.value)
+        sStore.toggleEditWVisibility()
+    }
 
-    function save(): void {
+    function saveCard(): void {
         cStore.updateCard(card.value)
         sStore.toggleEditWVisibility()
     }
-    
 
     watch(
-    () => sStore.isEditWVisibile(),
-        () =>{
-                card.value = cStore.getCardContents(cStore.getEditedIdx())
-                reloadModal.value++
-        }
+        () => sStore.isEditWVisibile(),
+            () =>{
+                    card.value = cStore.getEditedCard()
+                    reloadModal.value++
+            }
     )
 
 </script>
@@ -97,11 +104,15 @@
         flex-flow: column;
         width: fit-content;
         gap: 20px;
-        .save-btn{
-            align-self: flex-end;
+        .button-wrapper{
             font-size: 16px;
-            padding: 10px 20px 10px 20px;
             font-variation-settings: "wght" 500;
+            display: flex;
+            justify-content: space-between;
+            .save-btn, .delete-btn{
+                padding: 10px 20px 10px 20px;
+            }
+
         }
 
         .content-wrapper{

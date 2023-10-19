@@ -14,7 +14,7 @@
         },
         id: {
             type: String,
-            default: ""
+            default: "default"
         }
     })
     const isToggled = ref(props.modelValue)

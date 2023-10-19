@@ -51,7 +51,8 @@
     }
     .button-warning{
         background-color: rgba($warning-btn, $alpha: $static);
-
+        color: #000000;
+        
         &:hover{
             background-color: rgba($warning-btn, $alpha: $hover);
         }
