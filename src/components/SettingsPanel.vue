@@ -1,10 +1,10 @@
 <template>
-    <div class="panel-wrapper" v-if="!sStore.isSettingsBVisible()">
+    <div class="panel-wrapper" v-if="!sStore.isSettingsButtonVisibile">
         <Transition name="settings-panel"
         @after-leave="sStore.toggleSettingsBVisibility()"
         @before-leave="tStore.addTransition()" 
         @after-enter="tStore.removeTransition()">
-            <div class="panel" v-if="sStore.isSettingsWVisibile()">
+            <div class="panel" v-if="sStore.isSettingsWindowVisible">
                 <div class="header">
                     <RoundButton @click="sStore.toggleSettingsWVisibility()"/>
                     <div class="title">
@@ -17,7 +17,23 @@
                         <div class="text">
                             Disable "Add Card" button
                         </div>
-                        <ToggleButton :id="'addCard'" v-model="sStore.addCardButtonVisible"/>
+                        <ToggleButton :id="'addCard'" v-model="sStore.isAddCardButtonVisible"/>
+                    </div>
+                    <div class="option">
+                        <div class="text">
+                            Add background image
+                        </div>
+                        <NormalButton :btn-type="ButtonTypes.Normal" @click="">
+                            Choose
+                        </NormalButton>
+                    </div>
+                    <div class="option">
+                        <div class="text">
+                            Remove database
+                        </div>
+                        <NormalButton :btn-type="ButtonTypes.Warning" @click="cStore.removeDatabases()">
+                            Delete
+                        </NormalButton>
                     </div>
                 </div>
             </div>
@@ -31,12 +47,18 @@
 <script setup lang="ts">
 import RoundButton from './default/RoundButton.vue';
 import ToggleButton from './default/ToggleButton.vue';
+import NormalButton from './default/NormalButton.vue';
 
+import { ButtonTypes } from '../enums';
 import { useSettingsStore } from "../store/Settings"
 import { useTransitionsStore } from '../store/Transitions';
+import { useCardsStore } from '../store/Cards';
 
 const sStore = useSettingsStore()
 const tStore = useTransitionsStore()
+const cStore = useCardsStore()
+
+
 
 </script>
 
@@ -87,8 +109,14 @@ const tStore = useTransitionsStore()
                 }
             }
             .content{
+                display: flex;
+                flex-flow: column;
+                gap: 20px;
                 .option{
-
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    align-items: center;
                 }
             }
         }

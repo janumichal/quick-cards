@@ -11,10 +11,10 @@
 </template>
 
 <script setup lang="ts">
-    import { iCard } from '../Interfaces/CardInterface';
-    import { useCardsStore } from '../store/Cards';
-    import {useSettingsStore} from "../store/Settings"
-    import RoundButton from './default/RoundButton.vue';
+import { iCard } from '../Interfaces/CardInterface';
+import { useCardsStore } from '../store/Cards';
+import {useSettingsStore} from "../store/Settings"
+import RoundButton from './default/RoundButton.vue';
 
     const props = defineProps<iCard>()
     const cStore = useCardsStore()
@@ -27,9 +27,10 @@
 
 
     function cardClicked(event: Event): void {
-        event.preventDefault()
         cStore.setEditedIdx(props.idx)
+        console.log(cStore.getEditedCard());
         sStore.toggleEditWVisibility()
+        event.preventDefault()
     }
 
 </script>

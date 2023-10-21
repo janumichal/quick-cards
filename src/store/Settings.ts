@@ -4,37 +4,32 @@ import type { Ref } from "vue"
 
 
 export const useSettingsStore = defineStore("settings", () => {
-    const editWindowVisible: Ref<boolean> = ref(false)
-    const settingsWindowVisible: Ref<boolean> = ref(false)
-    const settingsButtonVisibile: Ref<boolean> = ref(!settingsWindowVisible.value)
-    const addCardButtonVisible: Ref<boolean> = ref(true)
+    const isEditWindowVisible: Ref<boolean> = ref(false)
+    const isSettingsWindowVisible: Ref<boolean> = ref(false)
+    const isSettingsButtonVisibile: Ref<boolean> = ref(!isSettingsWindowVisible.value)
+    const isAddCardButtonVisible: Ref<boolean> = ref(true)
 
     function toggleSettingsBVisibility():void{
-        settingsButtonVisibile.value = !settingsButtonVisibile.value
-    }
-
-    function isSettingsBVisible():boolean{
-        return settingsButtonVisibile.value
+        isSettingsButtonVisibile.value = !isSettingsButtonVisibile.value
     }
 
     function toggleSettingsWVisibility():void{
-        settingsWindowVisible.value = !settingsWindowVisible.value
+        isSettingsWindowVisible.value = !isSettingsWindowVisible.value
 	}
 
-    function isSettingsWVisibile(): boolean{
-        return settingsWindowVisible.value
-    }
-
     function toggleEditWVisibility(): void{
-        editWindowVisible.value = !editWindowVisible.value
+        isEditWindowVisible.value = !isEditWindowVisible.value
     }
 
-    function isEditWVisibile(): boolean{
-        return editWindowVisible.value
+    function init():void{
+        isEditWindowVisible.value = false
+        isSettingsWindowVisible.value = false
+        isSettingsButtonVisibile.value = !isSettingsWindowVisible.value
+        isAddCardButtonVisible.value = true
     }
 
     return {
-        addCardButtonVisible,
-        toggleEditWVisibility, isEditWVisibile, toggleSettingsWVisibility, isSettingsWVisibile, toggleSettingsBVisibility, isSettingsBVisible
+        isAddCardButtonVisible, isSettingsWindowVisible, isEditWindowVisible, isSettingsButtonVisibile,
+        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init
     }
 })

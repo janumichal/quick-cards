@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ModalWindow @toggle-modal="sStore.toggleEditWVisibility()" :visible="sStore.isEditWVisibile()" :key="reloadModal">
+        <ModalWindow @toggle-modal="sStore.toggleEditWVisibility()" :visible="sStore.isEditWindowVisible" :key="reloadModal">
             <template v-slot:header>
                 <div class="title">
                     {{ card.idx == -1 ? "Create" : "Edit" }} Shortcut
@@ -15,7 +15,7 @@
                                     Name 
                                 </div>
                                 <div class="input-wrapper">
-                                    <input type="text" v-model="card.name">
+                                    <input type="text" id="cd_name" v-model="card.name">
                                 </div>
                             </div>
                             <div class="edit-wrapper">
@@ -23,7 +23,7 @@
                                     URL
                                 </div>
                                 <div class="input-wrapper">
-                                    <input type="url" v-model="card.url">
+                                    <input type="url" id="cd_url" v-model="card.url">
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                             Delete
                         </NormalButton>
                         <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="saveCard()">
-                            Save
+                            {{ card.idx == -1 ? "Create" : "Save" }}
                         </NormalButton>
                     </div>
                 </div>
@@ -77,10 +77,10 @@
     }
 
     watch(
-        () => sStore.isEditWVisibile(),
+        () => sStore.isEditWindowVisible,
             () =>{
-                    card.value = cStore.getEditedCard()
-                    reloadModal.value++
+                card.value = cStore.getEditedCard()
+                reloadModal.value++
             }
     )
 

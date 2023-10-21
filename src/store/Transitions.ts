@@ -35,7 +35,11 @@ export const useTransitionsStore = defineStore("transitions", () => {
         })
     }
 
+    function init():void{
+        transitionCount.value = 0
+    }
+
     return {
-        inTransition, addTransition, removeTransition, waitForTransitions
+        inTransition, addTransition, removeTransition, waitForTransitions, init
     }
 })

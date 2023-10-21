@@ -6,43 +6,63 @@
 			@after-leave="sStore.toggleSettingsWVisibility()"
 			@before-leave="tStore.addTransition()"
 			@after-enter="tStore.removeTransition()">
-			<RoundButton class="settings" @click="sStore.toggleSettingsBVisibility()" v-if="sStore.isSettingsBVisible()">
+			<RoundButton class="settings" @click="sStore.toggleSettingsBVisibility()" v-if="sStore.isSettingsButtonVisibile">
 				<img src="../assets/icons/settings.svg"/>
 			</RoundButton>
 		</Transition>
-		<div class="wrapper">
+		<div class="home-wrapper">
 			<div class="cards-wrapper">
-				<div class="cards">
-					<Card 
-						v-for="sc in cStore.cards" 
-						:url="sc.url"
-						:name="sc.name"
-						:idx="sc.idx"
-						:key="sc.idx"
-						/>
-				</div>
+					<Draggable 
+						v-model="cStore.cards"
+						tag="div"
+						class="cards"
+						item-key="idx"
+						:animation="200"
+						:disabled="false"
+						:ghostClass="'ghost'"
+						@end="cStore.renewDB()"
+						>
+						<template #item="{ element: card }">
+							<Card 
+							:url="card.url"
+							:name="card.name"
+							:idx="card.idx"
+							:key="card.idx"
+							class="d_card"
+							/>
+						</template>
+						<template #footer>
+							<AddCard draggable="false" v-if="sStore.isAddCardButtonVisible"/>
+						</template>
+					</Draggable>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+import Draggable from 'vuedraggable'
+
 import { useCardsStore } from '../store/Cards'
 import { useTransitionsStore } from '../store/Transitions';
 import { useSettingsStore } from '../store/Settings';
 
 import Card from "../components/Card.vue"
 import EditWindow from "../components/EditWindow.vue"
+import AddCard from '../components/AddCard.vue';
 import RoundButton from '../components/default/RoundButton.vue';
 import SettingsPanel from "../components/SettingsPanel.vue"
-import { onBeforeMount } from 'vue';
 
 const cStore = useCardsStore()
 const tStore = useTransitionsStore()
 const sStore = useSettingsStore()
 
+
 onBeforeMount(()=> {
 	cStore.init()
+	sStore.init()
+	tStore.init()
 })
 
 </script>
@@ -70,13 +90,13 @@ onBeforeMount(()=> {
 		height: 100vh;
     	width: 100%;
 		overflow: auto;
-		.wrapper{
+		.home-wrapper{
 			height: fit-content;
 			width: 100%;
 			display: flex;
-			justify-content: center;
 			align-items: center;
 			flex-flow: column;
+			align-self: center;
 			.cards-wrapper {
 				background-color: transparent;
 				min-height: max-content;
@@ -96,6 +116,9 @@ onBeforeMount(()=> {
 					justify-items: center;
 					margin-top: 20px;
 					margin-bottom: 20px;
+					.ghost {
+						opacity: 0.5;
+					}
 				}
 			}
 		}	

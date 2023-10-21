@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "pinia": "^2.1.7",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.19",
