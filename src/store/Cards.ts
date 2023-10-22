@@ -45,7 +45,9 @@ export const useCardsStore = defineStore("cards", () => {
 
     function getCardContents(idx: number): iCard{
         if(idx == -1){
-            return {idx: -1, url: "", name: ""}
+            console.log("opening edit window with null img");
+            
+            return {idx: -1, url: "", name: "", image: null }
         }
         return structuredClone(toRaw(cards.value[idx]))
     }
@@ -59,9 +61,9 @@ export const useCardsStore = defineStore("cards", () => {
         return editedCardIdx.value
     }
 
-    function loadPreset(preset: iCard[]): void{
+    function loadPreset(preset: {url:string, name: string}[]): void{
         for (let index = 0; index < preset.length; index++) {
-            cards.value.push(preset[index])
+            cards.value.push({...{idx: index}, ...preset[index], ...{image: null}})
         }
     }
 
@@ -84,7 +86,7 @@ export const useCardsStore = defineStore("cards", () => {
             const tx = db.transaction("cards", "readwrite")
             const store = tx.objectStore("cards")
             cards.value.forEach(element => {
-                store.put({idx: element.idx, url: element.url, name: element.name})
+                store.put({idx: element.idx, url: element.url, name: element.name, image: element.image})
             })
             tx.oncomplete = () => {
                 localStorage.setItem("hasCustom", "true")
@@ -122,10 +124,10 @@ export const useCardsStore = defineStore("cards", () => {
             const request = indexedDB.open("card-layout");
             request.onupgradeneeded = () => {
                 const db:IDBDatabase = request.result;
-                const store = db.createObjectStore("cards", {keyPath: "idx"});
-                store.createIndex("by_url", "url");
-                store.createIndex("by_name", "name");
-                // store.createIndex("by_image", "image")
+                const store = db.createObjectStore("cards", {keyPath: "idx"})
+                store.createIndex("by_url", "url")
+                store.createIndex("by_name", "name")
+                store.createIndex("by_image", "image")
             }
             request.onsuccess = () => {
                 resolve(request.result)

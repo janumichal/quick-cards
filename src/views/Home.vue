@@ -27,6 +27,7 @@
 							:url="card.url"
 							:name="card.name"
 							:idx="card.idx"
+							:image="card.image"
 							:key="card.idx"
 							class="d_card"
 							/>

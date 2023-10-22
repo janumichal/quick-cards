@@ -29,7 +29,7 @@
                         </div>
                         <div class="divider"></div>
                         <div class="card-content-wrapper">
-                            <Card :idx="-1" :name="card.name" :url="card.url" class="noninteractable" />
+                            <Card @emitImage="tmpImage = $event" :idx="-1" :name="card.name" :url="card.url" :image="card.image"/>
                         </div>
                     </div>
                     <div class="button-wrapper">
@@ -63,8 +63,10 @@
     const sStore = useSettingsStore()
     const cStore = useCardsStore()
     const reloadModal: Ref<number> = ref(0)
-
     const card: Ref<iCard> = ref(cStore.getEditedCard())
+    const tmpImage: Ref<File|null> = ref(card.value.image)
+
+
 
     function deleteCard(): void {
         cStore.deleteCard(card.value)
@@ -72,6 +74,7 @@
     }
 
     function saveCard(): void {
+        card.value.image = tmpImage.value
         cStore.updateCard(card.value)
         sStore.toggleEditWVisibility()
     }
