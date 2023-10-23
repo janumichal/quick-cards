@@ -21,12 +21,34 @@
                     </div>
                     <div class="option">
                         <div class="text">
+                            Drag-and-drop
+                        </div>
+                        <ToggleButton :id="'dragAndDrop'" v-model="sStore.isDragAndDropEnabled"/>
+                    </div>
+                    <div class="option">
+                        <div class="text">
+                            Limit columns
+                        </div>
+                        <ToggleButton :id="'limit-columns'" v-model="sStore.isLimitColumnsEnabled"/>
+                    </div>
+                    <div class="option" v-if="sStore.isLimitColumnsEnabled">
+                        <div class="text">
+                            Number of columns
+                        </div>
+                        <NumberInput :number="sStore.columnCount" :min="1" :max="100" @input-number-model="setColumnNumber($event)" />
+                    </div>
+                    <div class="option">
+                        <div class="text">
                             Add background image
                         </div>
                         <NormalButton :btn-type="ButtonTypes.Normal" @click="">
                             Choose
                         </NormalButton>
                     </div>
+
+
+
+
                     <div class="option">
                         <div class="text">
                             Remove database
@@ -48,6 +70,7 @@
 import RoundButton from './default/RoundButton.vue';
 import ToggleButton from './default/ToggleButton.vue';
 import NormalButton from './default/NormalButton.vue';
+import NumberInput from "./default/NumberInput.vue"
 
 import { ButtonTypes } from '../enums';
 import { useSettingsStore } from "../store/Settings"
@@ -58,7 +81,9 @@ const sStore = useSettingsStore()
 const tStore = useTransitionsStore()
 const cStore = useCardsStore()
 
-
+function setColumnNumber(event: number){
+    sStore.columnCount = event
+}
 
 </script>
 

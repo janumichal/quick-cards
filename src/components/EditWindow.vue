@@ -75,6 +75,7 @@
 
     function saveCard(): void {
         card.value.image = tmpImage.value
+        tmpImage.value = null
         cStore.updateCard(card.value)
         sStore.toggleEditWVisibility()
     }

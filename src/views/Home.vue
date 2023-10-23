@@ -16,9 +16,10 @@
 						v-model="cStore.cards"
 						tag="div"
 						class="cards"
+						id="cards-grid"
 						item-key="idx"
 						:animation="200"
-						:disabled="false"
+						:disabled="!sStore.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
 						@end="cStore.renewDB()"
 						>
@@ -42,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { Ref, onBeforeMount, ref, watch} from 'vue';
 import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
@@ -59,12 +60,42 @@ const cStore = useCardsStore()
 const tStore = useTransitionsStore()
 const sStore = useSettingsStore()
 
+const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
+
+
+function setWrapperWidth(columns?: number):void{
+	cards_element.value = document.getElementById("cards-grid")
+	if(cards_element.value != null){
+		if(columns === undefined){
+			cards_element.value.style.width = `fit-content`
+		}else{
+			var width:number = 200
+			var gap:number = 10
+			if(columns != undefined){
+				cards_element.value.style.width = `min(${width*columns + gap*(columns-1)}px,100%`
+			}
+		}
+	}
+}
 
 onBeforeMount(()=> {
 	cStore.init()
 	sStore.init()
 	tStore.init()
 })
+
+watch(
+        () => [sStore.columnCount, sStore.isLimitColumnsEnabled],
+            () =>{
+				if(sStore.isLimitColumnsEnabled){
+					setWrapperWidth(sStore.columnCount)
+				}else{
+					setWrapperWidth()
+				}
+            }
+)
+
+
 
 </script>
 

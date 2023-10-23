@@ -45,8 +45,6 @@ export const useCardsStore = defineStore("cards", () => {
 
     function getCardContents(idx: number): iCard{
         if(idx == -1){
-            console.log("opening edit window with null img");
-            
             return {idx: -1, url: "", name: "", image: null }
         }
         return structuredClone(toRaw(cards.value[idx]))

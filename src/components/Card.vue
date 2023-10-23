@@ -74,7 +74,6 @@ import { ref, Ref, onBeforeMount, watch } from 'vue';
         setImage(null)
         emitImage(null)
         loadedImage.value = false
-        console.log(loadedImage.value);
         event.preventDefault()
     }
 
@@ -85,8 +84,6 @@ import { ref, Ref, onBeforeMount, watch } from 'vue';
     }
 
     onBeforeMount(() => {
-        console.log(props);
-        
         loadedImage.value = files.value || props.image != null ? true : false
         setImage(props.image)
     })
@@ -94,8 +91,7 @@ import { ref, Ref, onBeforeMount, watch } from 'vue';
     watch(
         () => cStore.cards[props.idx],
             () =>{
-                console.log("lala");
-                
+                setImage(props.image)
             }
     )
 
