@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ModalWindow @toggle-modal="sStore.toggleEditWVisibility()" :visible="sStore.isEditWindowVisible" :key="reloadModal">
+        <ModalWindow v-model:modal-visibility="sStore.isEditWindowVisible" :model-visible="sStore.isEditWindowVisible">
             <template v-slot:header>
                 <div class="title">
                     {{ card.idx == -1 ? "Create" : "Edit" }} Shortcut
@@ -68,7 +68,6 @@ import { ButtonTypes } from "../enums"
 
 const sStore = useSettingsStore()
 const cStore = useCardsStore()
-const reloadModal: Ref<number> = ref(0)
 const card: Ref<iCard> = ref(cStore.getEditedCard())
 const tmpImage: Ref<File|null> = ref(card.value.image)
 
@@ -89,7 +88,6 @@ watch(
     () => sStore.isEditWindowVisible,
     () =>{
         card.value = cStore.getEditedCard()
-        reloadModal.value++
     }
 )
 

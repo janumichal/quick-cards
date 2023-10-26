@@ -1,6 +1,6 @@
 <template>
     <Transition name="modal" appear>
-        <div class="modal-wrapper" v-if="modalVisisble" @click.self="onClickClose()">
+        <div class="modal-wrapper" v-if="modalVisibility" @click.self="onClickClose()">
             <div class="modal-inner">
                 <div class="modal-header">
                     <RoundButton @click="onClickClose()"/>
@@ -19,26 +19,28 @@
 </template>
 
 <script setup lang="ts">
-    import RoundButton from './RoundButton.vue';
-    import { ref, nextTick } from "vue"
+import { computed } from 'vue';
+import RoundButton from './RoundButton.vue';
 
-    const emit = defineEmits(['toggleModal'])
+const emit = defineEmits(['update:modalVisibility'])
+const props = defineProps({
+    modelVisible: Boolean
+})
 
-    const props = defineProps({
-        visible: {
-            type: Boolean,
-            required: true
-        }
-    })
-
-    const modalVisisble = ref(props.visible)
-
-    function onClickClose(){
-        modalVisisble.value = !modalVisisble.value
-        nextTick(() => {
-            emit("toggleModal", modalVisisble.value)
-        })
+const modalVisibility = computed({
+    get(){
+        return props.modelVisible
+    },
+    set(value){
+        emit("update:modalVisibility", value)
     }
+})
+
+
+function onClickClose(){
+    modalVisibility.value = !modalVisibility.value
+}
+
 </script>
 
 <style lang="scss" scoped>

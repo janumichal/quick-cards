@@ -37,7 +37,7 @@
                         <div class="text">
                             Number of columns
                         </div>
-                        <NumberInput :number="sStore.columnCount" :min="1" :max="100" @input-number-model="setColumnNumber($event)" />
+                        <NumberInput :min="1" :max="100" v-model:input-number="sStore.columnCount" />
                     </div>
 
                     <div class="option">
@@ -64,14 +64,14 @@
 
 
 
-                    <div class="option">
+                    <!-- <div class="option">
                         <div class="text">
                             Remove database
                         </div>
                         <NormalButton :btn-type="ButtonTypes.Warning" @click="cStore.removeDatabases()">
                             Delete
                         </NormalButton>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </Transition>
@@ -91,12 +91,12 @@ import { useFileDialog } from '@vueuse/core'
 import { ButtonTypes } from '../enums';
 import { useSettingsStore } from "../store/Settings"
 import { useTransitionsStore } from '../store/Transitions';
-import { useCardsStore } from '../store/Cards';
+// import { useCardsStore } from '../store/Cards';
 import { onMounted, watch } from 'vue';
 
 const sStore = useSettingsStore()
 const tStore = useTransitionsStore()
-const cStore = useCardsStore()
+// const cStore = useCardsStore()
 
 const {open, reset, onChange} = useFileDialog({
     accept: "image/jpg, image/png, image/jpeg",
@@ -133,10 +133,6 @@ function setBackgroundImage(file: File|null):void{
 function setBackgroundColor(color:string):void{
     const body:HTMLElement = document.body
     body.style.backgroundColor = color
-}
-
-function setColumnNumber(event: number){
-    sStore.columnCount = event
 }
 
 watch(

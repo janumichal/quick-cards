@@ -1,7 +1,7 @@
 {
   "name": "quick-shortcuts",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 8080",
@@ -14,8 +14,7 @@
     "@vueuse/core": "^10.5.0",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
-    "vuedraggable": "^4.1.0",
-    "web-ext": "^7.8.0"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

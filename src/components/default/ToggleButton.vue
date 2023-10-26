@@ -18,13 +18,10 @@
         }
     })
     const isToggled = ref(props.modelValue)
-    const emits = defineEmits(["update:modelValue"])
+    const emit = defineEmits(["update:modelValue"])
 
-    /**
-     * On being toggled emits event to the parent
-     */
     function toggle(){
-        emits("update:modelValue", isToggled.value)
+        emit("update:modelValue", isToggled.value)
     }
 
 </script>

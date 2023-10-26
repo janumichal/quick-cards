@@ -19,7 +19,7 @@ import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import {useSettingsStore} from "../store/Settings"
 import RoundButton from './default/RoundButton.vue';
-import { ref, Ref, onMounted, watch } from 'vue';
+import { ref, Ref, onMounted, watch, nextTick } from 'vue';
 
 const props = defineProps<iCard>()
 const cStore = useCardsStore()
@@ -65,6 +65,8 @@ function setImage(file: File|null):void{
 function setColor(color: string):void{
     if(card_background.value != undefined){
         card_background.value.style.backgroundColor = color
+        console.log("lala2");
+        
     }
 }
 
@@ -100,8 +102,11 @@ onMounted(() => {
 watch(
     () => cStore.cards[props.idx],
     () =>{
-        setImage(props.image)
-        setColor(props.color)
+        nextTick(() => {
+            setImage(props.image)
+            setColor(props.color)
+            console.log(props.color);
+        })
     }
 )
 

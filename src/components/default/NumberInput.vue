@@ -14,9 +14,10 @@
 
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
+import { computed } from 'vue';
 
-const emit = defineEmits(['inputNumberModel'])
+
+const emit = defineEmits(['update:inputNumber'])
 const props = defineProps({
     min: {
         type: Number,
@@ -30,21 +31,27 @@ const props = defineProps({
         type: Number,
         default: 1
     },
-    number: {
+    inputNumber: {
         type: Number,
-        required: true
-    },
+        default: 6
+    }
 })
-const inputNumber: Ref<number> = ref(props.number)
+
+const inputNumber = computed({
+    get(){
+        return props.inputNumber
+    },
+    set(value){
+        emit("update:inputNumber", value)
+    }
+})
 
 function increase():void{
     inputNumber.value++
-    emit("inputNumberModel", inputNumber.value)
 }
 
 function decrease():void{
     inputNumber.value--
-    emit("inputNumberModel", inputNumber.value)
 }
 </script>
 
