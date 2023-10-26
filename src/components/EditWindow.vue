@@ -29,7 +29,13 @@
                         </div>
                         <div class="divider"></div>
                         <div class="card-content-wrapper">
-                            <Card @emitImage="tmpImage = $event" :idx="-1" :name="card.name" :url="card.url" :image="card.image"/>
+                            <Card @emitImage="tmpImage = $event" :idx="-1" :name="card.name" :url="card.url" :image="card.image" :color="card.color"/>
+                            <div class="edit-color-wrapper">
+                                <div>
+                                    Card color
+                                </div>
+                                <input class="edit-color-picker" type="color" v-model="cStore.editedCardColor">
+                            </div>
                         </div>
                     </div>
                     <div class="button-wrapper">
@@ -49,49 +55,59 @@
 
 
 <script setup lang="ts">
-    import ModalWindow from "../components/default/ModalWindow.vue"
-    import Card from "./Card.vue";
-    import NormalButton from "./default/NormalButton.vue";
+import ModalWindow from "../components/default/ModalWindow.vue"
+import Card from "./Card.vue";
+import NormalButton from "./default/NormalButton.vue";
 
 
-    import { ref, watch, Ref } from "vue";
-    import { useSettingsStore } from "../store/Settings";
-    import { useCardsStore } from "../store/Cards"
-    import { iCard } from "../Interfaces/CardInterface";
-    import { ButtonTypes } from "../enums"
+import { ref, watch, Ref } from "vue";
+import { useSettingsStore } from "../store/Settings";
+import { useCardsStore } from "../store/Cards"
+import { iCard } from "../Interfaces/CardInterface";
+import { ButtonTypes } from "../enums"
 
-    const sStore = useSettingsStore()
-    const cStore = useCardsStore()
-    const reloadModal: Ref<number> = ref(0)
-    const card: Ref<iCard> = ref(cStore.getEditedCard())
-    const tmpImage: Ref<File|null> = ref(card.value.image)
+const sStore = useSettingsStore()
+const cStore = useCardsStore()
+const reloadModal: Ref<number> = ref(0)
+const card: Ref<iCard> = ref(cStore.getEditedCard())
+const tmpImage: Ref<File|null> = ref(card.value.image)
 
+function deleteCard(): void {
+    cStore.deleteCard(card.value)
+    sStore.toggleEditWVisibility()
+}
 
+function saveCard(): void {
+    card.value.image = tmpImage.value
+    tmpImage.value = null
+    card.value.color = cStore.editedCardColor
+    cStore.updateCard(card.value)
+    sStore.toggleEditWVisibility()
+}
 
-    function deleteCard(): void {
-        cStore.deleteCard(card.value)
-        sStore.toggleEditWVisibility()
+watch(
+    () => sStore.isEditWindowVisible,
+    () =>{
+        card.value = cStore.getEditedCard()
+        reloadModal.value++
     }
+)
 
-    function saveCard(): void {
-        card.value.image = tmpImage.value
-        tmpImage.value = null
-        cStore.updateCard(card.value)
-        sStore.toggleEditWVisibility()
+watch(
+    () => card.value,
+    () =>{
+        if(card.value != undefined){
+            cStore.editedCardColor = card.value.color
+        }
     }
-
-    watch(
-        () => sStore.isEditWindowVisible,
-            () =>{
-                card.value = cStore.getEditedCard()
-                reloadModal.value++
-            }
-    )
+)
 
 </script>
 
 
 <style lang="scss" scoped>
+    @use "../scss/Colors/Colors" as *;
+
     @media only screen and (max-width: 592px) {
         .divider{
             display: none;
@@ -164,8 +180,6 @@
                             padding: 10px;
                             box-sizing: border-box;
                             width: 100%;
-            
-            
                             font-size: 16px;
                             color: #c5c5c5;
                             background-color: #00000041;
@@ -178,8 +192,52 @@
             .card-content-wrapper{
                 width: max-content;
                 height: 100%;
+                display: flex;
+                flex-flow: column;
+                gap: 10px;
+                .edit-color-wrapper{
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+
+                    input[type="color"]{
+                        appearance: none;
+                        -moz-appearance: none;
+                        -webkit-appearance: none;
+                        background: none;
+                        border: 0;
+                        outline: 2px $default-btn solid;
+                        cursor: pointer;
+                        padding: 0;
+                        border-radius: 5px;
+                        transition: all ease-in-out 0.2s;
+
+                        &:hover{
+                            outline: 2px #222027 solid;
+                        }
+                    }
+                    ::-webkit-color-swatch-wrapper {
+                        padding: 0;    
+                    }
+
+                    ::-webkit-color-swatch{
+                        border: 0;
+                        border-radius: 0;
+                    }
+
+                    ::-moz-color-swatch,
+                    ::-moz-focus-inner{
+                        border: 0;
+                    }
+
+                    ::-moz-focus-inner{
+                        padding: 0;
+                    }
+                }
             }
         }
     }
 
-</style>../store/Cards../Interfaces/CardInterface
+</style>

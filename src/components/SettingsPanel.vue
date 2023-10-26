@@ -1,5 +1,5 @@
 <template>
-    <div class="panel-wrapper" v-if="!sStore.isSettingsButtonVisibile">
+    <div class="panel-wrapper" v-if="!sStore.isSettingsButtonVisibile" @click.self="sStore.toggleSettingsWVisibility()">
         <Transition name="settings-panel"
         @after-leave="sStore.toggleSettingsBVisibility()"
         @before-leave="tStore.addTransition()" 
@@ -25,24 +25,39 @@
                         </div>
                         <ToggleButton :id="'dragAndDrop'" v-model="sStore.isDragAndDropEnabled"/>
                     </div>
+
+
                     <div class="option">
                         <div class="text">
                             Limit columns
                         </div>
                         <ToggleButton :id="'limit-columns'" v-model="sStore.isLimitColumnsEnabled"/>
                     </div>
-                    <div class="option" v-if="sStore.isLimitColumnsEnabled">
+                    <div class="option sub" v-if="sStore.isLimitColumnsEnabled">
                         <div class="text">
                             Number of columns
                         </div>
                         <NumberInput :number="sStore.columnCount" :min="1" :max="100" @input-number-model="setColumnNumber($event)" />
                     </div>
+
                     <div class="option">
                         <div class="text">
-                            Add background image
+                            Enable background image
                         </div>
-                        <NormalButton :btn-type="ButtonTypes.Normal" @click="">
-                            Choose
+                        <ToggleButton :id="'enableBgImage'" v-model="sStore.isBackgroundImageEnabled"/>
+                    </div>
+                    <div class="option sub" v-if="!sStore.isBackgroundImageEnabled">
+                        <div class="text">
+                            Background color
+                        </div>
+                        <input class="input-color" type="color" v-model="sStore.backgroundColor"> 
+                    </div>
+                    <div class="option sub" v-if="sStore.isBackgroundImageEnabled">
+                        <div class="text">
+                            Background image
+                        </div>
+                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.backgroundImage != null ? resetBackgroundImage() : open()">
+                            {{ sStore.backgroundImage != null ? "Remove" : "Select" }}
                         </NormalButton>
                     </div>
 
@@ -72,18 +87,83 @@ import ToggleButton from './default/ToggleButton.vue';
 import NormalButton from './default/NormalButton.vue';
 import NumberInput from "./default/NumberInput.vue"
 
+import { useFileDialog } from '@vueuse/core'
 import { ButtonTypes } from '../enums';
 import { useSettingsStore } from "../store/Settings"
 import { useTransitionsStore } from '../store/Transitions';
 import { useCardsStore } from '../store/Cards';
+import { onMounted, watch } from 'vue';
 
 const sStore = useSettingsStore()
 const tStore = useTransitionsStore()
 const cStore = useCardsStore()
 
+const {open, reset, onChange} = useFileDialog({
+    accept: "image/jpg, image/png, image/jpeg",
+    multiple: false
+})
+
+function resetBackgroundImage():void{
+    reset()
+    sStore.backgroundImage = null
+    setBackgroundImage(sStore.backgroundImage)
+}
+
+onChange((files:FileList|null) => {
+    if(files != null){
+        sStore.backgroundImage = files[0]
+        setBackgroundImage(sStore.backgroundImage)
+    }
+})
+
+function setBackgroundImage(file: File|null):void{
+    const body:HTMLElement = document.body
+    if(file == null){
+        body.style.backgroundImage = "none"
+    }else{
+        const reader:FileReader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            body.style.backgroundImage = `url(${reader.result})`
+            sStore.updateBGDatabase()
+        }
+    }
+}
+
+function setBackgroundColor(color:string):void{
+    const body:HTMLElement = document.body
+    body.style.backgroundColor = color
+}
+
 function setColumnNumber(event: number){
     sStore.columnCount = event
 }
+
+watch(
+    () => sStore.backgroundColor,
+    () =>{
+        const body:HTMLElement = document.body
+        body.style.backgroundColor = sStore.backgroundColor
+    }
+)
+
+watch(
+    () =>  [sStore.backgroundImage, sStore.isBackgroundImageEnabled],
+    () =>{
+        if(sStore.isBackgroundImageEnabled){
+            setBackgroundImage(sStore.backgroundImage)
+        }else{
+            setBackgroundImage(null)
+        }
+    }
+)
+
+onMounted(() => {
+    if(sStore.isBackgroundImageEnabled){
+        setBackgroundImage(sStore.backgroundImage)
+    }
+    setBackgroundColor(sStore.backgroundColor)
+})
 
 </script>
 
@@ -99,13 +179,12 @@ function setColumnNumber(event: number){
         align-items: center;
         height: 100%;
         width: 100%;
-        background-color: rgba(0, 0, 0, 0.498);
         color: #FFFFFF;
         
         .panel{
             height: 100%;
             width: 320px;
-            background-color: $primary-bg;
+            background-color: #383642;
             display: flex;
             flex-flow: column;
             gap: 20px;
@@ -142,6 +221,43 @@ function setColumnNumber(event: number){
                     flex-flow: row;
                     justify-content: space-between;
                     align-items: center;
+                    input[type="color"]{
+                        appearance: none;
+                        -moz-appearance: none;
+                        -webkit-appearance: none;
+                        background: none;
+                        border: 0;
+                        outline: 2px $default-btn solid;
+                        cursor: pointer;
+                        padding: 0;
+                        border-radius: 5px;
+                        transition: all ease-in-out 0.2s;
+
+                        &:hover{
+                            outline: 2px #222027 solid;
+                        }
+                    }
+                    ::-webkit-color-swatch-wrapper {
+                        padding: 0;    
+                    }
+
+                    ::-webkit-color-swatch{
+                        border: 0;
+                        border-radius: 0;
+                    }
+
+                    ::-moz-color-swatch,
+                    ::-moz-focus-inner{
+                        border: 0;
+                    }
+
+                    ::-moz-focus-inner{
+                        padding: 0;
+                    }
+                }
+                .sub{
+                    border-left: 3px #0000008a solid;
+                    padding-left: 15px;
                 }
             }
         }

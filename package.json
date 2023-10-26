@@ -9,13 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.248",
+    "@types/firefox-webext-browser": "^111.0.3",
     "@vueuse/core": "^10.5.0",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "web-ext": "^7.8.0"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.0.0-beta.19",
     "@vitejs/plugin-vue": "^4.2.3",
     "sass": "^1.69.3",
     "typescript": "^5.0.2",

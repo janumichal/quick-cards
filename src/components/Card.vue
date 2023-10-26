@@ -19,81 +19,100 @@ import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import {useSettingsStore} from "../store/Settings"
 import RoundButton from './default/RoundButton.vue';
-import { ref, Ref, onBeforeMount, watch } from 'vue';
+import { ref, Ref, onMounted, watch } from 'vue';
 
-    const props = defineProps<iCard>()
-    const cStore = useCardsStore()
-    const sStore = useSettingsStore()
-    const loadedImage: Ref<boolean> = ref(false)
-    const card_background: Ref<HTMLElement|undefined> = ref()
-    const {files, open, reset, onChange} = useFileDialog({
-        accept: "image/jpg, image/png, image/jpeg",
-        multiple: false
-    })
-    const emit = defineEmits(["emitImage"])
+const props = defineProps<iCard>()
+const cStore = useCardsStore()
+const sStore = useSettingsStore()
+const loadedImage: Ref<boolean> = ref(false)
+const card_background: Ref<HTMLElement|undefined> = ref()
 
-    function emitImage(file: File|null):void{
-        emit("emitImage", file)
+
+const {files, open, reset, onChange} = useFileDialog({
+    accept: "image/jpg, image/png, image/jpeg",
+    multiple: false
+})
+const emit = defineEmits(["emitImage"])
+
+function emitImage(file: File|null):void{
+    emit("emitImage", file)
+}
+
+onChange((files:FileList|null) => {
+    if(files != null){
+        setImage(files[0])
+        loadedImage.value = true
+        emitImage(files[0])
     }
+})
 
-    onChange((files:FileList|null) => {
-        if(files != null){
-            setImage(files[0])
-            loadedImage.value = true
-            emitImage(files[0])
+function setImage(file: File|null):void{
+    if(file == null){
+        if(card_background.value != undefined){
+            card_background.value.style.backgroundImage = "none"
         }
-    })
-
-    function setImage(file: File|null):void{
-        if(file == null){
+    }else{
+        const reader:FileReader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
             if(card_background.value != undefined){
-                card_background.value.style.backgroundImage = "none"
-            }
-        }else{
-            const reader:FileReader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onloadend = () => {
-                if(card_background.value != undefined){
-                    card_background.value.style.backgroundImage = `url(${reader.result})`
-                }
+                card_background.value.style.backgroundImage = `url(${reader.result})`
             }
         }
     }
+}
 
-    function isEditModeCard():boolean{
-        return props.idx == -1
+function setColor(color: string):void{
+    if(card_background.value != undefined){
+        card_background.value.style.backgroundColor = color
     }
+}
 
-    function openFile(event: Event):void{
-        open()
-        event.preventDefault()
-    }
+function isEditModeCard():boolean{
+    return props.idx == -1
+}
 
-    function resetFile(event: Event):void{
-        reset()
-        setImage(null)
-        emitImage(null)
-        loadedImage.value = false
-        event.preventDefault()
-    }
+function openFile(event: Event):void{
+    open()
+    event.preventDefault()
+}
 
-    function cardClicked(event: Event): void {
-        cStore.setEditedIdx(props.idx)
-        sStore.toggleEditWVisibility()
-        event.preventDefault()
-    }
+function resetFile(event: Event):void{
+    reset()
+    setImage(null)
+    emitImage(null)
+    loadedImage.value = false
+    event.preventDefault()
+}
 
-    onBeforeMount(() => {
-        loadedImage.value = files.value || props.image != null ? true : false
+function cardClicked(event: Event): void {
+    cStore.setEditedIdx(props.idx)
+    sStore.toggleEditWVisibility()
+    event.preventDefault()
+}
+
+onMounted(() => {
+    loadedImage.value = files.value || props.image != null ? true : false
+    setImage(props.image)
+    setColor(props.color)
+})
+
+watch(
+    () => cStore.cards[props.idx],
+    () =>{
         setImage(props.image)
-    })
+        setColor(props.color)
+    }
+)
 
-    watch(
-        () => cStore.cards[props.idx],
-            () =>{
-                setImage(props.image)
-            }
-    )
+watch(
+    () => cStore.editedCardColor,
+    () => {
+        if(props.idx == -1){
+            setColor(cStore.editedCardColor)
+        }
+    }
+)
 
 </script>
 
@@ -132,6 +151,8 @@ import { ref, Ref, onBeforeMount, watch } from 'vue';
             box-sizing: border-box;
             background-repeat: no-repeat;
             background-size: cover;
+            box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.155);
+            outline: 1px #00000046 solid;
 
 
             .up-card-image{

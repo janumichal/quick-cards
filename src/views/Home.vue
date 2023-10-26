@@ -21,7 +21,7 @@
 						:animation="200"
 						:disabled="!sStore.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
-						@end="cStore.renewDB()"
+						@end="cStore.updateDatabase()"
 						>
 						<template #item="{ element: card }">
 							<Card 
@@ -30,6 +30,7 @@
 							:idx="card.idx"
 							:image="card.image"
 							:key="card.idx"
+							:color="card.color"
 							class="d_card"
 							/>
 						</template>
@@ -85,14 +86,14 @@ onBeforeMount(()=> {
 })
 
 watch(
-        () => [sStore.columnCount, sStore.isLimitColumnsEnabled],
-            () =>{
-				if(sStore.isLimitColumnsEnabled){
-					setWrapperWidth(sStore.columnCount)
-				}else{
-					setWrapperWidth()
-				}
-            }
+	() => [sStore.columnCount, sStore.isLimitColumnsEnabled],
+		() =>{
+			if(sStore.isLimitColumnsEnabled){
+				setWrapperWidth(sStore.columnCount)
+			}else{
+				setWrapperWidth()
+			}
+		}
 )
 
 
