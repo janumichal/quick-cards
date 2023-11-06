@@ -3,5 +3,5 @@ export interface iCard {
     name: string
     idx: number
     color: string
-    image: File|null
+    image: string|null
 }

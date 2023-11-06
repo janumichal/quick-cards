@@ -34,39 +34,29 @@ const {files, open, reset, onChange} = useFileDialog({
 })
 const emit = defineEmits(["emitImage"])
 
-function emitImage(file: File|null):void{
+function emitImage(file: string|null):void{
     emit("emitImage", file)
 }
 
 onChange((files:FileList|null) => {
     if(files != null){
-        setImage(files[0])
-        loadedImage.value = true
-        emitImage(files[0])
+        sStore.convertFileToString(files[0]).then(res =>{
+            setImage(res)
+            loadedImage.value = true
+            emitImage(res)
+        })
     }
 })
 
-function setImage(file: File|null):void{
-    if(file == null){
-        if(card_background.value != undefined){
-            card_background.value.style.backgroundImage = "none"
-        }
-    }else{
-        const reader:FileReader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onloadend = () => {
-            if(card_background.value != undefined){
-                card_background.value.style.backgroundImage = `url(${reader.result})`
-            }
-        }
+function setImage(file: string|null):void{
+    if(card_background.value != undefined){
+        card_background.value.style.backgroundImage = `url(${file == null ? "none" : file})`
     }
 }
 
 function setColor(color: string):void{
     if(card_background.value != undefined){
         card_background.value.style.backgroundColor = color
-        console.log("lala2");
-        
     }
 }
 

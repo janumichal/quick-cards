@@ -64,14 +64,14 @@
 
 
 
-                    <!-- <div class="option">
+                    <div class="option">
                         <div class="text">
                             Remove database
                         </div>
                         <NormalButton :btn-type="ButtonTypes.Warning" @click="cStore.removeDatabases()">
                             Delete
                         </NormalButton>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </Transition>
@@ -87,16 +87,17 @@ import ToggleButton from './default/ToggleButton.vue';
 import NormalButton from './default/NormalButton.vue';
 import NumberInput from "./default/NumberInput.vue"
 
-import { useFileDialog } from '@vueuse/core'
-import { ButtonTypes } from '../enums';
 import { useSettingsStore } from "../store/Settings"
 import { useTransitionsStore } from '../store/Transitions';
-// import { useCardsStore } from '../store/Cards';
+import { useCardsStore } from '../store/Cards';
+
+import { useFileDialog } from '@vueuse/core'
+import { ButtonTypes } from '../enums';
 import { onMounted, watch } from 'vue';
 
 const sStore = useSettingsStore()
 const tStore = useTransitionsStore()
-// const cStore = useCardsStore()
+const cStore = useCardsStore()
 
 const {open, reset, onChange} = useFileDialog({
     accept: "image/jpg, image/png, image/jpeg",
@@ -107,27 +108,25 @@ function resetBackgroundImage():void{
     reset()
     sStore.backgroundImage = null
     setBackgroundImage(sStore.backgroundImage)
+    sStore.updateBGDatabase()
 }
 
 onChange((files:FileList|null) => {
     if(files != null){
-        sStore.backgroundImage = files[0]
-        setBackgroundImage(sStore.backgroundImage)
+        sStore.convertFileToString(files[0]).then(res =>{
+            sStore.backgroundImage = res
+            console.log(res);
+            
+            setBackgroundImage(sStore.backgroundImage)
+            sStore.updateBGDatabase()
+        })
     }
 })
 
-function setBackgroundImage(file: File|null):void{
+
+function setBackgroundImage(file: string|null):void{
     const body:HTMLElement = document.body
-    if(file == null){
-        body.style.backgroundImage = "none"
-    }else{
-        const reader:FileReader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onloadend = () => {
-            body.style.backgroundImage = `url(${reader.result})`
-            sStore.updateBGDatabase()
-        }
-    }
+    body.style.backgroundImage = `url(${file == null ? "none" : file})`
 }
 
 function setBackgroundColor(color:string):void{
@@ -155,10 +154,10 @@ watch(
 )
 
 onMounted(() => {
+    setBackgroundColor(sStore.backgroundColor)
     if(sStore.isBackgroundImageEnabled){
         setBackgroundImage(sStore.backgroundImage)
     }
-    setBackgroundColor(sStore.backgroundColor)
 })
 
 </script>

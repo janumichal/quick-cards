@@ -14,7 +14,7 @@ export const useSettingsStore = defineStore("settings", () => {
 
     const isBackgroundImageEnabled: Ref<boolean> = ref(false)
     const backgroundColor: Ref<string> = ref("#464352")
-    const backgroundImage: Ref<File|null> = ref(null)
+    const backgroundImage: Ref<string|null> = ref(null)
 
     function toggleSettingsBVisibility():void{
         isSettingsButtonVisibile.value = !isSettingsButtonVisibile.value
@@ -71,7 +71,7 @@ export const useSettingsStore = defineStore("settings", () => {
             "columnCount": columnCount.value,
             "isDragAndDropEnabled": isDragAndDropEnabled.value,
             "isBackgroundImageEnabled": isBackgroundImageEnabled.value,
-            "backgroundColor": backgroundColor.value
+            "backgroundColor": backgroundColor.value,
         }
         localStorage.setItem("cards-settings", JSON.stringify(settings))
     }
@@ -99,7 +99,7 @@ export const useSettingsStore = defineStore("settings", () => {
             const request_clr = store.clear()
             request_clr.onsuccess = () => {
                 putBGToDatabase()
-                console.log("RENEW DB");
+                console.log("RENEW BG DB");
             }
         }
     }
@@ -116,7 +116,7 @@ export const useSettingsStore = defineStore("settings", () => {
         })
     }
 
-    function getBGFromDatabase():Promise<{id: number, image: File}|null>{
+    function getBGFromDatabase():Promise<{id: number, image: string}|null>{
         return new Promise((resolve) => {
             const request = indexedDB.open("card-bg");
             request.onsuccess = () => {
@@ -133,6 +133,17 @@ export const useSettingsStore = defineStore("settings", () => {
         })
     }
 
+    function convertFileToString(file: File):Promise<string|null>{
+        return new Promise((resolve) => {
+            const reader:FileReader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onloadend = () => {
+                if(typeof reader.result === "string"){
+                    resolve(reader.result)
+                }
+            }
+        })
+    }
 
 
     watch(
@@ -142,7 +153,7 @@ export const useSettingsStore = defineStore("settings", () => {
             columnCount.value,
             isDragAndDropEnabled.value,
             isBackgroundImageEnabled.value,
-            backgroundColor.value
+            backgroundColor.value,
         ],
             () =>{
                 setSettings()
@@ -159,6 +170,6 @@ export const useSettingsStore = defineStore("settings", () => {
     return {
         isAddCardButtonVisible, isSettingsWindowVisible, isEditWindowVisible, isSettingsButtonVisibile, isLimitColumnsEnabled,
         columnCount, isDragAndDropEnabled, isBackgroundImageEnabled, backgroundColor, backgroundImage,
-        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init, updateBGDatabase
+        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init, updateBGDatabase, convertFileToString
     }
 })
