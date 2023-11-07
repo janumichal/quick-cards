@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, watch } from "vue"
-import { iSettings } from '../Interfaces/SettingsInterface'
-
+import { iSettings, iSettingsObject } from '../Interfaces/SettingsInterface'
+import { useCardsStore } from './Cards'
+import { saveAs } from 'file-saver'
+import { useFileDialog } from '@vueuse/core'
 
 export const useSettingsStore = defineStore("settings", () => {
     const isEditWindowVisible: Ref<boolean> = ref(false)
@@ -15,6 +17,64 @@ export const useSettingsStore = defineStore("settings", () => {
     const isBackgroundImageEnabled: Ref<boolean> = ref(false)
     const backgroundColor: Ref<string> = ref("#464352")
     const backgroundImage: Ref<string|null> = ref(null)
+
+    const { open, onChange } = useFileDialog({
+        accept: "application/json",
+        multiple: false
+    })
+
+    const cStore = useCardsStore()
+
+    function importSettings(){
+        open()
+    }
+
+    onChange((files:FileList|null) => {
+        if(files != null){
+            const reader:FileReader = new FileReader()
+            reader.readAsText(files[0])
+            reader.onloadend = () => {
+                if(typeof reader.result === "string"){
+                    const settings: iSettingsObject = JSON.parse(reader.result)
+                    cStore.cards = settings.cards
+                    backgroundColor.value = settings.backgroundColor
+                    backgroundImage.value = settings.backgroundImage
+                    isBackgroundImageEnabled.value = settings.isBackgroundImageEnabled
+                    columnCount.value = settings.columnCount
+                    isLimitColumnsEnabled.value = settings.isLimitColumnsEnabled
+                    isAddCardButtonVisible.value = settings.isAddCardButtonVisible
+                    cStore.updateDatabase()
+                }
+            }
+        }
+    })
+
+    function exportSettings(){
+        const settingsObject:iSettingsObject = {
+            cards: cStore.cards,
+            backgroundColor: backgroundColor.value,
+            backgroundImage: backgroundImage.value,
+            isBackgroundImageEnabled: isBackgroundImageEnabled.value,
+            columnCount: columnCount.value,
+            isLimitColumnsEnabled: isLimitColumnsEnabled.value,
+            isAddCardButtonVisible: isAddCardButtonVisible.value
+        }
+        saveAs(new File([JSON.stringify(settingsObject)], "quick-cards-export.json",{
+            type: "application/json"
+        }))
+    }
+
+    function convertFileToString(file: File):Promise<string|null>{
+        return new Promise((resolve) => {
+            const reader:FileReader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onloadend = () => {
+                if(typeof reader.result === "string"){
+                    resolve(reader.result)
+                }
+            }
+        })
+    }
 
     function toggleSettingsBVisibility():void{
         isSettingsButtonVisibile.value = !isSettingsButtonVisibile.value
@@ -133,17 +193,6 @@ export const useSettingsStore = defineStore("settings", () => {
         })
     }
 
-    function convertFileToString(file: File):Promise<string|null>{
-        return new Promise((resolve) => {
-            const reader:FileReader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onloadend = () => {
-                if(typeof reader.result === "string"){
-                    resolve(reader.result)
-                }
-            }
-        })
-    }
 
 
     watch(
@@ -170,6 +219,7 @@ export const useSettingsStore = defineStore("settings", () => {
     return {
         isAddCardButtonVisible, isSettingsWindowVisible, isEditWindowVisible, isSettingsButtonVisibile, isLimitColumnsEnabled,
         columnCount, isDragAndDropEnabled, isBackgroundImageEnabled, backgroundColor, backgroundImage,
-        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init, updateBGDatabase, convertFileToString
+        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init, updateBGDatabase, convertFileToString, 
+        exportSettings, importSettings
     }
 })

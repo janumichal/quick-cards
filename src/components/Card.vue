@@ -95,7 +95,6 @@ watch(
         nextTick(() => {
             setImage(props.image)
             setColor(props.color)
-            console.log(props.color);
         })
     }
 )

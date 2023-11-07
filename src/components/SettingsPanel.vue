@@ -72,6 +72,16 @@
                             Delete
                         </NormalButton>
                     </div>
+
+                    <div class="option settings-import-export">
+                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.importSettings()">
+                            Import
+                        </NormalButton>
+                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.exportSettings()">
+                            Export
+                        </NormalButton>
+                    </div>
+
                 </div>
             </div>
         </Transition>
@@ -211,6 +221,8 @@ onMounted(() => {
                 display: flex;
                 flex-flow: column;
                 gap: 20px;
+                height: 100%;
+                justify-content: flex-start;
                 .option{
                     display: flex;
                     flex-flow: row;
@@ -249,6 +261,10 @@ onMounted(() => {
                     ::-moz-focus-inner{
                         padding: 0;
                     }
+                }
+                .settings-import-export{
+                    margin-top: auto;
+                    justify-content: space-around;
                 }
                 .sub{
                     border-left: 3px #0000008a solid;
