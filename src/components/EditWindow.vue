@@ -69,7 +69,7 @@ import { ButtonTypes } from "../enums"
 const sStore = useSettingsStore()
 const cStore = useCardsStore()
 const card: Ref<iCard> = ref(cStore.getEditedCard())
-const tmpImage: Ref<File|null> = ref(card.value.image)
+const tmpImage: Ref<string|null> = ref(card.value.image)
 
 function deleteCard(): void {
     cStore.deleteCard(card.value)

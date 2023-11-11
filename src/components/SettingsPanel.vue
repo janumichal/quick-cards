@@ -5,83 +5,103 @@
         @before-leave="tStore.addTransition()" 
         @after-enter="tStore.removeTransition()">
             <div class="panel" v-if="sStore.isSettingsWindowVisible">
-                <div class="header">
-                    <RoundButton @click="sStore.toggleSettingsWVisibility()"/>
-                    <div class="title">
-                        Settings
+                <div class="settings-wrapper">
+                    <div class="header">
+                        <RoundButton @click="sStore.toggleSettingsWVisibility()"/>
+                        <div class="title">
+                            Settings
+                        </div>
+                    </div>
+                    <div class="devider"></div>
+                    <div class="content">
+                        <SettingsItem>
+                            <template v-slot:label>
+                                Disable "Add Card" button
+                            </template>
+                            <template v-slot:input>
+                                <ToggleButton :id="'addCard'" v-model="sStore.isAddCardButtonVisible"/>
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem>
+                            <template v-slot:label>
+                                Drag-and-drop
+                            </template>
+                            <template v-slot:input>
+                                <ToggleButton :id="'dragAndDrop'" v-model="sStore.isDragAndDropEnabled"/>
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem>
+                            <template v-slot:label>
+                                Limit columns
+                            </template>
+                            <template v-slot:input>
+                                <ToggleButton :id="'limit-columns'" v-model="sStore.isLimitColumnsEnabled"/>
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem :sub="true" v-if="sStore.isLimitColumnsEnabled">
+                            <template v-slot:label>
+                                Number of columns
+                            </template>
+                            <template v-slot:input>
+                                <NumberInput :min="1" :max="100" v-model:input-number="sStore.columnCount" />
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem>
+                            <template v-slot:label>
+                                Enable background image
+                            </template>
+                            <template v-slot:input>
+                                <ToggleButton :id="'enableBgImage'" v-model="sStore.isBackgroundImageEnabled"/>
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem :sub="true" v-if="!sStore.isBackgroundImageEnabled">
+                            <template v-slot:label>
+                                Background color
+                            </template>
+                            <template v-slot:input>
+                                <ColorInput v-model:input-color="sStore.backgroundColor" />
+                            </template>
+                        </SettingsItem>
+
+                        <SettingsItem :sub="true" v-if="sStore.isBackgroundImageEnabled">
+                            <template v-slot:label>
+                                Background image
+                            </template>
+                            <template v-slot:input>
+                                <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.backgroundImage != null ? resetBackgroundImage() : open()">
+                                {{ sStore.backgroundImage != null ? "Remove" : "Select" }}
+                            </NormalButton>
+                            </template>
+                        </SettingsItem>
+
+
+
+
+                        <SettingsItem>
+                            <template v-slot:label>
+                                Remove database
+                            </template>
+                            <template v-slot:input>
+                                <NormalButton :btn-type="ButtonTypes.Warning" @click="cStore.removeDatabases()">
+                                    Delete
+                                </NormalButton>
+                            </template>
+                        </SettingsItem>
                     </div>
                 </div>
-                <div class="devider"></div>
-                <div class="content">
-                    <div class="option">
-                        <div class="text">
-                            Disable "Add Card" button
-                        </div>
-                        <ToggleButton :id="'addCard'" v-model="sStore.isAddCardButtonVisible"/>
-                    </div>
-                    <div class="option">
-                        <div class="text">
-                            Drag-and-drop
-                        </div>
-                        <ToggleButton :id="'dragAndDrop'" v-model="sStore.isDragAndDropEnabled"/>
-                    </div>
-
-
-                    <div class="option">
-                        <div class="text">
-                            Limit columns
-                        </div>
-                        <ToggleButton :id="'limit-columns'" v-model="sStore.isLimitColumnsEnabled"/>
-                    </div>
-                    <div class="option sub" v-if="sStore.isLimitColumnsEnabled">
-                        <div class="text">
-                            Number of columns
-                        </div>
-                        <NumberInput :min="1" :max="100" v-model:input-number="sStore.columnCount" />
-                    </div>
-
-                    <div class="option">
-                        <div class="text">
-                            Enable background image
-                        </div>
-                        <ToggleButton :id="'enableBgImage'" v-model="sStore.isBackgroundImageEnabled"/>
-                    </div>
-                    <div class="option sub" v-if="!sStore.isBackgroundImageEnabled">
-                        <div class="text">
-                            Background color
-                        </div>
-                        <input class="input-color" type="color" v-model="sStore.backgroundColor"> 
-                    </div>
-                    <div class="option sub" v-if="sStore.isBackgroundImageEnabled">
-                        <div class="text">
-                            Background image
-                        </div>
-                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.backgroundImage != null ? resetBackgroundImage() : open()">
-                            {{ sStore.backgroundImage != null ? "Remove" : "Select" }}
-                        </NormalButton>
-                    </div>
-
-
-
-
-                    <div class="option">
-                        <div class="text">
-                            Remove database
-                        </div>
-                        <NormalButton :btn-type="ButtonTypes.Warning" @click="cStore.removeDatabases()">
-                            Delete
-                        </NormalButton>
-                    </div>
-
-                    <div class="option settings-import-export">
-                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.importSettings()">
+                <div class="ie-wrapper">
+                        <div class="ie" @click="sStore.importSettings()">
                             Import
-                        </NormalButton>
-                        <NormalButton :btn-type="ButtonTypes.Normal" @click="sStore.exportSettings()">
+                        </div>
+                        <div class="devider"></div>
+                        <div class="ie" @click="sStore.exportSettings()">
                             Export
-                        </NormalButton>
-                    </div>
-
+                        </div>
                 </div>
             </div>
         </Transition>
@@ -96,6 +116,8 @@ import RoundButton from './default/RoundButton.vue';
 import ToggleButton from './default/ToggleButton.vue';
 import NormalButton from './default/NormalButton.vue';
 import NumberInput from "./default/NumberInput.vue"
+import ColorInput from './default/ColorInput.vue';
+import SettingsItem from './SettingsItem.vue';
 
 import { useSettingsStore } from "../store/Settings"
 import { useTransitionsStore } from '../store/Transitions';
@@ -175,21 +197,25 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-    @use "../scss/Colors/Colors" as *;
-    .panel-wrapper{
-        z-index: 1;
-        position: fixed;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
+@use "../scss/Colors/Colors" as *;
+.panel-wrapper{
+    z-index: 1;
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: #FFFFFF;
+    
+    .panel{
         height: 100%;
-        width: 100%;
-        color: #FFFFFF;
-        
-        .panel{
-            height: 100%;
-            width: 320px;
-            background-color: #383642;
+        width: 320px;
+        background-color: #383642;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        .settings-wrapper{
             display: flex;
             flex-flow: column;
             gap: 20px;
@@ -197,7 +223,6 @@ onMounted(() => {
             padding-left: 20px;
             padding-right: 20px;
             box-sizing: border-box;
-
             .devider{
                 height: 3px;
                 width: 100%;
@@ -223,79 +248,57 @@ onMounted(() => {
                 gap: 20px;
                 height: 100%;
                 justify-content: flex-start;
-                .option{
-                    display: flex;
-                    flex-flow: row;
-                    justify-content: space-between;
-                    align-items: center;
-                    input[type="color"]{
-                        appearance: none;
-                        -moz-appearance: none;
-                        -webkit-appearance: none;
-                        background: none;
-                        border: 0;
-                        outline: 2px $default-btn solid;
-                        cursor: pointer;
-                        padding: 0;
-                        border-radius: 5px;
-                        transition: all ease-in-out 0.2s;
-
-                        &:hover{
-                            outline: 2px #222027 solid;
-                        }
-                    }
-                    ::-webkit-color-swatch-wrapper {
-                        padding: 0;    
-                    }
-
-                    ::-webkit-color-swatch{
-                        border: 0;
-                        border-radius: 0;
-                    }
-
-                    ::-moz-color-swatch,
-                    ::-moz-focus-inner{
-                        border: 0;
-                    }
-
-                    ::-moz-focus-inner{
-                        padding: 0;
-                    }
-                }
-                .settings-import-export{
-                    margin-top: auto;
-                    justify-content: space-around;
-                }
-                .sub{
-                    border-left: 3px #0000008a solid;
-                    padding-left: 15px;
-                }
             }
         }
-    }
+        .ie-wrapper{
+            display: flex;
+            justify-content: space-between;
+            .devider{
+                height: 100%;
+                width: 2px;
+                background-color: #0d0d0f;
+            }
+            .ie{
+                width: 100%;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #222027b2;
+                cursor: pointer;
+                transition: background-color ease-in-out 0.2s;
 
-    .settings-panel-enter-active{
-        animation-name: hide-panel;
-        animation-direction: reverse;
-        animation-fill-mode: forwards;
-        animation-duration: .3s;
-        animation-timing-function: ease-in;
-    }
+                &:hover{
+                    background-color: #222027;
+                }
+            }
 
-    .settings-panel-leave-active{
-        animation-name: hide-panel;
-        animation-direction: normal;
-        animation-fill-mode: forwards;
-        animation-duration: .3s;
-        animation-timing-function: ease-out
-    }
-
-    @keyframes hide-panel {
-        0%{
-            transform: translateX(0%);
         }
-        100%{
-            transform: translateX(+100%);
-        }
     }
+}
+
+.settings-panel-enter-active{
+    animation-name: hide-panel;
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+    animation-duration: .3s;
+    animation-timing-function: ease-in;
+}
+
+.settings-panel-leave-active{
+    animation-name: hide-panel;
+    animation-direction: normal;
+    animation-fill-mode: forwards;
+    animation-duration: .3s;
+    animation-timing-function: ease-out
+}
+
+@keyframes hide-panel {
+    0%{
+        transform: translateX(0%);
+    }
+    100%{
+        transform: translateX(+100%);
+    }
+}
 </style>
