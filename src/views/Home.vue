@@ -2,10 +2,9 @@
 	<EditWindow />
 	<SettingsPanel />
 	<div class="overflow">
-		<Transition name="show-settings"
-			@after-leave="sStore.toggleSettingsWVisibility()"
-			@before-leave="tStore.addTransition()"
-			@after-enter="tStore.removeTransition()">
+		<Transition name="show-settings" mode="out-in"
+			@after-leave="sStore.toggleSettingsWVisibility()">
+
 			<RoundButton class="settings" @click="sStore.toggleSettingsBVisibility()" v-if="sStore.isSettingsButtonVisibile">
 				<img src="../assets/icons/settings.svg"/>
 			</RoundButton>
@@ -48,7 +47,6 @@ import { Ref, onBeforeMount, ref, watch} from 'vue';
 import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
-import { useTransitionsStore } from '../store/Transitions';
 import { useSettingsStore } from '../store/Settings';
 
 import Card from "../components/Card.vue"
@@ -58,7 +56,6 @@ import RoundButton from '../components/default/RoundButton.vue';
 import SettingsPanel from "../components/SettingsPanel.vue"
 
 const cStore = useCardsStore()
-const tStore = useTransitionsStore()
 const sStore = useSettingsStore()
 
 const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
@@ -82,7 +79,6 @@ function setWrapperWidth(columns?: number):void{
 onBeforeMount(()=> {
 	cStore.init()
 	sStore.init()
-	tStore.init()
 })
 
 watch(

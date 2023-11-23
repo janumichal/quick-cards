@@ -1,9 +1,7 @@
 <template>
     <div class="panel-wrapper" v-if="!sStore.isSettingsButtonVisibile" @click.self="sStore.toggleSettingsWVisibility()">
-        <Transition name="settings-panel"
-        @after-leave="sStore.toggleSettingsBVisibility()"
-        @before-leave="tStore.addTransition()" 
-        @after-enter="tStore.removeTransition()">
+        <Transition name="settings-panel" mode="out-in"
+        @after-leave="sStore.toggleSettingsBVisibility()">
             <div class="panel" v-if="sStore.isSettingsWindowVisible">
                 <div class="settings-wrapper">
                     <div class="header">
@@ -120,7 +118,6 @@ import ColorInput from './default/ColorInput.vue';
 import SettingsItem from './SettingsItem.vue';
 
 import { useSettingsStore } from "../store/Settings"
-import { useTransitionsStore } from '../store/Transitions';
 import { useCardsStore } from '../store/Cards';
 
 import { useFileDialog } from '@vueuse/core'
@@ -128,7 +125,6 @@ import { ButtonTypes } from '../enums';
 import { onMounted, watch } from 'vue';
 
 const sStore = useSettingsStore()
-const tStore = useTransitionsStore()
 const cStore = useCardsStore()
 
 const {open, reset, onChange} = useFileDialog({
@@ -264,12 +260,12 @@ onMounted(() => {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: #222027b2;
+                background-color: #22202788;
                 cursor: pointer;
                 transition: background-color ease-in-out 0.2s;
 
                 &:hover{
-                    background-color: #222027;
+                    background-color: #222027d3;
                 }
             }
 
