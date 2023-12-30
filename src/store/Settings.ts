@@ -6,9 +6,6 @@ import { saveAs } from 'file-saver'
 import { useFileDialog } from '@vueuse/core'
 
 export const useSettingsStore = defineStore("settings", () => {
-    const isEditWindowVisible: Ref<boolean> = ref(false)
-    const isSettingsWindowVisible: Ref<boolean> = ref(false)
-    const isSettingsButtonVisibile: Ref<boolean> = ref(!isSettingsWindowVisible.value)
     const isAddCardButtonVisible: Ref<boolean> = ref(true)
     const isLimitColumnsEnabled: Ref<boolean> = ref(false)
     const columnCount: Ref<number> = ref(6)
@@ -76,23 +73,8 @@ export const useSettingsStore = defineStore("settings", () => {
         })
     }
 
-    function toggleSettingsBVisibility():void{
-        isSettingsButtonVisibile.value = !isSettingsButtonVisibile.value
-    }
-
-    function toggleSettingsWVisibility():void{
-        isSettingsWindowVisible.value = !isSettingsWindowVisible.value
-	}
-
-    function toggleEditWVisibility(): void{
-        isEditWindowVisible.value = !isEditWindowVisible.value
-    }
-
     function init():void{
         isBackgroundImageEnabled.value = false
-        isEditWindowVisible.value = false
-        isSettingsWindowVisible.value = false
-        isSettingsButtonVisibile.value = !isSettingsWindowVisible.value
         isAddCardButtonVisible.value = true
         isLimitColumnsEnabled.value = false
         columnCount.value = 6
@@ -194,7 +176,6 @@ export const useSettingsStore = defineStore("settings", () => {
     }
 
 
-
     watch(
         () => [
             isAddCardButtonVisible.value, 
@@ -217,9 +198,8 @@ export const useSettingsStore = defineStore("settings", () => {
     )
 
     return {
-        isAddCardButtonVisible, isSettingsWindowVisible, isEditWindowVisible, isSettingsButtonVisibile, isLimitColumnsEnabled,
-        columnCount, isDragAndDropEnabled, isBackgroundImageEnabled, backgroundColor, backgroundImage,
-        toggleEditWVisibility, toggleSettingsWVisibility, toggleSettingsBVisibility, init, updateBGDatabase, convertFileToString, 
-        exportSettings, importSettings
+        isAddCardButtonVisible, isLimitColumnsEnabled, columnCount, isDragAndDropEnabled, 
+        isBackgroundImageEnabled, backgroundColor, backgroundImage,
+        init, updateBGDatabase, convertFileToString, exportSettings, importSettings
     }
 })

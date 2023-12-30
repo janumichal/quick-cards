@@ -1,11 +1,11 @@
 <template>
-    <div class="panel-wrapper" v-if="!sStore.isSettingsButtonVisibile" @click.self="sStore.toggleSettingsWVisibility()">
+    <div class="panel-wrapper" v-if="!gStore.isSettingsButtonVisibile" @click.self="gStore.toggleSettingsWVisibility()">
         <Transition name="settings-panel" mode="out-in"
-        @after-leave="sStore.toggleSettingsBVisibility()">
-            <div class="panel" v-if="sStore.isSettingsWindowVisible">
+        @after-leave="gStore.toggleSettingsBVisibility()">
+            <div class="panel" v-if="gStore.isSettingsWindowVisible">
                 <div class="settings-wrapper">
                     <div class="header">
-                        <RoundButton @click="sStore.toggleSettingsWVisibility()"/>
+                        <RoundButton @click="gStore.toggleSettingsWVisibility()"/>
                         <div class="title">
                             Settings
                         </div>
@@ -119,6 +119,7 @@ import SettingsItem from './SettingsItem.vue';
 
 import { useSettingsStore } from "../store/Settings"
 import { useCardsStore } from '../store/Cards';
+import { useGeneralStore } from '../store/General';
 
 import { useFileDialog } from '@vueuse/core'
 import { ButtonTypes } from '../enums';
@@ -126,6 +127,7 @@ import { onMounted, watch } from 'vue';
 
 const sStore = useSettingsStore()
 const cStore = useCardsStore()
+const gStore = useGeneralStore()
 
 const {open, reset, onChange} = useFileDialog({
     accept: "image/jpg, image/png, image/jpeg",
