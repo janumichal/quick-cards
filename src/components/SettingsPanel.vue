@@ -76,10 +76,6 @@
                             </NormalButton>
                             </template>
                         </SettingsItem>
-
-
-
-
                         <SettingsItem>
                             <template v-slot:label>
                                 Remove database
@@ -114,7 +110,7 @@ import RoundButton from './default/RoundButton.vue';
 import ToggleButton from './default/ToggleButton.vue';
 import NormalButton from './default/NormalButton.vue';
 import NumberInput from "./default/NumberInput.vue"
-import ColorInput from './default/ColorInput.vue';
+import ColorInput from './default/ColorPicker.vue';
 import SettingsItem from './SettingsItem.vue';
 
 import { useSettingsStore } from "../store/Settings"

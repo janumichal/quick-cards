@@ -1,15 +1,15 @@
 <template>
-  <a class="sc" :class="isEditModeCard() ? 'noninteractive' : ''" :href="props.url">
+  <a class="sc" :class="props.isPreview ? 'noninteractive' : ''" :href="props.card.url">
     <div ref="card_background" class="sc_body">
-      <RoundButton v-if="!isEditModeCard()" class="sc_edit" @click.stop="cardClicked($event)">
+      <RoundButton v-if="!props.isPreview" class="sc_edit" @click.stop="onEdit($event)">
         <img src="../assets/icons/edit.svg">
       </RoundButton>
-      <div v-if="isEditModeCard()" class="up-card-image" @click="loadedImage ? resetFile($event) : openFile($event)">
+      <div v-if="props.isPreview" class="up-card-image" @click="loadedImage ? resetFile($event) : openFile($event)">
         <img v-if="!loadedImage" src="../assets/icons/upload.svg">
         <img v-if="loadedImage" src="../assets/icons/delete.svg">
       </div>
     </div>
-    <div class="sc_name">{{ props.name }}</div>
+    <div class="sc_name">{{ props.card.name }}</div>
   </a>
 </template>
 
@@ -19,10 +19,21 @@ import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import { useSettingsStore } from "../store/Settings"
 import RoundButton from './default/RoundButton.vue';
-import { ref, Ref, onMounted, watch, nextTick } from 'vue';
+import { ref, Ref, onMounted, PropType } from 'vue';
 import { useGeneralStore } from '../store/General';
 
-const props = defineProps<iCard>()
+const props = defineProps({
+  isPreview: {
+    type: Boolean,
+    default: false,
+    required: false
+  },
+  card: {
+    type: Object as PropType<iCard>,
+    required: true
+  }
+})
+
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
 const gStore = useGeneralStore()
@@ -34,18 +45,14 @@ const { files, open, reset, onChange } = useFileDialog({
   accept: "image/jpg, image/png, image/jpeg",
   multiple: false
 })
-const emit = defineEmits(["emitImage"])
-
-function emitImage(file: string | null): void {
-  emit("emitImage", file)
-}
+const emit = defineEmits(["get-image"])
 
 onChange((files: FileList | null) => {
   if (files != null) {
     sStore.convertFileToString(files[0]).then(res => {
       setImage(res)
       loadedImage.value = true
-      emitImage(res)
+      emit("get-image", res)
     })
   }
 })
@@ -62,10 +69,6 @@ function setColor(color: string): void {
   }
 }
 
-function isEditModeCard(): boolean {
-  return props.idx == -1
-}
-
 function openFile(event: Event): void {
   open()
   event.preventDefault()
@@ -74,41 +77,23 @@ function openFile(event: Event): void {
 function resetFile(event: Event): void {
   reset()
   setImage(null)
-  emitImage(null)
+  emit("get-image", null)
   loadedImage.value = false
   event.preventDefault()
 }
 
-function cardClicked(event: Event): void {
-  cStore.setEditedIdx(props.idx)
-  gStore.toggleEditWVisibility()
+function onEdit(event: Event): void {
+  cStore.setEditedCard(props.card)
+  gStore.isCardEditOpen = true
+  gStore.isNewCard = false
   event.preventDefault()
 }
 
 onMounted(() => {
-  loadedImage.value = files.value || props.image != null ? true : false
-  setImage(props.image)
-  setColor(props.color)
+  loadedImage.value = files.value || props.card.image != null ? true : false
+  setImage(props.card.image)
+  setColor(props.card.color)
 })
-
-watch(
-  () => cStore.cards[props.idx],
-  () => {
-    nextTick(() => {
-      setImage(props.image)
-      setColor(props.color)
-    })
-  }
-)
-
-watch(
-  () => cStore.editedCardColor,
-  () => {
-    if (props.idx == -1) {
-      setColor(cStore.editedCardColor)
-    }
-  }
-)
 
 </script>
 
@@ -143,7 +128,7 @@ watch(
   .sc_body {
     aspect-ratio: 16/9;
     width: 100%;
-    background-color: rgb(179, 179, 255);
+    background-color: #b3b3ff;
     border-radius: 10px;
     display: flex;
     flex-flow: column;

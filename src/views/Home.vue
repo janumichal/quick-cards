@@ -4,7 +4,6 @@
 	<div class="overflow">
 		<Transition name="show-settings" mode="out-in"
 			@after-leave="gStore.toggleSettingsWVisibility()">
-
 			<RoundButton class="settings" @click="gStore.toggleSettingsBVisibility()" v-if="gStore.isSettingsButtonVisibile">
 				<img src="../assets/icons/settings.svg"/>
 			</RoundButton>
@@ -16,7 +15,7 @@
 						tag="div"
 						class="cards"
 						id="cards-grid"
-						item-key="idx"
+						item-key="color"
 						:animation="200"
 						:disabled="!sStore.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
@@ -24,12 +23,9 @@
 						>
 						<template #item="{ element: card }">
 							<Card 
-							:url="card.url"
-							:name="card.name"
-							:idx="card.idx"
-							:image="card.image"
-							:key="card.idx"
-							:color="card.color"
+              :is-preview="false"
+							:card="card"
+              :key="card.color"
 							class="d_card"
 							/>
 						</template>
@@ -82,7 +78,6 @@ function setWrapperWidth(columns?: number):void{
 onBeforeMount(()=> {
 	cStore.init()
 	sStore.init()
-	gStore.init()
 })
 
 watch(
@@ -121,7 +116,7 @@ watch(
 
 	.overflow{
 		height: 100vh;
-    	width: 100%;
+    width: 100%;
 		overflow: auto;
 		.home-wrapper{
 			height: fit-content;

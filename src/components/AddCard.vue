@@ -11,10 +11,10 @@ import { useGeneralStore } from '../store/General';
 const gStore = useGeneralStore()
 const cStore = useCardsStore()
 
-
 function addNewCard() {
-    cStore.setEditedIdx(-1)
-    gStore.toggleEditWVisibility()
+    gStore.isNewCard = true
+    gStore.isCardEditOpen = true
+    cStore.setEditedCard(cStore.getEmptyCard())
 }
 
 </script>

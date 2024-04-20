@@ -9,7 +9,7 @@ export interface iSettings {
     backgroundColor: string
 }
 
-export interface iSettingsObject{
+export interface iSettingsObject {
     cards: iCard[]
     backgroundColor: string
     backgroundImage: string|null

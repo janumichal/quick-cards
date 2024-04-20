@@ -1,9 +1,9 @@
 <template>
   <div>
-    <ModalWindow v-model:modal-visibility="gStore.isEditWindowVisible" :model-visible="gStore.isEditWindowVisible">
+    <ModalWindow :isOpen="gStore.isCardEditOpen" @modal-close="closeEditModal()">
       <template v-slot:header>
         <div class="title">
-          {{ card.idx == -1 ? "Create" : "Edit" }} Shortcut
+          {{ gStore.isNewCard ? "Create" : "Edit" }} Shortcut
         </div>
       </template>
       <template v-slot:content>
@@ -15,7 +15,7 @@
                   Name
                 </div>
                 <div class="input-wrapper">
-                  <input type="text" id="cd_name" v-model="card.name">
+                  <input type="text" id="cd_name" v-model="editedCard.name">
                 </div>
               </div>
               <div class="edit-wrapper">
@@ -23,19 +23,18 @@
                   URL
                 </div>
                 <div class="input-wrapper">
-                  <input type="url" id="cd_url" v-model="card.url">
+                  <input type="url" id="cd_url" v-model="editedCard.url">
                 </div>
               </div>
             </div>
             <div class="divider"></div>
             <div class="card-content-wrapper">
-              <Card @emitImage="tmpImage = $event" :idx="-1" :name="card.name" :url="card.url" :image="card.image"
-                :color="card.color" />
+              <Card @get-image="tmpImage = $event" :card='editedCard' :key="editedCard.color" :is-preview='true'/>
               <div class="edit-color-wrapper">
                 <div>
                   Card color
                 </div>
-                <input class="edit-color-picker" type="color" v-model="cStore.editedCardColor">
+                <input class="edit-color-picker" type="color" v-model="editedCard.color">
               </div>
             </div>
           </div>
@@ -44,7 +43,7 @@
               Delete
             </NormalButton>
             <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="saveCard()">
-              {{ card.idx == -1 ? "Create" : "Save" }}
+              {{ gStore.isNewCard ? "Create" : "Save" }}
             </NormalButton>
           </div>
         </div>
@@ -56,51 +55,57 @@
 
 
 <script setup lang="ts">
-import ModalWindow from "../components/default/ModalWindow.vue"
-import Card from "./Card.vue";
-import NormalButton from "./default/NormalButton.vue";
+  import ModalWindow from "../components/default/ModalWindow.vue"
+  import Card from "./Card.vue";
+  import NormalButton from "./default/NormalButton.vue";
 
 
-import { ref, watch, Ref } from "vue";
-import { useCardsStore } from "../store/Cards"
-import { useGeneralStore } from "../store/General";
-import { iCard } from "../Interfaces/CardInterface";
-import { ButtonTypes } from "../enums"
+  import { ref, watch, Ref, toRaw } from "vue";
+  import { useCardsStore } from "../store/Cards"
+  import { useGeneralStore } from "../store/General";
+  import { iCard } from "../Interfaces/CardInterface";
+  import { ButtonTypes } from "../enums"
 
-const cStore = useCardsStore()
-const gStore = useGeneralStore()
-const card: Ref<iCard> = ref(cStore.getEditedCard())
-const tmpImage: Ref<string | null> = ref(card.value.image)
+  const cStore = useCardsStore()
+  const gStore = useGeneralStore()
+  const card: Ref<iCard> = ref(cStore.getEditedCard())
+  const editedCard: Ref<iCard> = ref(cStore.getEditedCard())
+  const tmpImage: Ref<string | null> = ref(card.value.image)
 
-function deleteCard(): void {
-  cStore.deleteCard(card.value)
-  gStore.toggleEditWVisibility()
-}
-
-function saveCard(): void {
-  card.value.image = tmpImage.value
-  tmpImage.value = null
-  card.value.color = cStore.editedCardColor
-  cStore.updateCard(card.value)
-  gStore.toggleEditWVisibility()
-}
-
-watch(
-  () => gStore.isEditWindowVisible,
-  () => {
-    card.value = cStore.getEditedCard()
+  function deleteCard(): void {
+    cStore.deleteCard(card.value)
+    closeEditModal()
   }
-)
 
-watch(
-  () => card.value,
-  () => {
-    if (card.value != undefined) {
-      cStore.editedCardColor = card.value.color
+  function saveCard(): void {
+    editedCard.value.image = tmpImage.value
+    tmpImage.value = null
+
+    if(gStore.isNewCard){
+      cStore.cards.push(toRaw(editedCard.value))
+    }else{
+      // card.value = structuredClone(toRaw(editedCard.value))
+      cStore.cards[cStore.cards.indexOf(card.value)] = structuredClone(toRaw(editedCard.value))
     }
+    console.log(cStore.cards);
+    
+    cStore.updateDatabase()
+    closeEditModal()
   }
-)
 
+  function closeEditModal() {
+    gStore.isCardEditOpen = false
+  }
+
+  watch(
+    () => gStore.isCardEditOpen,
+    () => {
+      if(gStore.isCardEditOpen == true){
+        card.value = cStore.getEditedCard()
+        editedCard.value = structuredClone(toRaw(card.value))
+      }
+    }
+  )
 </script>
 
 

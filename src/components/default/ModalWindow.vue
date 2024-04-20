@@ -1,9 +1,9 @@
 <template>
     <Transition name="modal" appear>
-        <div class="modal-wrapper" v-if="modalVisibility" @click.self="onClickClose()">
+        <div class="modal-wrapper" v-if="isOpen" @click.self='closeOnClickOutside ? onClose(): ""'>
             <div class="modal-inner">
                 <div class="modal-header">
-                    <RoundButton @click="onClickClose()" />
+                    <RoundButton @click="onClose()" />
                     <slot name="header">
                         Default Header
                     </slot>
@@ -19,26 +19,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import RoundButton from './RoundButton.vue';
 
-const emit = defineEmits(['update:modalVisibility'])
-const props = defineProps({
-    modelVisible: Boolean
+defineProps({
+  isOpen: Boolean,
+  closeOnClickOutside: {
+    type: Boolean,
+    default: true,
+    required: false
+  }
 })
+const emit = defineEmits(['modal-close'])
 
-const modalVisibility = computed({
-    get() {
-        return props.modelVisible
-    },
-    set(value) {
-        emit("update:modalVisibility", value)
-    }
-})
-
-
-function onClickClose() {
-    modalVisibility.value = !modalVisibility.value
+function onClose() {
+  emit('modal-close');
 }
 
 </script>
