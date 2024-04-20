@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, watch } from "vue"
-import { iSettings, iSettingsObject } from '../Interfaces/SettingsInterface'
+import { iSettings } from '../Interfaces/SettingsInterface'
 import { useCardsStore } from './Cards'
 import { saveAs } from 'file-saver'
 import { useFileDialog } from '@vueuse/core'
 
 export const useSettingsStore = defineStore("settings", () => {
-    const isAddCardButtonVisible: Ref<boolean> = ref(true)
+    const isAddCardButtonEnabled: Ref<boolean> = ref(true)
     const isLimitColumnsEnabled: Ref<boolean> = ref(false)
     const columnCount: Ref<number> = ref(6)
     const isDragAndDropEnabled: Ref<boolean> = ref(true)
@@ -32,14 +32,14 @@ export const useSettingsStore = defineStore("settings", () => {
             reader.readAsText(files[0])
             reader.onloadend = () => {
                 if(typeof reader.result === "string"){
-                    const settings: iSettingsObject = JSON.parse(reader.result)
-                    cStore.cards = settings.cards
+                    const settings: iSettings = JSON.parse(reader.result)
+                    cStore.cards = settings.cards 
                     backgroundColor.value = settings.backgroundColor
                     backgroundImage.value = settings.backgroundImage
                     isBackgroundImageEnabled.value = settings.isBackgroundImageEnabled
                     columnCount.value = settings.columnCount
                     isLimitColumnsEnabled.value = settings.isLimitColumnsEnabled
-                    isAddCardButtonVisible.value = settings.isAddCardButtonVisible
+                    isAddCardButtonEnabled.value = settings.isAddCardButtonEnabled
                     cStore.updateDatabase()
                 }
             }
@@ -47,14 +47,15 @@ export const useSettingsStore = defineStore("settings", () => {
     })
 
     function exportSettings(){
-        const settingsObject:iSettingsObject = {
+        const settingsObject: iSettings = {
             cards: cStore.cards,
             backgroundColor: backgroundColor.value,
             backgroundImage: backgroundImage.value,
             isBackgroundImageEnabled: isBackgroundImageEnabled.value,
             columnCount: columnCount.value,
             isLimitColumnsEnabled: isLimitColumnsEnabled.value,
-            isAddCardButtonVisible: isAddCardButtonVisible.value
+            isAddCardButtonEnabled: isAddCardButtonEnabled.value,
+            isDragAndDropEnabled: isDragAndDropEnabled.value
         }
         saveAs(new File([JSON.stringify(settingsObject)], "quick-cards-export.json",{
             type: "application/json"
@@ -75,12 +76,12 @@ export const useSettingsStore = defineStore("settings", () => {
 
     function init():void{
         isBackgroundImageEnabled.value = false
-        isAddCardButtonVisible.value = true
+        isAddCardButtonEnabled.value = true
         isLimitColumnsEnabled.value = false
         columnCount.value = 6
         isDragAndDropEnabled.value = true
         backgroundColor.value = "#464352"
-        getSettings()
+        // getSettings()
         var dbExists:string|null = localStorage.getItem("hasBG")
         if(dbExists == null){
             putBGToDatabase()
@@ -93,30 +94,30 @@ export const useSettingsStore = defineStore("settings", () => {
         }
     }
 
-    function getSettings():void{
-        var jsonSettings: string|null = localStorage.getItem("cards-settings")
-        if(jsonSettings != null){
-            var settings: iSettings = JSON.parse(jsonSettings)
-            isAddCardButtonVisible.value = settings.isAddCardButtonVisible
-            isLimitColumnsEnabled.value = settings.isLimitColumnsEnabled
-            columnCount.value = settings.columnCount
-            isDragAndDropEnabled.value = settings.isDragAndDropEnabled
-            isBackgroundImageEnabled.value = settings.isBackgroundImageEnabled
-            backgroundColor.value = settings.backgroundColor
-        }
-    }
+  // function getSettings():void{
+  //     var jsonSettings: string|null = localStorage.getItem("cards-settings")
+  //     if(jsonSettings != null){
+  //         var settings: iSettings = JSON.parse(jsonSettings)
+  //         isAddCardButtonEnabled.value = settings.isAddCardButtonEnabled
+  //         isLimitColumnsEnabled.value = settings.isLimitColumnsEnabled
+  //         columnCount.value = settings.columnCount
+  //         isDragAndDropEnabled.value = settings.isDragAndDropEnabled
+  //         isBackgroundImageEnabled.value = settings.isBackgroundImageEnabled
+  //         backgroundColor.value = settings.backgroundColor
+  //     }
+  //   }
 
-    function setSettings():void{
-        var settings: iSettings = {
-            "isAddCardButtonVisible": isAddCardButtonVisible.value,
-            "isLimitColumnsEnabled": isLimitColumnsEnabled.value,
-            "columnCount": columnCount.value,
-            "isDragAndDropEnabled": isDragAndDropEnabled.value,
-            "isBackgroundImageEnabled": isBackgroundImageEnabled.value,
-            "backgroundColor": backgroundColor.value,
-        }
-        localStorage.setItem("cards-settings", JSON.stringify(settings))
-    }
+    // function setSettings():void{
+    //   var settings: iSettings = {
+    //       "isAddCardButtonEnabled": isAddCardButtonEnabled.value,
+    //       "isLimitColumnsEnabled": isLimitColumnsEnabled.value,
+    //       "columnCount": columnCount.value,
+    //       "isDragAndDropEnabled": isDragAndDropEnabled.value,
+    //       "isBackgroundImageEnabled": isBackgroundImageEnabled.value,
+    //       "backgroundColor": backgroundColor.value,
+    //   }
+    //   localStorage.setItem("cards-settings", JSON.stringify(settings))
+    // }
 
     function initBGDatabase():Promise<IDBDatabase>{
         return new Promise((resolve) => {
@@ -176,19 +177,19 @@ export const useSettingsStore = defineStore("settings", () => {
     }
 
 
-    watch(
-        () => [
-            isAddCardButtonVisible.value, 
-            isLimitColumnsEnabled.value,
-            columnCount.value,
-            isDragAndDropEnabled.value,
-            isBackgroundImageEnabled.value,
-            backgroundColor.value,
-        ],
-            () =>{
-                setSettings()
-            }
-    )
+    // watch(
+    //     () => [
+    //         isAddCardButtonEnabled.value, 
+    //         isLimitColumnsEnabled.value,
+    //         columnCount.value,
+    //         isDragAndDropEnabled.value,
+    //         isBackgroundImageEnabled.value,
+    //         backgroundColor.value,
+    //     ],
+    //         () =>{
+    //             setSettings()
+    //         }
+    // )
 
     watch(
         () => backgroundImage.value,
@@ -198,7 +199,7 @@ export const useSettingsStore = defineStore("settings", () => {
     )
 
     return {
-        isAddCardButtonVisible, isLimitColumnsEnabled, columnCount, isDragAndDropEnabled, 
+        isAddCardButtonEnabled, isLimitColumnsEnabled, columnCount, isDragAndDropEnabled, 
         isBackgroundImageEnabled, backgroundColor, backgroundImage,
         init, updateBGDatabase, convertFileToString, exportSettings, importSettings
     }
