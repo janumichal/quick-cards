@@ -1,7 +1,7 @@
 <template>
-     <div class="addcard-wrapper" @click="addNewCard()">
-        <img src="../assets/icons/add.svg"/>
-     </div>
+    <div class="addcard-wrapper" @click="addNewCard()">
+        <img src="../assets/icons/add.svg" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -12,7 +12,7 @@ const gStore = useGeneralStore()
 const cStore = useCardsStore()
 
 
-function addNewCard(){
+function addNewCard() {
     cStore.setEditedIdx(-1)
     gStore.toggleEditWVisibility()
 }
@@ -20,7 +20,7 @@ function addNewCard(){
 </script>
 
 <style lang="scss" scoped>
-.addcard-wrapper{
+.addcard-wrapper {
     aspect-ratio: 16/9;
     width: 184px;
     background-color: #00000034;
@@ -31,16 +31,15 @@ function addNewCard(){
     align-items: center;
     transition: all ease-in-out 0.2s;
 
-    img{
+    img {
         aspect-ratio: 1/1;
         width: 60px;
         opacity: .85;
     }
 
-    &:hover{
+    &:hover {
         background-color: #00000058;
         cursor: pointer;
     }
 }
-    
 </style>

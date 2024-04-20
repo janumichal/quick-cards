@@ -38,100 +38,104 @@ const props = defineProps({
 })
 
 const inputNumber = computed({
-    get(){
+    get() {
         return props.inputNumber
     },
-    set(value){
+    set(value) {
         emit("update:inputNumber", value)
     }
 })
 
-function increase():void{
+function increase(): void {
     inputNumber.value++
 }
 
-function decrease():void{
+function decrease(): void {
     inputNumber.value--
 }
 </script>
 
 
 <style lang="scss" scoped>
-    @use "../../scss" as *;
+@use "../../scss" as *;
 
-    .ni-wrapper{
+.ni-wrapper {
+    display: flex;
+    flex-flow: row;
+    width: fit-content;
+    height: fit-content;
+    max-height: 26px;
+    border-radius: 5px;
+
+    $border: 6px;
+
+    :nth-child(1 of .ni-button) {
+        border-bottom-left-radius: $border;
+        border-top-left-radius: $border;
+
+    }
+
+    :nth-child(2 of .ni-button) {
+        border-top-right-radius: $border;
+        border-bottom-right-radius: $border;
+    }
+
+    .ni-button {
         display: flex;
-        flex-flow: row;
-        width: fit-content;
-        height: fit-content;
-        max-height: 26px;
-        border-radius: 5px;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1/1;
+        box-sizing: border-box;
+        padding: 5px;
+        cursor: pointer;
 
-        $border: 6px;
+        background-color: rgba($default-btn, $alpha: $static);
+        transition: background-color ease-in-out 0.2s;
 
-        :nth-child( 1 of .ni-button ){
-            border-bottom-left-radius: $border;
-            border-top-left-radius: $border;
-
+        &:hover {
+            background-color: rgba($default-btn, $alpha: $hover);
         }
 
-        :nth-child( 2 of .ni-button ){
-            border-top-right-radius: $border;
-            border-bottom-right-radius: $border;
-        }
-
-        .ni-button{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            aspect-ratio: 1/1;
-            box-sizing: border-box;
-            padding: 5px;
-            cursor: pointer;
-
-            background-color: rgba($default-btn, $alpha: $static);
-            transition: background-color ease-in-out 0.2s;
-            
-            &:hover{
-                background-color: rgba($default-btn, $alpha: $hover);
-            }
-            
-            img{
-                height: 16px;
-            }
-        }
-        .ni-input{
-            width: 30px;
-            width: fit-content;
-            background-color: #81818146;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            input{
-                width: 30px;
-                height: 100%;
-                background-color: transparent;
-                padding: 0px;
-                border: none;
-                text-align: center;
-                
-                color: #FFFFFF;
-                &:focus{
-                    outline: none;
-                }
-
-                &[type=number] {
-                    -moz-appearance: textfield;
-                }   
-                &::-webkit-outer-spin-button,
-                &::-webkit-inner-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
-                }
-            }
-
-
-            
+        img {
+            height: 16px;
         }
     }
+
+    .ni-input {
+        width: 30px;
+        width: fit-content;
+        background-color: #81818146;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            width: 30px;
+            height: 100%;
+            background-color: transparent;
+            padding: 0px;
+            border: none;
+            text-align: center;
+
+            color: #FFFFFF;
+
+            &:focus {
+                outline: none;
+            }
+
+            &[type=number] {
+                -moz-appearance: textfield;
+            }
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
+
+
+
+    }
+}
 </style>

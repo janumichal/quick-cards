@@ -1,5 +1,5 @@
 <template>
-    <div class="option" :class='props.sub ? "sub" : "" '>
+    <div class="option" :class='props.sub ? "sub" : ""'>
         <div class="text">
             <slot name="label">
                 Label
@@ -24,13 +24,14 @@ const props = defineProps({
 
 
 <style lang="scss">
-.option{
+.option {
     display: flex;
     flex-flow: row;
     justify-content: space-between;
     align-items: center;
 }
-.sub{
+
+.sub {
     border-left: 3px #0000008a solid;
     padding-left: 15px;
 }
