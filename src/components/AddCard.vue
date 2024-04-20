@@ -6,15 +6,15 @@
 
 <script setup lang="ts">
 import { useCardsStore } from '../store/Cards';
-import { useSettingsStore } from '../store/Settings';
+import { useGeneralStore } from '../store/General';
 
-const sStore = useSettingsStore()
+const gStore = useGeneralStore()
 const cStore = useCardsStore()
 
 
 function addNewCard(){
     cStore.setEditedIdx(-1)
-    sStore.toggleEditWVisibility()
+    gStore.toggleEditWVisibility()
 }
 
 </script>

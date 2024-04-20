@@ -28,6 +28,6 @@ export const useGeneralStore = defineStore("general", () => {
 
     return {
         toggleSettingsBVisibility, toggleSettingsWVisibility, toggleEditWVisibility, init,
-        isSettingsButtonVisibile, isSettingsWindowVisible
+        isSettingsButtonVisibile, isSettingsWindowVisible, isEditWindowVisible
     }
 })
