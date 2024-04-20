@@ -1,4 +1,16 @@
-@use "../Colors/Colors" as *;
+// Opacity
+$static: .5;
+$hover: .8;
+$active: .95;
+
+// Colors
+$warning-btn: #ff6464;
+$default-btn: #1c1b20;
+$submit-btn: #79db8e;
+
+$primary-bg: #464352;
+$secondary-bg: #383542;
+$secondary-bg-hover: #332f3bd3;
 
 body {
     margin: 0;

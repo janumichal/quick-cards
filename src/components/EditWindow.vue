@@ -110,7 +110,7 @@ watch(
 
 
 <style lang="scss" scoped>
-@use "../scss/Colors/Colors" as *;
+@use "../scss" as *;
 
 @media only screen and (max-width: 592px) {
     .divider {

@@ -195,7 +195,8 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-@use "../scss/Colors/Colors" as *;
+@use "../scss" as *;
+
 .panel-wrapper{
     z-index: 1;
     position: fixed;

@@ -57,8 +57,7 @@ function decrease():void{
 
 
 <style lang="scss" scoped>
-    @use "../../scss/Colors/Colors" as *;
-    @use "../../scss/Styles/Opacities" as *;
+    @use "../../scss" as *;
 
     .ni-wrapper{
         display: flex;

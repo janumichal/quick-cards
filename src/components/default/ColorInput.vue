@@ -27,7 +27,7 @@ const inputColor = computed({
 
 
 <style lang="scss" scoped>
-@use "../../scss/Colors/Colors" as *;
+@use "../../scss" as *;
 
 input[type="color"]{
     appearance: none;

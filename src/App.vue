@@ -60,5 +60,5 @@ function getNameFromURL(url: string){
 </script>
 
 <style lang="scss">
-    @use "./scss/Styles/Default";
+    @use "./scss";
 </style>

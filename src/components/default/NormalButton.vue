@@ -25,8 +25,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @use "../../scss/Colors" as *;
-    @use "../../scss/Styles/Opacities" as *;
+    @use "../../scss" as *;
     
     .button{
         display: flex;

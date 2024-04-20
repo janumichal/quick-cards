@@ -20,10 +20,12 @@ import { useCardsStore } from '../store/Cards';
 import {useSettingsStore} from "../store/Settings"
 import RoundButton from './default/RoundButton.vue';
 import { ref, Ref, onMounted, watch, nextTick } from 'vue';
+import { useGeneralStore } from '../store/General';
 
 const props = defineProps<iCard>()
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
+const gStore = useGeneralStore()
 const loadedImage: Ref<boolean> = ref(false)
 const card_background: Ref<HTMLElement|undefined> = ref()
 
@@ -79,7 +81,7 @@ function resetFile(event: Event):void{
 
 function cardClicked(event: Event): void {
     cStore.setEditedIdx(props.idx)
-    sStore.toggleEditWVisibility()
+    gStore.toggleEditWVisibility()
     event.preventDefault()
 }
 

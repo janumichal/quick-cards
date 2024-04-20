@@ -44,7 +44,7 @@ function onClickClose(){
 </script>
 
 <style lang="scss" scoped>
-    @use "../../scss/Colors/Colors" as *;
+    @use "../../scss" as *;
 
     .modal-wrapper{
         z-index: 9999;

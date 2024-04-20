@@ -10,8 +10,8 @@
 </script>
 
 <style lang="scss" scoped>
-    @use "../../scss/Colors" as *;
-    @use "../../scss/Styles/Opacities" as *;
+    @use "../../scss" as *;
+    
     .button-inner{
         display: flex;
         align-items: center;
