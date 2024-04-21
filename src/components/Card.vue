@@ -1,5 +1,5 @@
 <template>
-  <a class="sc" :class="props.isPreview ? 'noninteractive' : ''" :href="props.card.url">
+  <a class="sc" :class="props.isPreview ? 'noninteractive' : ''" :href="props.card.value.url">
     <div ref="card_background" class="sc_body">
       <RoundButton v-if="!props.isPreview" class="sc_edit" @click.stop="onEdit($event)">
         <img src="../assets/icons/edit.svg">
@@ -9,7 +9,7 @@
         <img v-if="loadedImage" src="../assets/icons/delete.svg">
       </div>
     </div>
-    <div class="sc_name">{{ props.card.name }}</div>
+    <div class="sc_name">{{ props.card.value.name }}</div>
   </a>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps({
     required: false
   },
   card: {
-    type: Object as PropType<iCard>,
+    type: Object as PropType<Ref<iCard>>,
     required: true
   }
 })
@@ -90,9 +90,9 @@ function onEdit(event: Event): void {
 }
 
 onMounted(() => {
-  loadedImage.value = files.value || props.card.image != null ? true : false
-  setImage(props.card.image)
-  setColor(props.card.color)
+  loadedImage.value = files.value || props.card.value.image != null ? true : false
+  setImage(props.card.value.image)
+  setColor(props.card.value.color)
 })
 
 </script>

@@ -29,7 +29,7 @@
             </div>
             <div class="divider"></div>
             <div class="card-content-wrapper">
-              <Card @get-image="tmpImage = $event" :card='editedCard' :key="editedCard.color" :is-preview='true'/>
+              <Card @get-image="tmpImage = $event" :card='ref(editedCard)' :key="editedCard.color" :is-preview='true'/>
               <div class="edit-color-wrapper">
                 <div>
                   Card color
@@ -68,8 +68,8 @@
 
   const cStore = useCardsStore()
   const gStore = useGeneralStore()
-  const card: Ref<iCard> = ref(cStore.getEditedCard())
-  const editedCard: Ref<iCard> = ref(cStore.getEditedCard())
+  var card: Ref<iCard> = cStore.getEditedCard()
+  const editedCard: Ref<iCard> = ref(cStore.getEditedCard().value)
   const tmpImage: Ref<string | null> = ref(card.value.image)
 
   function deleteCard(): void {
@@ -82,12 +82,14 @@
     tmpImage.value = null
 
     if(gStore.isNewCard){
-      cStore.cards.push(structuredClone(toRaw(editedCard.value)))
+      cStore.cards.push(structuredClone(toRaw(editedCard)))
     }else{
-      // card.value = structuredClone(toRaw(editedCard.value))
-      cStore.cards[cStore.cards.indexOf(card.value)] = structuredClone(toRaw(editedCard.value))
+      card.value = structuredClone(toRaw(editedCard.value))
+      // cStore.cards[cStore.cards.indexOf(card.value)] = structuredClone(toRaw(editedCard.value))
     }
     console.log(cStore.cards);
+    console.log(card.value);
+    
     
     cStore.updateDatabase()
     closeEditModal()
@@ -101,7 +103,7 @@
     () => gStore.isCardEditOpen,
     () => {
       if(gStore.isCardEditOpen == true){
-        card.value = cStore.getEditedCard()
+        card = cStore.getEditedCard()
         editedCard.value = structuredClone(toRaw(card.value))
       }
     }
