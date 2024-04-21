@@ -15,7 +15,7 @@
 						tag="div"
 						class="cards"
 						id="cards-grid"
-						item-key="color"
+						item-key="id"
 						:animation="200"
 						:disabled="!sStore.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
@@ -25,7 +25,6 @@
 							<Card 
               :is-preview="false"
 							:card="card"
-              :key="card.color"
 							class="d_card"
 							/>
 						</template>

@@ -11,8 +11,8 @@ export const useCardsStore = defineStore("cards", () => {
     color: "#b3b3ff",
     image: null
   }
-  const cards: Ref<iCard[]> = ref([])
-  const editedCard: Ref<iCard> = ref(getEmptyCard())
+  const cards: Ref<Ref<iCard>[]> = ref([])
+  var editedCard: Ref<iCard> = ref(getEmptyCard())
   const editedCardColor: Ref<string> = ref("#464352")
 
   function getEmptyCard():iCard{
@@ -20,22 +20,22 @@ export const useCardsStore = defineStore("cards", () => {
   }
 
   function deleteCard(card: iCard):void{
-    const idx = cards.value.indexOf(card)
+    const idx = cards.value.indexOf(ref(card))
       cards.value.splice(idx, 1)
       updateDatabase()
   }
 
-  function getEditedCard():iCard{
-      return editedCard.value
+  function getEditedCard():Ref<iCard>{
+      return editedCard
   }
 
-  function setEditedCard(card: iCard): void{
-      editedCard.value = card
+  function setEditedCard(card: Ref<iCard>): void{
+      editedCard.value = card.value
   }
 
   function loadPreset(preset: {url:string, name: string}[]): void{
       for (let index = 0; index < preset.length; index++) {
-          cards.value.push({...preset[index], ...{image: null, color: "#CCCCFF"}})
+          cards.value.push(ref({...preset[index], ...{image: null, color: "#CCCCFF"}}))
       }
   }
 
@@ -47,7 +47,7 @@ export const useCardsStore = defineStore("cards", () => {
           putCardsToDatabase()
       }else{
           getCardsFromDatabase().then(res => {
-              cards.value = res
+              cards.value = res.map(e => ref(e))
           })
       }
   }
@@ -91,7 +91,13 @@ export const useCardsStore = defineStore("cards", () => {
             const store = tx.objectStore("cards")
             for (let index = 0; index < cards.value.length; index++) {
                 const element = cards.value[index]
-                store.put({idx: index, url: element.url, name: element.name, image: element.image, color: element.color})
+                store.put({
+                  idx: index, 
+                  url: element.value.url, 
+                  name: element.value.name, 
+                  image: element.value.image, 
+                  color: element.value.color
+                })
             }
             tx.oncomplete = () => {
                 localStorage.setItem("hasCustom", "true")

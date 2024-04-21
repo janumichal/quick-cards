@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, Ref, watch } from "vue"
+import { ref, Ref, watch, toValue, toRaw } from "vue"
 import { iSettings } from '../Interfaces/SettingsInterface'
 import { useCardsStore } from './Cards'
 import { saveAs } from 'file-saver'
@@ -33,7 +33,7 @@ export const useSettingsStore = defineStore("settings", () => {
             reader.onloadend = () => {
                 if(typeof reader.result === "string"){
                     const settings: iSettings = JSON.parse(reader.result)
-                    cStore.cards = settings.cards 
+                    cStore.cards = settings.cards.map(e => ref(e))
                     backgroundColor.value = settings.backgroundColor
                     backgroundImage.value = settings.backgroundImage
                     isBackgroundImageEnabled.value = settings.isBackgroundImageEnabled
@@ -48,7 +48,7 @@ export const useSettingsStore = defineStore("settings", () => {
 
     function exportSettings(){
         const settingsObject: iSettings = {
-            cards: cStore.cards,
+            cards: structuredClone(toRaw(cStore.cards)).map(e => toValue(e)),
             backgroundColor: backgroundColor.value,
             backgroundImage: backgroundImage.value,
             isBackgroundImageEnabled: isBackgroundImageEnabled.value,

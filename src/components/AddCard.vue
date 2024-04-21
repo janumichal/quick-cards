@@ -7,14 +7,15 @@
 <script setup lang="ts">
 import { useCardsStore } from '../store/Cards';
 import { useGeneralStore } from '../store/General';
+import { ref, toRaw } from "vue"
 
 const gStore = useGeneralStore()
 const cStore = useCardsStore()
 
 function addNewCard() {
-    gStore.isNewCard = true
-    gStore.isCardEditOpen = true
-    cStore.setEditedCard(cStore.getEmptyCard())
+  cStore.setEditedCard(ref(structuredClone(toRaw(cStore.getEmptyCard()))))
+  gStore.isNewCard = true
+  gStore.isCardEditOpen = true
 }
 
 </script>
