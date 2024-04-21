@@ -19,7 +19,7 @@ import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import { useSettingsStore } from "../store/Settings"
 import RoundButton from './default/RoundButton.vue';
-import { ref, Ref, onMounted, PropType } from 'vue';
+import { ref, Ref, onMounted, PropType, watch } from 'vue';
 import { useGeneralStore } from '../store/General';
 
 const props = defineProps({
@@ -94,6 +94,14 @@ onMounted(() => {
   setImage(props.card.value.image)
   setColor(props.card.value.color)
 })
+
+watch(
+  () => cStore.cards[cStore.cards.indexOf(props.card)],
+    () =>{
+      setImage(props.card.value.image)
+      setColor(props.card.value.color)
+    }
+)
 
 </script>
 

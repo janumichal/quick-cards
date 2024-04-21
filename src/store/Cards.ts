@@ -79,7 +79,6 @@ export const useCardsStore = defineStore("cards", () => {
           const request_clr = store.clear()
           request_clr.onsuccess = () => {
               putCardsToDatabase()
-              console.log("RENEW DB");
           }
       }
   }

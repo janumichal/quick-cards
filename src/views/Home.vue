@@ -15,16 +15,17 @@
 						tag="div"
 						class="cards"
 						id="cards-grid"
-						item-key="id"
+						item-key="(item) => item.value.idx"
 						:animation="200"
 						:disabled="!sStore.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
-						@end="cStore.updateDatabase()"
+						@end="refreshDraggeble()"
 						>
 						<template #item="{ element: card }">
 							<Card 
               :is-preview="false"
 							:card="card"
+              :key="card.idx"
 							class="d_card"
 							/>
 						</template>
@@ -58,6 +59,10 @@ const gStore = useGeneralStore()
 
 const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
 
+function refreshDraggeble(){
+  console.log(cStore.cards);
+  cStore.updateDatabase()
+}
 
 function setWrapperWidth(columns?: number):void{
 	cards_element.value = document.getElementById("cards-grid")
