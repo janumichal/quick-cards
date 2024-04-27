@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, watch, toValue, toRaw } from "vue"
 import { iSettings } from '../Interfaces/SettingsInterface'
-import { useCardsStore } from './Cards'
 import { saveAs } from 'file-saver'
 import { useFileDialog } from '@vueuse/core'
+import { useDatabaseStore } from './Database'
+import { useCardsStore } from './Cards'
 
 export const useSettingsStore = defineStore("settings", () => {
   const isAddCardButtonEnabled: Ref<boolean> = ref(true)
@@ -20,6 +21,7 @@ export const useSettingsStore = defineStore("settings", () => {
       multiple: false
   })
 
+  const dStore = useDatabaseStore()
   const cStore = useCardsStore()
 
   function importSettings(){
@@ -40,7 +42,7 @@ export const useSettingsStore = defineStore("settings", () => {
                   columnCount.value = settings.columnCount
                   isLimitColumnsEnabled.value = settings.isLimitColumnsEnabled
                   isAddCardButtonEnabled.value = settings.isAddCardButtonEnabled
-                  cStore.updateDatabase()
+                  dStore.saveCards(cStore.cards.map(e => toValue(e)))
               }
           }
       }

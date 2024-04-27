@@ -60,14 +60,17 @@
   import NormalButton from "./default/NormalButton.vue";
 
 
-  import { ref, Ref } from "vue";
+  import { ref, Ref, toValue } from "vue";
   import { useCardsStore } from "../store/Cards"
   import { useGeneralStore } from "../store/General";
   import { iCard } from "../Interfaces/CardInterface";
   import { ButtonTypes } from "../enums"
+import { useDatabaseStore } from "../store/Database";
 
   const cStore = useCardsStore()
   const gStore = useGeneralStore()
+  const dStore = useDatabaseStore()
+
   var card: Ref<iCard> = cStore.getEditedCard()
   var editedCard: Ref<iCard> = cStore.getEditedCard()
   const tmpImage: Ref<string | null> = ref(card.value.image)
@@ -87,7 +90,7 @@
       card.value = editedCard.value
     }
     
-    cStore.updateDatabase()
+    dStore.saveCards(cStore.cards.map(e => toValue(e)))
     closeEditModal()
   }
 

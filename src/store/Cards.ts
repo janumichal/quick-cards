@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref, Ref } from "vue"
+import { ref, Ref, toValue } from "vue"
 import { iCard } from '../Interfaces/CardInterface'
 
 import default_json from "../assets/default.json"
+import { useDatabaseStore } from './Database'
 
 export const useCardsStore = defineStore("cards", () => {
   const emptyCard: iCard = {
@@ -11,9 +12,10 @@ export const useCardsStore = defineStore("cards", () => {
     color: "#b3b3ff",
     image: null
   }
-  const cards: Ref<Ref<iCard>[]> = ref([])
+  var cards: Ref<Ref<iCard>[]> = ref([])
   var editedCard: Ref<iCard> = ref(getEmptyCard())
   const editedCardColor: Ref<string> = ref("#464352")
+  const dStore = useDatabaseStore()
 
   function getEmptyCard():iCard{
     return emptyCard
@@ -22,7 +24,7 @@ export const useCardsStore = defineStore("cards", () => {
   function deleteCard(card: iCard):void{
     const idx = cards.value.indexOf(ref(card))
       cards.value.splice(idx, 1)
-      updateDatabase()
+      dStore.saveCards(cards.value.map(e => toValue(e)))
   }
 
   function getEditedCard():Ref<iCard>{
@@ -39,103 +41,25 @@ export const useCardsStore = defineStore("cards", () => {
       }
   }
 
-  function init():void{
-      var dbExists:string|null = localStorage.getItem("hasCustom")
-      
-      if(dbExists == null){
+  async function init():Promise<void>{
+      if(!await dStore.cardDbExists()){
           loadPreset(default_json)
-          putCardsToDatabase()
+          dStore.saveCards(cards.value.map(e => toValue(e)))
       }else{
-          getCardsFromDatabase().then(res => {
-              cards.value = res.map(e => ref(e))
-          })
-      }
-  }
-
-  function initDatabase():Promise<IDBDatabase>{
-      return new Promise((resolve) => {
-          const request = indexedDB.open("card-layout");
-          request.onupgradeneeded = () => {
-              const db:IDBDatabase = request.result;
-              const store = db.createObjectStore("cards", {keyPath: "idx"})
-              store.createIndex("by_url", "url")
-              store.createIndex("by_name", "name")
-              store.createIndex("by_color", "color")
-              store.createIndex("by_image", "image")
-          }
-          request.onsuccess = () => {
-              resolve(request.result)
-          }
-      })
-      
-  }
-
-  function updateDatabase():void{
-      const request = indexedDB.open("card-layout")
-      request.onsuccess = () => {
-          const db:IDBDatabase = request.result
-          const tx = db.transaction("cards", "readwrite")
-          const store = tx.objectStore("cards")
-          const request_clr = store.clear()
-          request_clr.onsuccess = () => {
-              putCardsToDatabase()
-          }
-      }
-  }
-
-    function putCardsToDatabase():void{
-        initDatabase().then(res => {
-            const db:IDBDatabase = res
-            const tx = db.transaction("cards", "readwrite")
-            const store = tx.objectStore("cards")
-            for (let index = 0; index < cards.value.length; index++) {
-                const element = cards.value[index]
-                store.put({
-                  idx: index, 
-                  url: element.value.url, 
-                  name: element.value.name, 
-                  image: element.value.image, 
-                  color: element.value.color
-                })
-            }
-            tx.oncomplete = () => {
-                localStorage.setItem("hasCustom", "true")
-            }
+        dStore.getCards().then(res => {
+            cards.value = res.map(card => ref(card))
         })
-    }
-
-  function getCardsFromDatabase():Promise<iCard[]>{
-      return new Promise((resolve) => {
-          const request = indexedDB.open("card-layout");
-          request.onsuccess = () => {
-              const tx = request.result.transaction("cards", "readwrite")
-              const store = tx.objectStore("cards")
-              const getAllRequest = store.getAll()
-              getAllRequest.onsuccess = () => {
-                  resolve(getAllRequest.result)
-              }
-              getAllRequest.onerror = () => {
-                  resolve([])
-              }
-          }
-      })
+      }
   }
 
-  function removeDatabases():void{ // TODO remove
-      const request = indexedDB.deleteDatabase("card-layout"); 
-      const request2 = indexedDB.deleteDatabase("card-bg"); 
-      request.onsuccess = () => { 
-              console.log("Card database deleted successfully"); 
-      } 
-      request2.onsuccess = () => { 
-          console.log("BG database deleted successfully"); 
-  } 
-      localStorage.clear()
-  }
+
 
   return {
-      cards, editedCardColor,
-      setEditedCard, deleteCard, init, getEditedCard, getEmptyCard,
-      updateDatabase, removeDatabases
+    cards,
+    editedCardColor,
+    init, 
+    setEditedCard,
+    getEditedCard, getEmptyCard,
+    deleteCard,
   }
 })

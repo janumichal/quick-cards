@@ -202,6 +202,7 @@ onMounted(() => {
     height: 100%;
     width: 100%;
     color: #FFFFFF;
+    background-color: $modal-bg;
     
     .panel{
         height: 100%;

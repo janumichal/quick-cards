@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, onBeforeMount, ref, watch} from 'vue';
+import { Ref, onBeforeMount, ref, toValue, watch} from 'vue';
 import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
@@ -51,17 +51,18 @@ import EditWindow from "../components/EditWindow.vue"
 import AddCard from '../components/AddCard.vue';
 import RoundButton from '../components/default/RoundButton.vue';
 import SettingsPanel from "../components/SettingsPanel.vue"
+import { useDatabaseStore } from '../store/Database';
 
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
 const gStore = useGeneralStore()
+const dStore = useDatabaseStore()
 
 
 const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
 
 function refreshDraggeble(){
-  console.log(cStore.cards);
-  cStore.updateDatabase()
+  dStore.saveCards(cStore.cards.map(e => toValue(e)))
 }
 
 function setWrapperWidth(columns?: number):void{
@@ -80,6 +81,7 @@ function setWrapperWidth(columns?: number):void{
 }
 
 onBeforeMount(()=> {
+  // dStore.deleteCardsDatabase()
 	cStore.init()
 	sStore.init()
 })
