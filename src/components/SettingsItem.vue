@@ -1,23 +1,24 @@
 <template>
-    <div class="option" :class='props.sub ? "sub" : ""'>
-        <div class="text">
-            <slot name="label">
-                Label
-            </slot>
-        </div>
-        <slot name="input">
-            Placeholder
-        </slot>
+  <div class="option" :class='props.sub ? "sub" : ""'>
+    <div class="sub-devider" v-if="props.sub"></div>
+    <div class="item-content">
+      <slot name="label">
+        Label
+      </slot>
+      <slot name="input">
+        Placeholder
+      </slot>
     </div>
+  </div>
 </template>
 
 
 <script setup lang="ts">
 const props = defineProps({
-    sub: {
-        type: Boolean,
-        default: false
-    }
+  sub: {
+    type: Boolean,
+    default: false
+  }
 })
 
 </script>
@@ -25,14 +26,25 @@ const props = defineProps({
 
 <style lang="scss">
 .option {
+  display: flex;
+  flex-flow: row;
+
+  .item-content{
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+.sub {
+  gap: 10px;
+  .sub-devider {
+    width: 4px;
+    height: 100%;
+    border-radius: 5px;
+    background-color: #00000052;
+  }
 }
 
-.sub {
-    border-left: 3px #0000008a solid;
-    padding-left: 15px;
-}
 </style>

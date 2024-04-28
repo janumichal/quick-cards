@@ -34,12 +34,12 @@
                 <div>
                   Card color
                 </div>
-                <input class="edit-color-picker" type="color" v-model="editedCard.color">
+                <ColorPicker v-model:input-color="editedCard.color"/>
               </div>
             </div>
           </div>
-          <div class="button-wrapper">
-            <NormalButton class="delete-btn" :btn-type="ButtonTypes.Warning" @click="deleteCard()">
+          <div class="button-wrapper" :style="'justify-content:' + (gStore.isNewCard? 'end;': 'space-between;')">
+            <NormalButton v-if="!gStore.isNewCard" class="delete-btn" :btn-type="ButtonTypes.Warning" @click="deleteCard()">
               Delete
             </NormalButton>
             <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="saveCard()">
@@ -66,6 +66,7 @@ import { useGeneralStore } from "../store/General";
 import { iCard } from "../Interfaces/CardInterface";
 import { ButtonTypes } from "../enums"
 import { useDatabaseStore } from "../store/Database";
+import ColorPicker from "./default/ColorPicker.vue";
 
 const cStore = useCardsStore()
 const gStore = useGeneralStore()
@@ -137,13 +138,11 @@ watch(
     font-size: 16px;
     font-variation-settings: "wght" 500;
     display: flex;
-    justify-content: space-between;
 
     .save-btn,
     .delete-btn {
       padding: 10px 20px 10px 20px;
     }
-
   }
 
   .content-wrapper {

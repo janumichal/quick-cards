@@ -33,6 +33,7 @@ input[type="color"] {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+
   background: none;
   border: 0;
   outline: 2px $default-btn solid;
@@ -40,6 +41,9 @@ input[type="color"] {
   padding: 0;
   border-radius: 5px;
   transition: all ease-in-out 0.2s;
+
+  height: 23px;
+  width: 46px;
 
   &:hover {
     outline: 2px #222027 solid;

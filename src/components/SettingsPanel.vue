@@ -82,7 +82,6 @@
           <div class="ie" @click="sStore.importSettings()">
             Import
           </div>
-          <div class="devider"></div>
           <div class="ie" @click="sStore.exportSettings()">
             Export
           </div>
@@ -201,23 +200,19 @@ onChange((files: FileList | null) => {
 
     .ie-wrapper {
       display: flex;
-      justify-content: space-between;
-
-      .devider {
-        height: 100%;
-        width: 2px;
-        background-color: #0d0d0f;
-      }
+      padding: 8px;
+      gap: 8px;
 
       .ie {
         width: 100%;
-        height: 40px;
+        height: 35px;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: #22202788;
         cursor: pointer;
         transition: background-color ease-in-out 0.2s;
+        border-radius: 5px;
 
         &:hover {
           background-color: #222027d3;

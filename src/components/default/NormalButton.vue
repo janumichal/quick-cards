@@ -37,7 +37,7 @@ function getColor() {
     padding: 5px 10px 5px 10px;
     margin: 0px;
     cursor: pointer;
-    color: #FFFFFF;
+    color: #f7f6fa;
     transition: background-color ease-in-out 0.2s;
 }
 
@@ -51,7 +51,7 @@ function getColor() {
 
 .button-warning {
     background-color: rgba($warning-btn, $alpha: $static);
-    color: #000000;
+    color: #0f0f0f;
 
     &:hover {
         background-color: rgba($warning-btn, $alpha: $hover);
@@ -60,7 +60,7 @@ function getColor() {
 
 .button-submit {
     background-color: rgba($submit-btn, $alpha: $static);
-    color: #000000;
+    color: #0f0f0f;
 
     &:hover {
         background-color: rgba($submit-btn, $alpha: $hover);
