@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { iCard } from '../Interfaces/CardInterface';
-import { iSettings } from '../Interfaces/SettingsInterface';
 import { toRaw } from 'vue';
+import { iSettings } from '../Interfaces/SettingsInterface';
 
 export const useDatabaseStore = defineStore("database", () => {
   const LAYOUT_DB = "cards_layout";
@@ -122,86 +122,6 @@ export const useDatabaseStore = defineStore("database", () => {
   async function settingsDbExists(): Promise<boolean> {
     return databaseExists(SETTINGS_DB)
   }
-
-  // function initDatabase(): Promise<IDBDatabase> {
-  //   return new Promise((resolve) => {
-  //     const request = indexedDB.open("card-layout");
-  //     request.onupgradeneeded = () => {
-  //       const db: IDBDatabase = request.result;
-  //       const store = db.createObjectStore("cards", { keyPath: "idx" })
-  //       store.createIndex("by_url", "url")
-  //       store.createIndex("by_name", "name")
-  //       store.createIndex("by_color", "color")
-  //       store.createIndex("by_image", "image")
-  //     }
-  //     request.onsuccess = () => {
-  //       resolve(request.result)
-  //     }
-  //   })
-  // }
-
-  // function updateDatabase(cards: Ref<Ref<iCard>[]>): void {
-  //   const request = indexedDB.open("card-layout")
-  //   request.onsuccess = () => {
-  //     const db: IDBDatabase = request.result
-  //     const tx = db.transaction("cards", "readwrite")
-  //     const store = tx.objectStore("cards")
-  //     const request_clr = store.clear()
-  //     request_clr.onsuccess = () => {
-  //       putCardsToDatabase(cards)
-  //     }
-  //   }
-  // }
-
-  // function putCardsToDatabase(cards: Ref<Ref<iCard>[]>): void {
-  //   initDatabase().then(res => {
-  //     const db: IDBDatabase = res
-  //     const tx = db.transaction("cards", "readwrite")
-  //     const store = tx.objectStore("cards")
-  //     for (let index = 0; index < cards.value.length; index++) {
-  //       const element = cards.value[index]
-  //       store.put({
-  //         idx: index,
-  //         url: element.value.url,
-  //         name: element.value.name,
-  //         image: element.value.image,
-  //         color: element.value.color
-  //       })
-  //     }
-  //     tx.oncomplete = () => {
-  //       localStorage.setItem("hasCustom", "true")
-  //     }
-  //   })
-  // }
-
-  // function getCardsFromDatabase(): Promise<iCard[]> {
-  //   return new Promise((resolve) => {
-  //     const request = indexedDB.open("card-layout");
-  //     request.onsuccess = () => {
-  //       const tx = request.result.transaction("cards", "readwrite")
-  //       const store = tx.objectStore("cards")
-  //       const getAllRequest = store.getAll()
-  //       getAllRequest.onsuccess = () => {
-  //         resolve(getAllRequest.result)
-  //       }
-  //       getAllRequest.onerror = () => {
-  //         resolve([])
-  //       }
-  //     }
-  //   })
-  // }
-
-  // function removeDatabases(): void { // TODO remove
-  //   const request = indexedDB.deleteDatabase("card-layout");
-  //   const request2 = indexedDB.deleteDatabase("card-bg");
-  //   request.onsuccess = () => {
-  //     console.log("Card database deleted successfully");
-  //   }
-  //   request2.onsuccess = () => {
-  //     console.log("BG database deleted successfully");
-  //   }
-  //   localStorage.clear()
-  // }
 
 
   async function deleteDatabase(databaseName: string): Promise<void> {

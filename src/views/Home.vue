@@ -17,7 +17,7 @@
 						id="cards-grid"
 						item-key="(item) => item.value.idx"
 						:animation="200"
-						:disabled="!sStore.isDragAndDropEnabled"
+						:disabled="!sStore.settings.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
 						@end="refreshDraggeble()"
 						>
@@ -30,7 +30,7 @@
 							/>
 						</template>
 						<template #footer>
-							<AddCard draggable="false" v-if="sStore.isAddCardButtonEnabled"/>
+							<AddCard draggable="false" v-if="sStore.settings.isAddCardButtonEnabled"/>
 						</template>
 					</Draggable>
 			</div>
@@ -82,15 +82,16 @@ function setWrapperWidth(columns?: number):void{
 
 onBeforeMount(()=> {
   // dStore.deleteCardsDatabase()
+  // dStore.deleteSettingsDatabase()
 	cStore.init()
 	sStore.init()
 })
 
 watch(
-	() => [sStore.columnCount, sStore.isLimitColumnsEnabled],
+	() => [sStore.settings.columnCount, sStore.settings.isLimitColumnsEnabled],
 		() =>{
-			if(sStore.isLimitColumnsEnabled){
-				setWrapperWidth(sStore.columnCount)
+			if(sStore.settings.isLimitColumnsEnabled){
+				setWrapperWidth(sStore.settings.columnCount)
 			}else{
 				setWrapperWidth()
 			}

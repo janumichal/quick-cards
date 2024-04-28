@@ -1,4 +1,6 @@
-export interface iSettings {
+import { iCard } from "./CardInterface"
+export interface iExport {
+    cards: iCard[]
     columnCount: number
     backgroundColor: string
     backgroundImage: string|null
