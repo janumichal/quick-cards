@@ -29,7 +29,7 @@
             </div>
             <div class="divider"></div>
             <div class="card-content-wrapper">
-              <Card @get-image="tmpImage = $event" :card='ref(editedCard)' :key="editedCard.color" :is-preview='true'/>
+              <Card @get-image="tmpImage = $event" :card='ref(editedCard)' :key="editedCard.color" :is-preview='true' />
               <div class="edit-color-wrapper">
                 <div>
                   Card color
@@ -55,48 +55,58 @@
 
 
 <script setup lang="ts">
-  import ModalWindow from "../components/default/ModalWindow.vue"
-  import Card from "./Card.vue";
-  import NormalButton from "./default/NormalButton.vue";
+import ModalWindow from "../components/default/ModalWindow.vue"
+import Card from "./Card.vue";
+import NormalButton from "./default/NormalButton.vue";
 
 
-  import { ref, Ref, toValue } from "vue";
-  import { useCardsStore } from "../store/Cards"
-  import { useGeneralStore } from "../store/General";
-  import { iCard } from "../Interfaces/CardInterface";
-  import { ButtonTypes } from "../enums"
+import { ref, Ref, watch, toRaw } from "vue";
+import { useCardsStore } from "../store/Cards"
+import { useGeneralStore } from "../store/General";
+import { iCard } from "../Interfaces/CardInterface";
+import { ButtonTypes } from "../enums"
 import { useDatabaseStore } from "../store/Database";
 
-  const cStore = useCardsStore()
-  const gStore = useGeneralStore()
-  const dStore = useDatabaseStore()
+const cStore = useCardsStore()
+const gStore = useGeneralStore()
+const dStore = useDatabaseStore()
 
-  var card: Ref<iCard> = cStore.getEditedCard()
-  var editedCard: Ref<iCard> = cStore.getEditedCard()
-  const tmpImage: Ref<string | null> = ref(card.value.image)
+var card: Ref<iCard> = ref(cStore.getEmptyCard())
+const editedCard: Ref<iCard> = ref(cStore.getEmptyCard())
+const tmpImage: Ref<string | null> = ref(editedCard.value.image)
 
-  function deleteCard(): void {
-    cStore.deleteCard(card.value)
-    closeEditModal()
+function deleteCard(): void {
+  cStore.deleteCard(card.value)
+  closeEditModal()
+}
+
+function saveCard(): void {
+  editedCard.value.image = tmpImage.value
+  tmpImage.value = null
+
+  if (gStore.isNewCard) {
+    cStore.cards.push(ref(structuredClone(toRaw(editedCard.value))))
+  } else {
+    card.value = editedCard.value
   }
+  closeEditModal()
+}
 
-  function saveCard(): void {
-    editedCard.value.image = tmpImage.value
-    tmpImage.value = null
+function closeEditModal() {
+  dStore.saveCards()
+  gStore.isCardEditOpen = false
+}
 
-    if(gStore.isNewCard){
-      cStore.cards.push(ref(editedCard.value))
-    }else{
-      card.value = editedCard.value
+watch(
+  () => gStore.isCardEditOpen,
+  () => {
+    if (gStore.isCardEditOpen) {
+      card = cStore.getEditedCard()
+      editedCard.value = structuredClone(toRaw(card.value))
     }
-    
-    dStore.saveCards(cStore.cards.map(e => toValue(e)))
-    closeEditModal()
   }
+)
 
-  function closeEditModal() {
-    gStore.isCardEditOpen = false
-  }
 </script>
 
 

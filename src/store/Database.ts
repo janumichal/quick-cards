@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { iCard } from '../Interfaces/CardInterface';
-import { toRaw } from 'vue';
+import { toRaw, toValue } from 'vue';
 import { iSettings } from '../Interfaces/SettingsInterface';
+import { useCardsStore } from './Cards';
+import { useSettingsStore } from './Settings';
 
 export const useDatabaseStore = defineStore("database", () => {
   const LAYOUT_DB = "cards_layout";
@@ -10,6 +12,9 @@ export const useDatabaseStore = defineStore("database", () => {
   const SETTINGS_OBJECT_STORE = "settings"
 
   const CURRENT_DB_VERSION = 1
+
+  const cStore = useCardsStore()
+  const sStore = useSettingsStore()
 
   async function databaseExists(databaseName: string): Promise<boolean>{
     return new Promise(resolve => {
@@ -99,11 +104,13 @@ export const useDatabaseStore = defineStore("database", () => {
   }
 
 
-  function saveCards(cards: iCard[]): void {
+  function saveCards(): void {
+    const cards: iCard[] = cStore.cards.map(e => toValue(e))
     saveElements(cards, LAYOUT_DB, LAYOUT_OBJECT_STORE)
   }
 
-  function saveSettings(settings: iSettings) {
+  function saveSettings() {
+    const settings: iSettings = sStore.settings
     saveElements([settings], SETTINGS_DB, SETTINGS_OBJECT_STORE)
   }
 

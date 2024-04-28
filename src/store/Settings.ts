@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch, toValue, toRaw, Ref, reactive } from "vue"
+import { ref, watch, toValue, toRaw, Ref } from "vue"
 import { saveAs } from 'file-saver'
 import { useFileDialog } from '@vueuse/core'
 import { useDatabaseStore } from './Database'
@@ -47,8 +47,8 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.columnCount = new_settings.columnCount
           settings.value.isLimitColumnsEnabled = new_settings.isLimitColumnsEnabled
           settings.value.isAddCardButtonEnabled = new_settings.isAddCardButtonEnabled
-          dStore.saveCards(cStore.cards.map(e => toValue(e)))
-          dStore.saveSettings(settings.value)
+          dStore.saveCards()
+          dStore.saveSettings()
         }
       }
     }
@@ -78,7 +78,7 @@ export const useSettingsStore = defineStore("settings", () => {
 
   async function init(): Promise<void> {
     if (!await dStore.settingsDbExists()) {
-      dStore.saveSettings(settings.value)
+      dStore.saveSettings()
     } else {
       dStore.getSettings().then(new_settings => {
         settings.value = new_settings[0]
@@ -105,7 +105,7 @@ export const useSettingsStore = defineStore("settings", () => {
   watch(
     () => settings.value,
     () => {
-      dStore.saveSettings(settings.value)
+      dStore.saveSettings()
     },
     { deep: true }
   )

@@ -40,7 +40,6 @@ const gStore = useGeneralStore()
 const loadedImage: Ref<boolean> = ref(false)
 const card_background: Ref<HTMLElement | undefined> = ref()
 
-
 const { files, open, reset, onChange } = useFileDialog({
   accept: "image/jpg, image/png, image/jpeg",
   multiple: false
@@ -97,10 +96,13 @@ onMounted(() => {
 
 watch(
   () => cStore.cards[cStore.cards.indexOf(props.card)],
-    () =>{
-      setImage(props.card.value.image)
-      setColor(props.card.value.color)
-    }
+  () => {
+    setImage(props.card.value.image)
+    setColor(props.card.value.color)
+  },
+  {
+    deep: true
+  }
 )
 
 </script>

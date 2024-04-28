@@ -122,14 +122,14 @@ const { open, reset, onChange } = useFileDialog({
 function resetBackgroundImage(): void {
   reset()
   sStore.setBackgroundImage(null)
-  dStore.saveSettings(sStore.settings)
+  dStore.saveSettings()
 }
 
 onChange((files: FileList | null) => {
   if (files != null) {
     sStore.convertFileToString(files[0]).then((image: string) => {
       sStore.setBackgroundImage(image)
-      dStore.saveSettings(sStore.settings) // TODO asi dát napevno ten sStore.settings
+      dStore.saveSettings()
     })
   }
 })

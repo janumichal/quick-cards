@@ -15,7 +15,7 @@
 						tag="div"
 						class="cards"
 						id="cards-grid"
-						item-key="(item) => item.value.idx"
+						item-key="(item) => item.value"
 						:animation="200"
 						:disabled="!sStore.settings.isDragAndDropEnabled"
 						:ghostClass="'ghost'"
@@ -25,7 +25,6 @@
 							<Card 
               :is-preview="false"
 							:card="card"
-              :key="card.idx"
 							class="d_card"
 							/>
 						</template>
@@ -39,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, onBeforeMount, ref, toValue, watch} from 'vue';
+import { Ref, onBeforeMount, ref, watch} from 'vue';
 import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
@@ -62,7 +61,7 @@ const dStore = useDatabaseStore()
 const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
 
 function refreshDraggeble(){
-  dStore.saveCards(cStore.cards.map(e => toValue(e)))
+  dStore.saveCards()
 }
 
 function setWrapperWidth(columns?: number):void{

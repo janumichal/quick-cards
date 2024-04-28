@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, Ref, toValue } from "vue"
+import { ref, Ref } from "vue"
 import { iCard } from '../Interfaces/CardInterface'
 
 import default_json from "../assets/default.json"
@@ -23,8 +23,7 @@ export const useCardsStore = defineStore("cards", () => {
 
   function deleteCard(card: iCard):void{
     const idx = cards.value.indexOf(ref(card))
-      cards.value.splice(idx, 1)
-      dStore.saveCards(cards.value.map(e => toValue(e)))
+    cards.value.splice(idx, 1)
   }
 
   function getEditedCard():Ref<iCard>{
@@ -32,7 +31,7 @@ export const useCardsStore = defineStore("cards", () => {
   }
 
   function setEditedCard(card: Ref<iCard>): void{
-      editedCard.value = card.value
+      editedCard = card
   }
 
   function loadPreset(preset: {url:string, name: string}[]): void{
@@ -44,7 +43,7 @@ export const useCardsStore = defineStore("cards", () => {
   async function init():Promise<void>{
       if(!await dStore.cardDbExists()){
           loadPreset(default_json)
-          dStore.saveCards(cards.value.map(e => toValue(e)))
+          dStore.saveCards()
       }else{
         dStore.getCards().then(res => {
             cards.value = res.map(card => ref(card))
