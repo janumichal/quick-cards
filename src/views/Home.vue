@@ -1,12 +1,12 @@
 <template>
-	<EditWindow />
-	<SettingsPanel />
+	<CardEdit />
+	<Settings />
 	<div class="overflow">
 		<Transition name="show-settings" mode="out-in"
-			@after-leave="gStore.toggleSettingsWVisibility()">
-			<RoundButton class="settings" @click="gStore.toggleSettingsBVisibility()" v-if="gStore.isSettingsButtonVisibile">
+			@after-leave="mStore.isSettingsWindowEnabled = !mStore.isSettingsWindowEnabled">
+			<Button class="settings" :button-class="'round'" @click="mStore.isSettingsButtonEnabled = !mStore.isSettingsButtonEnabled" v-if="mStore.isSettingsButtonEnabled">
 				<img src="../assets/icons/settings.svg"/>
-			</RoundButton>
+			</Button>
 		</Transition>
 		<div class="home-wrapper">
 			<div class="cards-wrapper">
@@ -43,18 +43,18 @@ import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
 import { useSettingsStore } from '../store/Settings';
-import { useGeneralStore } from '../store/General';
 
 import Card from "../components/Card.vue"
-import EditWindow from "../components/EditWindow.vue"
+import CardEdit from "../components/CardEdit.vue"
 import AddCard from '../components/AddCard.vue';
-import RoundButton from '../components/default/RoundButton.vue';
-import SettingsPanel from "../components/SettingsPanel.vue"
+import Button from '../components/default/Button.vue';
+import Settings from "../components/Settings.vue"
 import { useDatabaseStore } from '../store/Database';
+import { useModalsStore } from '../store/Modals';
 
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
-const gStore = useGeneralStore()
+const mStore = useModalsStore()
 const dStore = useDatabaseStore()
 
 
@@ -182,4 +182,4 @@ watch(
             transform: translateX(+200%);
         }
     }
-</style>../store/Cards
+</style>../store/Cards../store/Modals

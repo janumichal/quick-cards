@@ -1,10 +1,10 @@
 <template>
-  <div class="panel-wrapper" v-if="!gStore.isSettingsButtonVisibile" @click.self="gStore.toggleSettingsWVisibility()">
-    <Transition name="settings-panel" mode="out-in" @after-leave="gStore.toggleSettingsBVisibility()">
-      <div class="panel" v-if="gStore.isSettingsWindowVisible">
+  <div class="panel-wrapper" v-if="!mStore.isSettingsButtonEnabled" @click.self="mStore.isSettingsWindowEnabled = !mStore.isSettingsWindowEnabled">
+    <Transition name="settings-panel" mode="out-in" @after-leave="mStore.isSettingsButtonEnabled = !mStore.isSettingsButtonEnabled">
+      <div class="panel" v-if="mStore.isSettingsWindowEnabled">
         <div class="settings-wrapper">
           <div class="header">
-            <RoundButton @click="gStore.toggleSettingsWVisibility()" />
+            <Button :button-class="'round'" @click="mStore.isSettingsWindowEnabled = !mStore.isSettingsWindowEnabled" />
             <div class="title">
               Settings
             </div>
@@ -16,7 +16,7 @@
                 Disable "Add Card" button
               </template>
               <template v-slot:input>
-                <ToggleButton :id="'addCard'" v-model="sStore.settings.isAddCardButtonEnabled" />
+                <Toggle :id="'addCard'" v-model="sStore.settings.isAddCardButtonEnabled" />
               </template>
             </SettingsItem>
 
@@ -25,7 +25,7 @@
                 Drag-and-drop
               </template>
               <template v-slot:input>
-                <ToggleButton :id="'dragAndDrop'" v-model="sStore.settings.isDragAndDropEnabled" />
+                <Toggle :id="'dragAndDrop'" v-model="sStore.settings.isDragAndDropEnabled" />
               </template>
             </SettingsItem>
 
@@ -34,7 +34,7 @@
                 Limit columns
               </template>
               <template v-slot:input>
-                <ToggleButton :id="'limit-columns'" v-model="sStore.settings.isLimitColumnsEnabled" />
+                <Toggle :id="'limit-columns'" v-model="sStore.settings.isLimitColumnsEnabled" />
               </template>
             </SettingsItem>
 
@@ -52,7 +52,7 @@
                 Enable background image
               </template>
               <template v-slot:input>
-                <ToggleButton :id="'enableBgImage'" v-model="sStore.settings.isBackgroundImageEnabled" />
+                <Toggle :id="'enableBgImage'" v-model="sStore.settings.isBackgroundImageEnabled" />
               </template>
             </SettingsItem>
 
@@ -70,10 +70,10 @@
                 Background image
               </template>
               <template v-slot:input>
-                <NormalButton :btn-type="ButtonTypes.Normal"
+                <Button
                   @click="sStore.settings.backgroundImage != null ? resetBackgroundImage() : open()">
                   {{ sStore.settings.backgroundImage != null ? "Remove" : "Select" }}
-                </NormalButton>
+                </Button>
               </template>
             </SettingsItem>
           </div>
@@ -95,22 +95,20 @@
 
 
 <script setup lang="ts">
-import RoundButton from './default/RoundButton.vue';
-import ToggleButton from './default/ToggleButton.vue';
-import NormalButton from './default/NormalButton.vue';
+import Toggle from './default/Toggle.vue';
+import Button from './default/Button.vue';
 import NumberInput from "./default/NumberInput.vue"
 import ColorInput from './default/ColorPicker.vue';
 import SettingsItem from './SettingsItem.vue';
 
 import { useSettingsStore } from "../store/Settings"
-import { useGeneralStore } from '../store/General';
 
 import { useFileDialog } from '@vueuse/core'
-import { ButtonTypes } from '../enums';
 import { useDatabaseStore } from '../store/Database';
+import { useModalsStore } from '../store/Modals';
 
 const sStore = useSettingsStore()
-const gStore = useGeneralStore()
+const mStore = useModalsStore()
 const dStore = useDatabaseStore()
 
 const { open, reset, onChange } = useFileDialog({
@@ -209,7 +207,7 @@ onChange((files: FileList | null) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #22202788;
+        background-color: $default-btn;
         cursor: pointer;
         transition: background-color ease-in-out 0.2s;
         border-radius: 5px;
@@ -248,4 +246,4 @@ onChange((files: FileList | null) => {
     transform: translateX(+100%);
   }
 }
-</style>
+</style>../store/Modals

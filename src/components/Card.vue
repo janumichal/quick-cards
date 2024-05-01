@@ -1,9 +1,9 @@
 <template>
   <a class="sc" :class="props.isPreview ? 'noninteractive' : ''" :href="props.card.value.url">
     <div ref="card_background" class="sc_body">
-      <RoundButton v-if="!props.isPreview" class="sc_edit" @click.stop="onEdit($event)">
+      <Button class="sc_edit" :button-class="'round'" v-if="!props.isPreview" @click.stop="onEdit($event)">
         <img src="../assets/icons/edit.svg">
-      </RoundButton>
+      </Button>
       <div v-if="props.isPreview" class="up-card-image" @click="loadedImage ? resetFile($event) : openFile($event)">
         <img v-if="!loadedImage" src="../assets/icons/upload.svg">
         <img v-if="loadedImage" src="../assets/icons/delete.svg">
@@ -18,9 +18,9 @@ import { useFileDialog } from '@vueuse/core'
 import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import { useSettingsStore } from "../store/Settings"
-import RoundButton from './default/RoundButton.vue';
 import { ref, Ref, onMounted, PropType, watch } from 'vue';
-import { useGeneralStore } from '../store/General';
+import { useModalsStore } from '../store/Modals';
+import Button from './default/Button.vue';
 
 const props = defineProps({
   isPreview: {
@@ -36,7 +36,7 @@ const props = defineProps({
 
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
-const gStore = useGeneralStore()
+const mStore = useModalsStore()
 const loadedImage: Ref<boolean> = ref(false)
 const card_background: Ref<HTMLElement | undefined> = ref()
 
@@ -83,8 +83,8 @@ function resetFile(event: Event): void {
 
 async function onEdit(event: Event): Promise<void> {
   cStore.setEditedCard(props.card)
-  gStore.isCardEditOpen = true
-  gStore.isNewCard = false
+  mStore.isCardEditEnabled = true
+  cStore.isNewCard = false
   event.preventDefault()
 }
 
@@ -201,4 +201,4 @@ watch(
       -1px 0 0 #000;
   }
 }
-</style>
+</style>../store/Modals

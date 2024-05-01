@@ -1,9 +1,9 @@
 <template>
   <div>
-    <ModalWindow :isOpen="gStore.isCardEditOpen" @modal-close="closeEditModal()">
+    <Modal :isOpen="mStore.isCardEditEnabled" @modal-close="closeEditModal()">
       <template v-slot:header>
         <div class="title">
-          {{ gStore.isNewCard ? "Create" : "Edit" }} Shortcut
+          {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
         </div>
       </template>
       <template v-slot:content>
@@ -38,38 +38,37 @@
               </div>
             </div>
           </div>
-          <div class="button-wrapper" :style="'justify-content:' + (gStore.isNewCard? 'end;': 'space-between;')">
-            <NormalButton v-if="!gStore.isNewCard" class="delete-btn" :btn-type="ButtonTypes.Warning" @click="deleteCard()">
+          <div class="button-wrapper" :style="'justify-content:' + (cStore.isNewCard ? 'end;': 'space-between;')">
+            <Button v-if="!cStore.isNewCard" class="delete-btn" :button-class="'warning'" @click="deleteCard()">
               Delete
-            </NormalButton>
-            <NormalButton class="save-btn" :btn-type="ButtonTypes.Submit" @click="saveCard()">
-              {{ gStore.isNewCard ? "Create" : "Save" }}
-            </NormalButton>
+            </Button>
+            <Button class="save-btn" :button-class="'submit'" @click="saveCard()">
+              {{ cStore.isNewCard ? "Create" : "Save" }}
+            </Button>
           </div>
         </div>
 
       </template>
-    </ModalWindow>
+    </Modal>
   </div>
 </template>
 
 
 <script setup lang="ts">
-import ModalWindow from "../components/default/ModalWindow.vue"
+import Modal from "../components/default/Modal.vue"
 import Card from "./Card.vue";
-import NormalButton from "./default/NormalButton.vue";
+import Button from "./default/Button.vue";
 
 
 import { ref, Ref, watch, toRaw } from "vue";
 import { useCardsStore } from "../store/Cards"
-import { useGeneralStore } from "../store/General";
 import { iCard } from "../Interfaces/CardInterface";
-import { ButtonTypes } from "../enums"
 import { useDatabaseStore } from "../store/Database";
 import ColorPicker from "./default/ColorPicker.vue";
+import { useModalsStore } from "../store/Modals";
 
 const cStore = useCardsStore()
-const gStore = useGeneralStore()
+const mStore = useModalsStore()
 const dStore = useDatabaseStore()
 
 var card: Ref<iCard> = ref(cStore.getEmptyCard())
@@ -85,7 +84,7 @@ function saveCard(): void {
   editedCard.value.image = tmpImage.value
   tmpImage.value = null
 
-  if (gStore.isNewCard) {
+  if (cStore.isNewCard) {
     cStore.cards.push(ref(structuredClone(toRaw(editedCard.value))))
   } else {
     card.value = editedCard.value
@@ -95,13 +94,13 @@ function saveCard(): void {
 
 function closeEditModal() {
   dStore.saveCards()
-  gStore.isCardEditOpen = false
+  mStore.isCardEditEnabled = false
 }
 
 watch(
-  () => gStore.isCardEditOpen,
+  () => mStore.isCardEditEnabled,
   () => {
-    if (gStore.isCardEditOpen) {
+    if (mStore.isCardEditEnabled) {
       card = cStore.getEditedCard()
       editedCard.value = structuredClone(toRaw(card.value))
     }
@@ -253,4 +252,4 @@ watch(
     }
   }
 }
-</style>
+</style>../store/Modals

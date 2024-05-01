@@ -6,16 +6,16 @@
 
 <script setup lang="ts">
 import { useCardsStore } from '../store/Cards';
-import { useGeneralStore } from '../store/General';
 import { ref, toRaw } from "vue"
+import { useModalsStore } from '../store/Modals';
 
-const gStore = useGeneralStore()
+const mStore = useModalsStore()
 const cStore = useCardsStore()
 
 function addNewCard() {
   cStore.setEditedCard(ref(structuredClone(toRaw(cStore.getEmptyCard()))))
-  gStore.isNewCard = true
-  gStore.isCardEditOpen = true
+  cStore.isNewCard = true
+  mStore.isCardEditEnabled = true
 }
 
 </script>
@@ -43,4 +43,4 @@ function addNewCard() {
         cursor: pointer;
     }
 }
-</style>
+</style>../store/Modals

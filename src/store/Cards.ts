@@ -14,7 +14,8 @@ export const useCardsStore = defineStore("cards", () => {
   }
   var cards: Ref<Ref<iCard>[]> = ref([])
   var editedCard: Ref<iCard> = ref(getEmptyCard())
-  const editedCardColor: Ref<string> = ref("#464352")
+  const isNewCard: Ref<boolean> = ref(false)
+
   const dStore = useDatabaseStore()
 
   function getEmptyCard():iCard{
@@ -36,7 +37,7 @@ export const useCardsStore = defineStore("cards", () => {
 
   function loadPreset(preset: {url:string, name: string}[]): void{
       for (let index = 0; index < preset.length; index++) {
-          cards.value.push(ref({...preset[index], ...{image: null, color: "#CCCCFF"}}))
+          cards.value.push(ref({...preset[index], ...{image: null, color: "#CCCCFF"}})) // TODO remove the index
       }
   }
 
@@ -55,10 +56,10 @@ export const useCardsStore = defineStore("cards", () => {
 
   return {
     cards,
-    editedCardColor,
     init, 
     setEditedCard,
     getEditedCard, getEmptyCard,
+    isNewCard,
     deleteCard,
   }
 })

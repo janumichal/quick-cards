@@ -3,7 +3,7 @@
         <div class="modal-wrapper" v-if="isOpen" @click.self='closeOnClickOutside ? onClose(): ""'>
             <div class="modal-inner">
                 <div class="modal-header">
-                    <RoundButton @click="onClose()" />
+                    <Button :button-class="'round'" @click="onClose()" />
                     <slot name="header">
                         Default Header
                     </slot>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import RoundButton from './RoundButton.vue';
+import Button from './Button.vue';
 
 defineProps({
   isOpen: Boolean,
