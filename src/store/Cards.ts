@@ -37,7 +37,7 @@ export const useCardsStore = defineStore("cards", () => {
 
   function loadPreset(preset: {url:string, name: string}[]): void{
       for (let index = 0; index < preset.length; index++) {
-          cards.value.push(ref({...preset[index], ...{image: null, color: "#CCCCFF"}})) // TODO remove the index
+          cards.value.push(ref({...preset[index], ...{image: null, color: "#CCCCFF"}}))
       }
   }
 

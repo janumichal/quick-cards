@@ -118,7 +118,7 @@ export const useSettingsStore = defineStore("settings", () => {
   )
 
   watch(
-    () => [settings.value.isBackgroundImageEnabled],
+    () => settings.value.isBackgroundImageEnabled,
     () => {
       if (settings.value.isBackgroundImageEnabled) {
         setBackgroundImage(settings.value.backgroundImage)

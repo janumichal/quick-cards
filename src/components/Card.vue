@@ -100,9 +100,7 @@ watch(
     setImage(props.card.value.image)
     setColor(props.card.value.color)
   },
-  {
-    deep: true
-  }
+  { deep: true }
 )
 
 </script>

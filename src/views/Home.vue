@@ -10,7 +10,7 @@
 		</Transition>
 		<div class="home-wrapper">
 			<div class="cards-wrapper">
-					<Draggable 
+					<Draggable
 						v-model="cStore.cards"
 						tag="div"
 						class="cards"
@@ -25,7 +25,6 @@
 							<Card 
               :is-preview="false"
 							:card="card"
-							class="d_card"
 							/>
 						</template>
 						<template #footer>
