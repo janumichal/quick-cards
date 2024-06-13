@@ -15,7 +15,7 @@
                   Name
                 </div>
                 <div class="input-wrapper">
-                  <input type="text" id="cd_name" v-model="editedCard.name">
+                  <input type="text" id="cd_name" v-model="cStore.getEditedCard().value.name">
                 </div>
               </div>
               <div class="edit-wrapper">
@@ -23,18 +23,18 @@
                   URL
                 </div>
                 <div class="input-wrapper">
-                  <input type="url" id="cd_url" v-model="editedCard.url">
+                  <input type="url" id="cd_url" v-model="cStore.getEditedCard().value.url">
                 </div>
               </div>
             </div>
             <div class="divider"></div>
             <div class="card-content-wrapper">
-              <Card @get-image="tmpImage = $event" :card='ref(editedCard)' :key="editedCard.color" :is-preview='true' />
+              <Card :card='ref(cStore.getEditedCard().value)' :key="cStore.getEditedCard().value.color" :is-preview='true' />
               <div class="edit-color-wrapper">
                 <div>
                   Card color
                 </div>
-                <ColorPicker v-model:input-color="editedCard.color"/>
+                <ColorPicker v-model:input-color="cStore.getEditedCard().value.color"/>
               </div>
             </div>
           </div>
@@ -60,53 +60,32 @@ import Card from "./Card.vue";
 import Button from "./default/Button.vue";
 
 
-import { ref, Ref, watch, toRaw } from "vue";
+import { ref, toRaw } from "vue";
 import { useCardsStore } from "../store/Cards"
-import { iCard } from "../Interfaces/CardInterface";
-import { useDatabaseStore } from "../store/Database";
-import ColorPicker from "./default/ColorPicker.vue";
 import { useModalsStore } from "../store/Modals";
+import ColorPicker from "./default/ColorPicker.vue";
 
 const cStore = useCardsStore()
 const mStore = useModalsStore()
-const dStore = useDatabaseStore()
-
-var card: Ref<iCard> = ref(cStore.getEmptyCard())
-const editedCard: Ref<iCard> = ref(cStore.getEmptyCard())
-const tmpImage: Ref<string | null> = ref(editedCard.value.image)
 
 function deleteCard(): void {
-  cStore.deleteCard(card.value)
+  cStore.deleteEditedCard()
   closeEditModal()
 }
 
 function saveCard(): void {
-  editedCard.value.image = tmpImage.value
-  tmpImage.value = null
-
   if (cStore.isNewCard) {
-    cStore.cards.push(ref(structuredClone(toRaw(editedCard.value))))
+    cStore.cards.push(ref(structuredClone(toRaw(cStore.getEditedCard().value))))
   } else {
-    card.value = editedCard.value
+    cStore.applyEditedCardChanges()
   }
+  cStore.clearEditedCard()
   closeEditModal()
 }
 
 function closeEditModal() {
-  dStore.saveCards()
   mStore.isCardEditEnabled = false
 }
-
-watch(
-  () => mStore.isCardEditEnabled,
-  () => {
-    if (mStore.isCardEditEnabled) {
-      card = cStore.getEditedCard()
-      editedCard.value = structuredClone(toRaw(card.value))
-    }
-  }
-)
-
 </script>
 
 

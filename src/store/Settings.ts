@@ -64,18 +64,6 @@ export const useSettingsStore = defineStore("settings", () => {
     }))
   }
 
-  function convertFileToString(file: File): Promise<string> {
-    const reader: FileReader = new FileReader()
-    return new Promise((resolve) => {
-      reader.readAsDataURL(file)
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          resolve(reader.result)
-        }
-      }
-    })
-  }
-
   async function init(): Promise<void> {
     if (!await dStore.settingsDbExists()) {
       dStore.saveSettings()
@@ -131,7 +119,7 @@ export const useSettingsStore = defineStore("settings", () => {
   return {
     settings,
     init, 
-    convertFileToString, exportSettings, importSettings,
+    exportSettings, importSettings,
     setBackgroundImage, setBackgroundColor
   }
 })

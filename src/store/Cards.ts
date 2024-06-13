@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, Ref } from "vue"
+import { ref, Ref, toRaw } from "vue"
 import { iCard } from '../Interfaces/CardInterface'
 
 import default_json from "../assets/default.json"
@@ -12,8 +12,11 @@ export const useCardsStore = defineStore("cards", () => {
     color: "#b3b3ff",
     image: null
   }
+
   var cards: Ref<Ref<iCard>[]> = ref([])
+  var originalCard: Ref<iCard> = ref(getEmptyCard())
   var editedCard: Ref<iCard> = ref(getEmptyCard())
+
   const isNewCard: Ref<boolean> = ref(false)
 
   const dStore = useDatabaseStore()
@@ -22,9 +25,11 @@ export const useCardsStore = defineStore("cards", () => {
     return emptyCard
   }
 
-  function deleteCard(card: iCard):void{
-    const idx = cards.value.indexOf(ref(card))
+  function deleteEditedCard():void{
+    const idx = cards.value.indexOf(originalCard)
     cards.value.splice(idx, 1)
+    clearEditedCard()
+    dStore.saveCards()
   }
 
   function getEditedCard():Ref<iCard>{
@@ -32,7 +37,17 @@ export const useCardsStore = defineStore("cards", () => {
   }
 
   function setEditedCard(card: Ref<iCard>): void{
-      editedCard = card
+    originalCard = card
+    editedCard.value = structuredClone(toRaw(originalCard.value))
+  }
+
+  function clearEditedCard(): void{
+    setEditedCard(ref(getEmptyCard()))
+  }
+
+  function applyEditedCardChanges():void{
+    originalCard.value = structuredClone(toRaw(editedCard.value))
+    dStore.saveCards()
   }
 
   function loadPreset(preset: {url:string, name: string}[]): void{
@@ -58,8 +73,9 @@ export const useCardsStore = defineStore("cards", () => {
     cards,
     init, 
     setEditedCard,
-    getEditedCard, getEmptyCard,
+    getEditedCard, getEmptyCard, 
+    clearEditedCard, applyEditedCardChanges,
     isNewCard,
-    deleteCard,
+    deleteEditedCard,
   }
 })

@@ -4,9 +4,9 @@
       <Button class="sc_edit" :button-class="'round'" v-if="!props.isPreview" @click.stop="onEdit($event)">
         <img src="../assets/icons/edit.svg">
       </Button>
-      <div v-if="props.isPreview" class="up-card-image" @click="loadedImage ? resetFile($event) : openFile($event)">
-        <img v-if="!loadedImage" src="../assets/icons/upload.svg">
-        <img v-if="loadedImage" src="../assets/icons/delete.svg">
+      <div v-if="props.isPreview" class="up-card-image" @click="props.card.value.image == null ? fStore.openFile($event) : fStore.resetFile($event)">
+        <img v-if="props.card.value.image == null" src="../assets/icons/upload.svg">
+        <img v-if="props.card.value.image != null" src="../assets/icons/delete.svg">
       </div>
     </div>
     <div class="sc_name">{{ props.card.value.name }}</div>
@@ -14,12 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { useFileDialog } from '@vueuse/core'
 import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
-import { useSettingsStore } from "../store/Settings"
-import { ref, Ref, onMounted, PropType, watch } from 'vue';
 import { useModalsStore } from '../store/Modals';
+import { useFilesStore } from '../store/Files';
+import { ref, Ref, onMounted, PropType, watch } from 'vue';
 import Button from './default/Button.vue';
 
 const props = defineProps({
@@ -35,26 +34,9 @@ const props = defineProps({
 })
 
 const cStore = useCardsStore()
-const sStore = useSettingsStore()
 const mStore = useModalsStore()
-const loadedImage: Ref<boolean> = ref(false)
+const fStore = useFilesStore()
 const card_background: Ref<HTMLElement | undefined> = ref()
-
-const { files, open, reset, onChange } = useFileDialog({
-  accept: "image/jpg, image/png, image/jpeg",
-  multiple: false
-})
-const emit = defineEmits(["get-image"])
-
-onChange((files: FileList | null) => {
-  if (files != null) {
-    sStore.convertFileToString(files[0]).then(res => {
-      setImage(res)
-      loadedImage.value = true
-      emit("get-image", res)
-    })
-  }
-})
 
 function setImage(file: string | null): void {
   if (card_background.value != undefined) {
@@ -68,19 +50,6 @@ function setColor(color: string): void {
   }
 }
 
-function openFile(event: Event): void {
-  open()
-  event.preventDefault()
-}
-
-function resetFile(event: Event): void {
-  reset()
-  setImage(null)
-  emit("get-image", null)
-  loadedImage.value = false
-  event.preventDefault()
-}
-
 async function onEdit(event: Event): Promise<void> {
   cStore.setEditedCard(props.card)
   mStore.isCardEditEnabled = true
@@ -89,13 +58,12 @@ async function onEdit(event: Event): Promise<void> {
 }
 
 onMounted(() => {
-  loadedImage.value = files.value || props.card.value.image != null ? true : false
   setImage(props.card.value.image)
   setColor(props.card.value.color)
 })
 
 watch(
-  () => cStore.cards[cStore.cards.indexOf(props.card)],
+  () => props.card,
   () => {
     setImage(props.card.value.image)
     setColor(props.card.value.color)
