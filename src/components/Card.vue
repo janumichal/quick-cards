@@ -18,8 +18,9 @@ import { iCard } from '../Interfaces/CardInterface';
 import { useCardsStore } from '../store/Cards';
 import { useModalsStore } from '../store/Modals';
 import { useFilesStore } from '../store/Files';
-import { ref, Ref, onMounted, PropType, watch } from 'vue';
+import { ref, Ref, onMounted, PropType } from 'vue';
 import Button from './default/Button.vue';
+import { watchDeep } from '@vueuse/core';
 
 const props = defineProps({
   isPreview: {
@@ -62,13 +63,12 @@ onMounted(() => {
   setColor(props.card.value.color)
 })
 
-watch(
+watchDeep(
   () => props.card,
   () => {
     setImage(props.card.value.image)
     setColor(props.card.value.color)
-  },
-  { deep: true }
+  }
 )
 
 </script>

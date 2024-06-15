@@ -23,11 +23,11 @@ export const useDatabaseStore = defineStore("database", () => {
           request.transaction?.abort();
       }
       request.onerror = () => {
-        console.log(`Database ${databaseName} does NOT exists`);
+        // console.log(`Database ${databaseName} does NOT exists`);
         resolve(false)
       }
       request.onsuccess = () => {
-        console.log(`Database ${databaseName} does exists`);
+        // console.log(`Database ${databaseName} does exists`);
         resolve(true)
       }
     })
@@ -46,7 +46,7 @@ export const useDatabaseStore = defineStore("database", () => {
       }
 
       request.onupgradeneeded = () => {
-        console.log("onupgradeneeded");
+        // console.log("onupgradeneeded");
         let db = request.result;
         const objectStore = db.createObjectStore(objectStoreName, { keyPath: "idx" })
         objectStore.createIndex("element", "element")
@@ -135,7 +135,7 @@ export const useDatabaseStore = defineStore("database", () => {
     return new Promise(resolve => {
       const request = indexedDB.deleteDatabase(databaseName)
       request.onsuccess = () => {
-        console.log(`Database ${databaseName} deleted successfully`);
+        // console.log(`Database ${databaseName} deleted successfully`);
         resolve()
       }
     })

@@ -42,6 +42,7 @@ export const useFilesStore = defineStore("files", () => {
   }
 
   return {
-    openFile, resetFile
+    openFile, resetFile, 
+    convertFileToString
   }
 })

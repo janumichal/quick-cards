@@ -4,11 +4,11 @@
 
 
 <script setup lang="ts">
-import { iCard } from "./Interfaces/CardInterface";
-import { useCardsStore } from "./store/Cards";
+// import { iCard } from "./Interfaces/CardInterface";
+// import { useCardsStore } from "./store/Cards";
 import Home from "./views/Home.vue"
 
-const cStore = useCardsStore()
+// const cStore = useCardsStore()
 
 // browser.menus.create({
 // 	id: "add-card",
@@ -47,15 +47,15 @@ const cStore = useCardsStore()
 // });
 
 
-function getNameFromURL(url: string){
-	const regex = new RegExp("^https?:\/\/(?:www\.)?([^.]+)\..*")
-	const found = url.match(regex)
+// function getNameFromURL(url: string){
+// 	const regex = new RegExp("^https?:\/\/(?:www\.)?([^.]+)\..*")
+// 	const found = url.match(regex)
 	
-	if(found != null){
-		return found[1]
-	}
-	return ""
-}
+// 	if(found != null){
+// 		return found[1]
+// 	}
+// 	return ""
+// }
 
 </script>
 

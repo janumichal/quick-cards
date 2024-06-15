@@ -9,15 +9,17 @@ import { iSettings } from '../Interfaces/SettingsInterface'
 
 export const useSettingsStore = defineStore("settings", () => {
 
-  const settings: Ref<iSettings> = ref({
-    isAddCardButtonEnabled: true,
-    isLimitColumnsEnabled: false,
-    columnCount: 6,
-    isDragAndDropEnabled: true,
-    isBackgroundImageEnabled: false,
-    backgroundColor: "#464352",
-    backgroundImage: null,
-  })
+  const defaultSettings = {
+      isAddCardButtonEnabled: true,
+      isLimitColumnsEnabled: false,
+      columnCount: 6,
+      isDragAndDropEnabled: true,
+      isBackgroundImageEnabled: false,
+      backgroundColor: "#464352",
+      backgroundImage: null,
+    }
+
+  const settings: Ref<iSettings> = ref(defaultSettings)
 
 
 
@@ -72,6 +74,7 @@ export const useSettingsStore = defineStore("settings", () => {
         settings.value = new_settings[0]
       })
     }
+
     setBackgroundColor(settings.value.backgroundColor)
     if (settings.value.isBackgroundImageEnabled) {
       setBackgroundImage(settings.value.backgroundImage)
@@ -88,6 +91,10 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.backgroundColor = color
     const body: HTMLElement = document.body
     body.style.backgroundColor = color
+  }
+
+  function restoreDefaultColor(){
+    settings.value.backgroundColor = defaultSettings.backgroundColor;
   }
 
   watch(
@@ -117,9 +124,10 @@ export const useSettingsStore = defineStore("settings", () => {
   )
 
   return {
-    settings,
+    settings, defaultSettings,
     init, 
     exportSettings, importSettings,
-    setBackgroundImage, setBackgroundColor
+    setBackgroundImage, setBackgroundColor,
+    restoreDefaultColor
   }
 })

@@ -74,14 +74,14 @@ function decrease(): void {
   $border: 6px;
 
   :nth-child(1 of .ni-button) {
-    border-bottom-left-radius: $border;
-    border-top-left-radius: $border;
+    // border-bottom-left-radius: $border;
+    // border-top-left-radius: $border;
 
   }
 
   :nth-child(2 of .ni-button) {
-    border-top-right-radius: $border;
-    border-bottom-right-radius: $border;
+  //   border-top-right-radius: $border;
+  //   border-bottom-right-radius: $border;
   }
 
   .ni-button {
@@ -93,11 +93,11 @@ function decrease(): void {
     padding: 5px;
     cursor: pointer;
 
-    background-color: rgba($default-btn, $alpha: $static);
+    // background-color: rgba($default-btn, $alpha: $static);
     transition: background-color ease-in-out 0.2s;
 
     &:hover {
-      background-color: rgba($default-btn, $alpha: $hover);
+      // background-color: rgba($default-btn, $alpha: $hover);
     }
 
     img {

@@ -1,13 +1,7 @@
 <template>
 	<CardEdit />
-	<Settings />
+  <Settings />
 	<div class="overflow">
-		<Transition name="show-settings" mode="out-in"
-			@after-leave="mStore.isSettingsWindowEnabled = !mStore.isSettingsWindowEnabled">
-			<Button class="settings" :button-class="'round'" @click="mStore.isSettingsButtonEnabled = !mStore.isSettingsButtonEnabled" v-if="mStore.isSettingsButtonEnabled">
-				<img src="../assets/icons/settings.svg"/>
-			</Button>
-		</Transition>
 		<div class="home-wrapper">
 			<div class="cards-wrapper">
 					<Draggable
@@ -101,28 +95,12 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-	.settings{
-		justify-self: end;
-		margin: 10px;
-		box-sizing: border-box;
-		position: fixed;
-		z-index: 1;
-	}
-
-	.overflow{
-		display: grid;
-		grid-template-columns: 1fr;
-		width: 100%;
-		.wrapper, .settings{
-			grid-row-start: 1;
-			grid-column-start: 1;
-		}
-	}
-
 	.overflow{
 		height: 100vh;
     width: 100%;
 		overflow: auto;
+    display: flex;
+    align-items: center;
 		.home-wrapper{
 			height: fit-content;
 			width: 100%;
