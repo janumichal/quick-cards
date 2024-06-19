@@ -8,4 +8,6 @@ export interface iExport {
     isLimitColumnsEnabled: boolean
     isDragAndDropEnabled: boolean
     isAddCardButtonEnabled: boolean
+    cardNameEnabled: boolean
+    cardEditEnabled: boolean
 }

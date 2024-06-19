@@ -18,9 +18,7 @@ const customDarkTheme: ThemeDefinition = {
     'surface-variant': '#696872', // off toggle
     'on-surface-variant': '#EEEEEE',
     primary: '#1867C0',
-    'primary-darken-1': '#1F5592',
     secondary: '#48A9A6',
-    'secondary-darken-1': '#018786',
     error: '#e72c2c',
     info: '#2196F3',
     success: '#4bc365',
@@ -51,7 +49,34 @@ const vuetify = createVuetify({
     },
     VDivider: {
       thickness: 3,
-      class: 'my-3'
+    },
+    VTextField: {
+      variant: "solo-filled",
+      width: "350",
+      hideDetails: true,
+    },
+    VCard: {
+      color: "surface-darken-2"
+    },
+    VCardText: {
+      class: "bg-surface-darken-1"
+    },
+    VFileInput: {
+      variant: "solo-filled",
+      chips: true,
+      prependIcon: "mdi-image-plus",
+      accept: "image/png, image/jpeg",
+      hideDetails: true,
+    },
+    VBtnToggle: {
+      density: "comfortable",
+      variant: "tonal",
+      mandatory: true
+    },
+    VColorPicker: {
+      mode: "hex",
+      dotSize: 20,
+      modes: ['hex']
     }
   }
 })

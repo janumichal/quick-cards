@@ -17,11 +17,11 @@ export const useSettingsStore = defineStore("settings", () => {
       isBackgroundImageEnabled: false,
       backgroundColor: "#464352",
       backgroundImage: null,
+      cardNameEnabled: true,
+      cardEditEnabled: true
     }
 
   const settings: Ref<iSettings> = ref(defaultSettings)
-
-
 
   const { open, onChange } = useFileDialog({
     accept: "application/json",
@@ -49,6 +49,8 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.columnCount = new_settings.columnCount
           settings.value.isLimitColumnsEnabled = new_settings.isLimitColumnsEnabled
           settings.value.isAddCardButtonEnabled = new_settings.isAddCardButtonEnabled
+          settings.value.cardNameEnabled = new_settings.cardNameEnabled
+          settings.value.cardEditEnabled = new_settings.cardEditEnabled
           dStore.saveCards()
           dStore.saveSettings()
         }

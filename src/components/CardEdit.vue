@@ -1,6 +1,48 @@
 <template>
+  <v-dialog v-model="mStore.isCardEditEnabled">
+    <div class="d-flex w-fit-content ga-10 ma-auto align-center">
+      <v-card 
+        class="w-fit-content">
+        <v-card-title>
+          <v-icon start size="small">mdi-card-plus</v-icon>
+          {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
+        </v-card-title>
+        <v-card-text class="pa-5">
+          <div class="d-flex flex-row">
+            <div class="d-flex flex-column ga-5 h-fit-content">
+              <v-text-field label="Name"></v-text-field>
+              <v-text-field label="URL"></v-text-field>
+              <div class="d-flex align-center ga-2">
+                <v-file-input
+                  v-model="cardImage"
+                  label="Choose card image" 
+                  chips></v-file-input>
+                <v-btn id="remove-shortcut-image"icon="mdi-delete"></v-btn>
+                <v-tooltip activator="#remove-shortcut-image" location="start">Remove Image</v-tooltip>
+              </div>
+            </div>
+            <v-divider 
+              class="mx-5"
+              vertical></v-divider>
+            <div>
+              <v-color-picker
+                v-model="cStore.getEditedCard().value.color"
+                ></v-color-picker>
+            </div>
+          </div>
+        </v-card-text>
+      </v-card>
+
+      
+      <Card :is-preview="true" :card="cStore.getEditedCard()"></Card>
+    </div>
+  </v-dialog>
+
+
+
+
   <div>
-    <Modal :isOpen="mStore.isCardEditEnabled" @modal-close="closeEditModal()">
+    <Modal :isOpen="false" @modal-close="closeEditModal()">
       <template v-slot:header>
         <div class="title">
           {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
@@ -60,13 +102,16 @@ import Card from "./Card.vue";
 import Button from "./default/Button.vue";
 
 
-import { ref, toRaw } from "vue";
+import { ref, toRaw, Ref, watch } from "vue";
 import { useCardsStore } from "../store/Cards"
 import { useModalsStore } from "../store/Modals";
 import ColorPicker from "./default/ColorPicker.vue";
+import { useFilesStore } from "../store/Files";
 
 const cStore = useCardsStore()
 const mStore = useModalsStore()
+const fStore = useFilesStore()
+const cardImage: Ref<File|null> = ref(null)
 
 function deleteCard(): void {
   cStore.deleteEditedCard()
@@ -86,11 +131,23 @@ function saveCard(): void {
 function closeEditModal() {
   mStore.isCardEditEnabled = false
 }
+
+watch(
+    () => cardImage.value,
+    () => {
+      if(cardImage.value != null){
+        fStore.convertFileToString(cardImage.value).then(res => {
+          cStore.getEditedCard().value.image = res
+        })
+      }
+    }
+  )
 </script>
 
 
 <style lang="scss" scoped>
 @use "../scss" as *;
+
 
 @media only screen and (max-width: 592px) {
   .divider {

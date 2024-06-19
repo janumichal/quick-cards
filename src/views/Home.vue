@@ -134,29 +134,4 @@ watch(
 			}
 		}	
 	}
-
-
-	.show-settings-enter-active{
-        animation-name: hide-btn-kf;
-        animation-direction: reverse;
-        animation-fill-mode: forwards;
-        animation-duration: .3s;
-        animation-timing-function: ease-in;
-    }
-    .show-settings-leave-active{
-        animation-name: hide-btn-kf;
-        animation-direction: normal;
-        animation-fill-mode: forwards;
-        animation-duration: .3s;
-        animation-timing-function: ease-out;
-    }
-
-	@keyframes hide-btn-kf {
-        0%{
-            transform: translateX(0%);
-        }
-        100%{
-            transform: translateX(+200%);
-        }
-    }
-</style>../store/Cards../store/Modals
+</style>

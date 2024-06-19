@@ -3,7 +3,7 @@ $static: .8;
 $hover: 1;
 
 // Colors
-$default-btn: #2e2c34;
+$default-btn: rgb(46, 44, 52);
 $warning-btn: rgba(43, 42, 50, 0.3);
 $submit-btn: #B00020;
 $primary-bg: #696872;
@@ -28,10 +28,39 @@ body {
     url(./fonts/MavenPro-VariableFont_wght.ttf) format("truetype");
 }
 
+
+[class*='text-'] {
+  font-family: $font-family !important;
+}
+
 .v-switch{
   padding-left: 12px;
   padding-right: 12px;
   .v-selection-control{
     min-height: fit-content !important;
   }
+}
+
+.w-fit-content{
+  width: fit-content;
+}
+
+.h-fit-content{
+  height: fit-content;
+}
+
+.text-outline{
+  text-shadow:
+      -1px -1px 0 #000,
+      0 -1px 0 #000,
+      1px -1px 0 #000,
+      1px 0 0 #000,
+      1px 1px 0 #000,
+      0 1px 0 #000,
+      -1px 1px 0 #000,
+      -1px 0 0 #000;
+}
+
+.bg-surface-opacity{
+  background-color: RGBA(46, 44, 52, 0.5);
 }

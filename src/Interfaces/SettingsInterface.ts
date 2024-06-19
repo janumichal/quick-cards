@@ -6,4 +6,6 @@ export interface iSettings {
     isLimitColumnsEnabled: boolean
     isDragAndDropEnabled: boolean
     isAddCardButtonEnabled: boolean
+    cardNameEnabled: boolean
+    cardEditEnabled: boolean
 }
