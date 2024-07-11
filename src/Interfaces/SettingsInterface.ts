@@ -1,7 +1,9 @@
+import { iFile } from "./FileInterface"
+
 export interface iSettings {
     columnCount: number
     backgroundColor: string
-    backgroundImage: string|null
+    backgroundImage: iFile|null
     isBackgroundImageEnabled: boolean
     isLimitColumnsEnabled: boolean
     isDragAndDropEnabled: boolean

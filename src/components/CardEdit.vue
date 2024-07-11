@@ -112,6 +112,7 @@ import { useFilesStore } from "../store/Files";
 const cStore = useCardsStore()
 const mStore = useModalsStore()
 const fStore = useFilesStore()
+
 const cardImage: Ref<File|null> = ref(null)
 
 function deleteCard(): void {
@@ -136,9 +137,10 @@ function closeEditModal() {
 watch(
     () => cardImage.value,
     () => {
-      if(cardImage.value != null){
-        fStore.convertFileToString(cardImage.value).then(res => {
-          cStore.getEditedCard().value.image = res
+      if(cardImage.value !== null){
+        const image: File = cardImage.value
+        fStore.convertFileToString(image).then(res => {
+          cStore.getEditedCard().value.image = {name: image.name, data: res}
         })
       }
     }

@@ -12,7 +12,7 @@
             class="position-absolute" 
             style="left: -50px;" 
             @click="mStore.isSettingsPanelOpen = !mStore.isSettingsPanelOpen" 
-            :icon="mStore.isSettingsPanelOpen ? 'mdi-close' : 'mdi-cog' " variant="tonal"
+            :icon="mStore.isSettingsPanelOpen ? 'mdi-close' : 'mdi-cog' "
             density="comfortable" 
             elevation="1"></v-btn>
           <v-tooltip v-if="!mStore.isSettingsPanelOpen" activator="#settings-btn" location="start">Settings</v-tooltip>
@@ -99,8 +99,8 @@
                   <v-file-input
                     v-model="backgroundImage"
                     label="Choose image" 
-                    chips></v-file-input>
-                  <div class="d-flex">
+                    chips persistent-clear></v-file-input>
+                  <!-- <div class="d-flex">
                     <v-btn color="success mt-4"
                       v-if="backgroundImage != null"
                       @click="applyBackgroundImage()">
@@ -119,7 +119,7 @@
                       v-if="sStore.settings.backgroundImage != null">
                       Clear background image
                     </v-tooltip>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </v-card-text>
@@ -145,21 +145,42 @@
 <script setup lang="ts">
 import { useSettingsStore } from "../store/Settings"
 import { useModalsStore } from '../store/Modals';
-import { Ref, ref } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { useFilesStore } from '../store/Files';
+import { iFile } from "../Interfaces/FileInterface";
 
 const sStore = useSettingsStore()
 const mStore = useModalsStore()
 const fStore = useFilesStore()
 const backgroundImage: Ref<File|null> = ref(null);
 
-function applyBackgroundImage(){
-  if(backgroundImage.value instanceof File){
-    fStore.convertFileToString(backgroundImage.value).then(res =>{
-      sStore.setBackgroundImage(res)
-    })
-  }
-}
+watch(
+    () => mStore.isSettingsPanelOpen,
+    () => {
+      if(mStore.isSettingsPanelOpen){
+        const image: iFile|null = sStore.settings.backgroundImage
+        if(image !== null){
+          backgroundImage.value = new File([], image.name)
+        }
+      }
+    }
+  )
+
+  watch(
+    () => backgroundImage.value,
+    () => {
+      if(backgroundImage.value !== null && sStore.settings.isBackgroundImageEnabled){
+        if(backgroundImage.value.size != 0){
+          const image: File = backgroundImage.value
+          fStore.convertFileToString(image).then(res =>{
+            sStore.setBackgroundImage({name: image.name,data: res})
+          })
+        }
+      }else{
+        sStore.setBackgroundImage(null)
+      }
+    }
+  )
 
 </script>
 

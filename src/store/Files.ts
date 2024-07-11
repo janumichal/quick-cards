@@ -13,7 +13,7 @@ export const useFilesStore = defineStore("files", () => {
   onChange((files: FileList|null) => {
     if(files != null){
       convertFileToString(files[0]).then(res => {
-        cStore.getEditedCard().value.image = res
+        cStore.getEditedCard().value.image = {name: files[0].name, data: res}
       });
     }
   });

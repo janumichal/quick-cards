@@ -36,18 +36,15 @@ import Draggable from 'vuedraggable'
 
 import { useCardsStore } from '../store/Cards'
 import { useSettingsStore } from '../store/Settings';
+import { useDatabaseStore } from '../store/Database';
 
 import Card from "../components/Card.vue"
 import CardEdit from "../components/CardEdit.vue"
 import AddCard from '../components/AddCard.vue';
-import Button from '../components/default/Button.vue';
 import Settings from "../components/Settings.vue"
-import { useDatabaseStore } from '../store/Database';
-import { useModalsStore } from '../store/Modals';
 
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
-const mStore = useModalsStore()
 const dStore = useDatabaseStore()
 
 

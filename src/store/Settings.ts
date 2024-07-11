@@ -6,6 +6,7 @@ import { useDatabaseStore } from './Database'
 import { useCardsStore } from './Cards'
 import { iExport } from '../Interfaces/ExportInterface'
 import { iSettings } from '../Interfaces/SettingsInterface'
+import { iFile } from '../Interfaces/FileInterface'
 
 export const useSettingsStore = defineStore("settings", () => {
 
@@ -83,10 +84,12 @@ export const useSettingsStore = defineStore("settings", () => {
     }
   }
 
-  function setBackgroundImage(file: string | null): void {
-    settings.value.backgroundImage = file
+  function setBackgroundImage(file: iFile | null): void {
+    if(settings.value.isBackgroundImageEnabled){
+      settings.value.backgroundImage = file
+    }
     const body: HTMLElement = document.body
-    body.style.backgroundImage = `url(${file == null ? "none" : file})`
+    body.style.backgroundImage = `url(${file == null ? "none" : file.data})`
   }
 
   function setBackgroundColor(color: string): void {

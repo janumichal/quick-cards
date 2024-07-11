@@ -12,7 +12,7 @@
           :color="isHovering? '' : 'transparent'"
           flat>
           <v-responsive :aspect-ratio="16/9" class="w-100 rounded-lg elevation-2">
-            <div class="w-100 h-100 rounded-lg border-lg border-opacity-25" ref="card_background">
+            <div class="w-100 h-100 bg-size-cover pa-1" ref="card_background">
               <v-btn 
                 v-if="sStore.settings.cardEditEnabled"
                 @click="onEdit($event)"
@@ -20,15 +20,16 @@
                 width="30px"
                 icon=""
                 density="comfortable"
-                class="d-flex ml-auto opacity-0" :class="isHovering? 'opacity-80':''">
+                class="d-flex ml-auto opacity-0 z-index-1" :class="isHovering? 'opacity-80':''">
                 <v-icon size="20">mdi-pencil</v-icon>
-                <v-tooltip v-if="isHovering" activator="parent" location="bottom">Settings</v-tooltip>
+                <v-tooltip v-if="isHovering" activator="parent" location="bottom">Edit</v-tooltip>
               </v-btn>
             </div>
+            <div class="w-100 h-100 rounded-lg border-lg border-opacity-25 position-absolute top-0"></div>
           </v-responsive>
           <v-card-title v-if="sStore.settings.cardNameEnabled"
-            class="py-0 px-4 mt-1 w-fit-content 
-            rounded-pill
+            class="py-0 px-4 mt-1 w-fit-content
+            rounded-pill 
             text-center font-weight-bold text-subtitle-2 text-outline">
             {{ cardProps.card.value.name }}
           </v-card-title>
@@ -45,6 +46,7 @@ import { useModalsStore } from '../store/Modals';
 import { ref, Ref, onMounted, PropType } from 'vue';
 import { watchDeep } from '@vueuse/core';
 import { useSettingsStore } from '../store/Settings';
+import { iFile } from '../Interfaces/FileInterface';
 
 const cardProps = defineProps({
   isPreview: {
@@ -63,9 +65,9 @@ const mStore = useModalsStore()
 const sStore = useSettingsStore()
 const card_background: Ref<HTMLElement | undefined> = ref()
 
-function setImage(file: string | null): void {
+function setImage(file: iFile | null): void {
   if (card_background.value != undefined) {
-    card_background.value.style.backgroundImage = `url(${file == null ? "none" : file})`
+    card_background.value.style.backgroundImage = `url(${file == null ? "none" : file.data})`
   }
 }
 

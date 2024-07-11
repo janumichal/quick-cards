@@ -1,9 +1,10 @@
 import { iCard } from "./CardInterface"
+import { iFile } from "./FileInterface"
 export interface iExport {
     cards: iCard[]
     columnCount: number
     backgroundColor: string
-    backgroundImage: string|null
+    backgroundImage: iFile|null
     isBackgroundImageEnabled: boolean
     isLimitColumnsEnabled: boolean
     isDragAndDropEnabled: boolean
