@@ -10,14 +10,15 @@
         <v-card-text class="pa-5">
           <div class="d-flex flex-row">
             <div class="d-flex flex-column ga-5 h-fit-content">
-              <v-text-field label="Name"></v-text-field>
-              <v-text-field label="URL"></v-text-field>
+              <v-text-field label="Name" v-model="cStore.getEditedCard().value.name"></v-text-field>
+              <v-text-field label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
               <div class="d-flex align-center ga-2">
                 <v-file-input
                   v-model="cardImage"
                   label="Choose card image" 
-                  chips></v-file-input>
-                <v-btn id="remove-shortcut-image"icon="mdi-delete"></v-btn>
+                  chips
+                  persistent-clear></v-file-input>
+                <!-- <v-btn id="remove-shortcut-image"icon="mdi-delete"></v-btn> -->
                 <v-tooltip activator="#remove-shortcut-image" location="start">Remove Image</v-tooltip>
               </div>
             </div>
