@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="mStore.isCardEditEnabled">
-    <div class="d-flex w-fit-content ga-10 ma-auto align-center">
+    <div class="d-flex flex-wrap w-fit-content ga-7 ma-auto align-center justify-center">
       <v-card 
         class="w-fit-content">
         <v-card-title>
@@ -8,34 +8,38 @@
           {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
         </v-card-title>
         <v-card-text class="pa-5">
-          <div class="d-flex flex-row">
+          <div class="d-flex flex-row align-center">
             <div class="d-flex flex-column ga-5 h-fit-content">
               <v-text-field label="Name" v-model="cStore.getEditedCard().value.name"></v-text-field>
               <v-text-field label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
-              <div class="d-flex align-center ga-2">
-                <v-file-input
-                  v-model="cardImage"
-                  label="Choose card image" 
-                  chips
-                  persistent-clear></v-file-input>
-                <!-- <v-btn id="remove-shortcut-image"icon="mdi-delete"></v-btn> -->
-                <v-tooltip activator="#remove-shortcut-image" location="start">Remove Image</v-tooltip>
-              </div>
             </div>
             <v-divider 
               class="mx-5"
               vertical></v-divider>
-            <div>
-              <v-color-picker
-                v-model="cStore.getEditedCard().value.color"
-                ></v-color-picker>
+            <div class="d-flex flex-column ga-5">
+              <v-color-picker v-model="cStore.getEditedCard().value.color"></v-color-picker>
+              <v-file-input v-model="cardImage" label="Optional image" chips persistent-clear></v-file-input>
             </div>
           </div>
+          <div class="d-flex w-100 justify-space-between mt-7">
+            <v-btn color="warning">Delete</v-btn>
+            <div class="d-flex ga-3">
+              <v-btn>Cancel</v-btn>
+              <v-btn color="success">Save</v-btn>
+            </div>
+          </div>
+
         </v-card-text>
       </v-card>
 
-      
-      <Card :is-preview="true" :card="cStore.getEditedCard()"></Card>
+      <v-card>
+        <v-card-title>
+          Preview
+        </v-card-title>
+        <v-card-text class="pa-5">
+          <Card :is-preview="true" :card="cStore.getEditedCard()"></Card>
+        </v-card-text>
+      </v-card>
     </div>
   </v-dialog>
 

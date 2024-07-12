@@ -18,11 +18,11 @@ const customDarkTheme: ThemeDefinition = {
     'surface-variant': '#696872', // off toggle
     'on-surface-variant': '#EEEEEE',
     primary: '#1867C0',
-    secondary: '#48A9A6',
+    secondary: '#000000',
     error: '#e72c2c',
     info: '#2196F3',
     success: '#4bc365',
-    warning: '#FB8C00',
+    warning: '#db6856',
   },
 }
 
