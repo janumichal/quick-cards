@@ -3,32 +3,29 @@
     <div class="d-flex flex-wrap w-fit-content ga-7 ma-auto align-center justify-center">
       <v-card 
         class="w-fit-content">
-        <v-card-title>
+        <v-card-title class="d-flex align-center">
           <v-icon start size="small">mdi-card-plus</v-icon>
           {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
+          <v-btn class="ml-auto" icon="mdi-close" density="comfortable" elevation="1" @click="closeEditModal()"></v-btn>
         </v-card-title>
-        <v-card-text class="pa-5">
+        <v-card-text class="pa-5 ">
           <div class="d-flex flex-row align-center">
             <div class="d-flex flex-column ga-5 h-fit-content">
               <v-text-field label="Name" v-model="cStore.getEditedCard().value.name"></v-text-field>
               <v-text-field label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
+              <v-file-input v-model="cardImage" label="Optional Background Image" chips persistent-clear></v-file-input>
             </div>
             <v-divider 
               class="mx-5"
               vertical></v-divider>
             <div class="d-flex flex-column ga-5">
               <v-color-picker v-model="cStore.getEditedCard().value.color"></v-color-picker>
-              <v-file-input v-model="cardImage" label="Optional image" chips persistent-clear></v-file-input>
             </div>
           </div>
-          <div class="d-flex w-100 justify-space-between mt-7">
-            <v-btn color="warning">Delete</v-btn>
-            <div class="d-flex ga-3">
-              <v-btn>Cancel</v-btn>
-              <v-btn color="success">Save</v-btn>
-            </div>
-          </div>
-
+          <v-card-actions class="pa-0 mt-3 min-h-fit-content">
+            <v-btn color="warning" @click="deleteConfirmationEnabled=true" v-if="!cStore.isNewCard">Delete</v-btn>
+            <v-btn class="ml-auto" color="success" @click="saveCard()">{{ cStore.isNewCard ? "Add Card" : "Save"}}</v-btn>
+          </v-card-actions>
         </v-card-text>
       </v-card>
 
@@ -43,74 +40,28 @@
     </div>
   </v-dialog>
 
-
-
-
-  <div>
-    <Modal :isOpen="false" @modal-close="closeEditModal()">
-      <template v-slot:header>
-        <div class="title">
-          {{ cStore.isNewCard ? "Create" : "Edit" }} Shortcut
-        </div>
-      </template>
-      <template v-slot:content>
-        <div class="wrapper">
-          <div class="content-wrapper">
-            <div class="text-content-wrapper">
-              <div class="edit-wrapper">
-                <div class="subtitle">
-                  Name
-                </div>
-                <div class="input-wrapper">
-                  <input type="text" id="cd_name" v-model="cStore.getEditedCard().value.name">
-                </div>
-              </div>
-              <div class="edit-wrapper">
-                <div class="subtitle">
-                  URL
-                </div>
-                <div class="input-wrapper">
-                  <input type="url" id="cd_url" v-model="cStore.getEditedCard().value.url">
-                </div>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="card-content-wrapper">
-              <Card :card='ref(cStore.getEditedCard().value)' :key="cStore.getEditedCard().value.color" :is-preview='true' />
-              <div class="edit-color-wrapper">
-                <div>
-                  Card color
-                </div>
-                <ColorPicker v-model:input-color="cStore.getEditedCard().value.color"/>
-              </div>
-            </div>
-          </div>
-          <div class="button-wrapper" :style="'justify-content:' + (cStore.isNewCard ? 'end;': 'space-between;')">
-            <Button v-if="!cStore.isNewCard" class="delete-btn" :button-class="'warning'" @click="deleteCard()">
-              Delete
-            </Button>
-            <Button class="save-btn" :button-class="'submit'" @click="saveCard()">
-              {{ cStore.isNewCard ? "Create" : "Save" }}
-            </Button>
-          </div>
-        </div>
-
-      </template>
-    </Modal>
-  </div>
+  <v-dialog v-model="deleteConfirmationEnabled">
+    <div class="d-flex flex-wrap w-fit-content ga-7 ma-auto align-center justify-center">
+      <v-card class="w-fit-content">
+        <v-card-text class="pa-5">
+          Are you sure you want to delete this card?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="warning" @click="deleteCard()" v-if="!cStore.isNewCard">Delete</v-btn>
+          <v-btn class="ml-auto" @click="deleteConfirmationEnabled=false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </div>
+  </v-dialog>
 </template>
 
 
 <script setup lang="ts">
-import Modal from "../components/default/Modal.vue"
 import Card from "./Card.vue";
-import Button from "./default/Button.vue";
-
 
 import { ref, toRaw, Ref, watch } from "vue";
 import { useCardsStore } from "../store/Cards"
 import { useModalsStore } from "../store/Modals";
-import ColorPicker from "./default/ColorPicker.vue";
 import { useFilesStore } from "../store/Files";
 
 const cStore = useCardsStore()
@@ -118,17 +69,22 @@ const mStore = useModalsStore()
 const fStore = useFilesStore()
 
 const cardImage: Ref<File|null> = ref(null)
+const deleteConfirmationEnabled : Ref<boolean> = ref(false)
 
 function deleteCard(): void {
+  deleteConfirmationEnabled.value = false
   cStore.deleteEditedCard()
   closeEditModal()
+  mStore.isSnackbarDeletedCardEnabled = true
 }
 
 function saveCard(): void {
   if (cStore.isNewCard) {
     cStore.cards.push(ref(structuredClone(toRaw(cStore.getEditedCard().value))))
+    mStore.isSnackbarAddedCardEnabled = true
   } else {
     cStore.applyEditedCardChanges()
+    mStore.isSnackbarEditedCardEnabled = true
   }
   cStore.clearEditedCard()
   closeEditModal()

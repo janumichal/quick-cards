@@ -1,6 +1,7 @@
 <template>
 	<CardEdit />
   <Settings />
+
 	<div class="overflow">
 		<div class="home-wrapper">
 			<div class="cards-wrapper">
@@ -28,6 +29,50 @@
 			</div>
 		</div>
 	</div>
+
+  <v-snackbar 
+    v-model="mStore.isSnackbarAddedCardEnabled"
+    :timeout="baseTimeout"
+    color="success"
+    variant="tonal">
+    <div class="d-flex">
+      <v-icon>
+        mdi-check-circle
+      </v-icon>
+      <div class="d-flex w-100 justify-center">
+        New card&nbsp;<b>Added</b>
+      </div>
+    </div>
+  </v-snackbar>
+
+  <v-snackbar 
+    v-model="mStore.isSnackbarEditedCardEnabled"
+    :timeout="baseTimeout"
+    variant="tonal">
+    <div class="d-flex">
+      <v-icon>
+        mdi-pencil
+      </v-icon>
+      <div class="d-flex w-100 justify-center">
+        Card&nbsp;<b>Edited</b>
+      </div>
+    </div>
+  </v-snackbar>
+
+  <v-snackbar 
+    v-model="mStore.isSnackbarDeletedCardEnabled"
+    :timeout="baseTimeout"
+    color="warning"
+    variant="tonal">
+    <div class="d-flex">
+      <v-icon>
+        mdi-delete
+      </v-icon>
+      <div class="d-flex w-100 justify-center">
+        Card was&nbsp;<b>Deleted</b>
+      </div>
+    </div>
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -37,33 +82,36 @@ import Draggable from 'vuedraggable'
 import { useCardsStore } from '../store/Cards'
 import { useSettingsStore } from '../store/Settings';
 import { useDatabaseStore } from '../store/Database';
+import { useModalsStore } from '../store/Modals'
 
 import Card from "../components/Card.vue"
 import CardEdit from "../components/CardEdit.vue"
-import AddCard from '../components/AddCard.vue';
+import AddCard from '../components/AddCard.vue'
 import Settings from "../components/Settings.vue"
 
 const cStore = useCardsStore()
 const sStore = useSettingsStore()
 const dStore = useDatabaseStore()
+const mStore = useModalsStore()
 
+const baseTimeout : number = 1500
 
-const cards_element: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
+const cardsElement: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
 
 function refreshDraggeble(){
   dStore.saveCards()
 }
 
 function setWrapperWidth(columns?: number):void{
-	cards_element.value = document.getElementById("cards-grid")
-	if(cards_element.value != null){
+	cardsElement.value = document.getElementById("cards-grid")
+	if(cardsElement.value != null){
 		if(columns === undefined){
-			cards_element.value.style.width = `fit-content`
+			cardsElement.value.style.width = `fit-content`
 		}else{
 			var width:number = 200
 			var gap:number = 10
 			if(columns != undefined){
-				cards_element.value.style.width = `min(${width*columns + gap*(columns-1)}px,100%`
+				cardsElement.value.style.width = `min(${width*columns + gap*(columns-1)}px,100%`
 			}
 		}
 	}

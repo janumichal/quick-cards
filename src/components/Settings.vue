@@ -100,26 +100,6 @@
                     v-model="backgroundImage"
                     label="Choose image" 
                     chips persistent-clear></v-file-input>
-                  <!-- <div class="d-flex">
-                    <v-btn color="success mt-4"
-                      v-if="backgroundImage != null"
-                      @click="applyBackgroundImage()">
-                      <v-icon start>mdi-check</v-icon>
-                      Apply
-                    </v-btn>
-                    <v-btn 
-                      class="mt-4 ml-auto"
-                      id="clear-bg-img-btn"
-                      color="primary"
-                      v-if="sStore.settings.backgroundImage != null"
-                      @click="sStore.setBackgroundImage(null)">
-                      Clear
-                    </v-btn>
-                    <v-tooltip activator="#clear-bg-img-btn" location="start"
-                      v-if="sStore.settings.backgroundImage != null">
-                      Clear background image
-                    </v-tooltip>
-                  </div> -->
                 </div>
               </div>
             </v-card-text>
