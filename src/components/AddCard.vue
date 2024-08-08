@@ -1,6 +1,6 @@
 <template>
     <div class="addcard-wrapper" @click="addNewCard()">
-        <img src="../assets/icons/add.svg" />
+        <v-icon size="60px" class="opacity-60">mdi-plus</v-icon>
     </div>
 </template>
 
@@ -31,12 +31,6 @@ function addNewCard() {
     justify-content: center;
     align-items: center;
     transition: all ease-in-out 0.2s;
-
-    img {
-        aspect-ratio: 1/1;
-        width: 60px;
-        opacity: .85;
-    }
 
     &:hover {
         background-color: #00000058;

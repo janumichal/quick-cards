@@ -94,7 +94,7 @@ const sStore = useSettingsStore()
 const dStore = useDatabaseStore()
 const mStore = useModalsStore()
 
-const baseTimeout : number = 1500
+const baseTimeout : number = 2000
 
 const cardsElement: Ref<HTMLElement|null> = ref(document.getElementById("cards-grid"))
 

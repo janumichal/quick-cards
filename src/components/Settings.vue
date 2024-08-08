@@ -105,7 +105,7 @@
             </v-card-text>
           </v-card>
         </div>
-        <div class="d-flex justify-space-around">
+        <div class="d-flex justify-space-around mt-4">
           <v-btn @click="sStore.importSettings()" variant="tonal">
             <v-icon start>mdi-import</v-icon>
             Import

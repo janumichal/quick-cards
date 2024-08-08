@@ -46,6 +46,7 @@ const vuetify = createVuetify({
       hideDetails: true,
       inline: true,
       flat: true,
+      inset: true
     },
     VDivider: {
       thickness: 3,
