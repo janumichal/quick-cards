@@ -35,7 +35,7 @@
           </v-card-title>
         </v-card>
       </a>
-      </v-hover>
+    </v-hover>
   </div>
 </template>
 
