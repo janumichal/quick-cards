@@ -49,6 +49,7 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.isBackgroundImageEnabled = new_settings.isBackgroundImageEnabled
           settings.value.columnCount = new_settings.columnCount
           settings.value.isLimitColumnsEnabled = new_settings.isLimitColumnsEnabled
+          settings.value.isDragAndDropEnabled = new_settings.isDragAndDropEnabled
           settings.value.isAddCardButtonEnabled = new_settings.isAddCardButtonEnabled
           settings.value.cardNameEnabled = new_settings.cardNameEnabled
           settings.value.cardEditEnabled = new_settings.cardEditEnabled
@@ -61,8 +62,8 @@ export const useSettingsStore = defineStore("settings", () => {
 
   function exportSettings() {
     const settingsObject: iExport = {
-      cards: structuredClone(toRaw(cStore.cards)).map(e => toValue(e)),
-      ...(Object.fromEntries(Object.entries(settings).map((k, v) => [k, toValue(v)])))
+      cards: toRaw(cStore.cards).map(e => toValue(e)),
+      ...(toRaw(settings.value))
     }
     saveAs(new File([JSON.stringify(settingsObject)], "quick-cards-export.json", {
       type: "application/json"

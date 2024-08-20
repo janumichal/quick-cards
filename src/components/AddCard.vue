@@ -13,7 +13,8 @@
         <v-card-title class="py-0 px-4 mt-2 text-placeholder
             rounded-pill 
             text-center font-weight-bold text-subtitle-2 text-outline bg-black opacity-20 bg-animated"
-            :class="isHovering ? 'opacity-30' : ''">
+            :class="isHovering ? 'opacity-30' : ''"
+            v-if="sStore.settings.cardNameEnabled">
         </v-card-title>
       </v-card>
     </v-hover>
@@ -21,11 +22,13 @@
 </template>
 <script setup lang="ts">
 import { useCardsStore } from '../store/Cards';
-import { ref, toRaw } from "vue"
 import { useModalsStore } from '../store/Modals';
+import { useSettingsStore } from '../store/Settings';
+import { ref, toRaw } from "vue"
 
 const mStore = useModalsStore()
 const cStore = useCardsStore()
+const sStore = useSettingsStore()
 
 function addNewCard() {
   cStore.setEditedCard(ref(structuredClone(toRaw(cStore.getEmptyCard()))))
