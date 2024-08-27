@@ -2,8 +2,8 @@
 	<CardEdit />
   <Settings />
 
-	<div class="overflow">
-		<div class="home-wrapper">
+	<div class="h-screen w-100 overflow-auto d-flex">
+		<div class="w-100 d-flex h-fit-content align-center flex-column home-wrapper ma-auto">
 			<div class="cards-wrapper">
 					<Draggable
 						v-model="cStore.cards"
@@ -138,45 +138,28 @@ watch(
 
 
 </script>
-
 <style lang="scss" scoped>
-	.overflow{
-		height: 100vh;
-    width: 100%;
-		overflow: auto;
+  .cards-wrapper {
+    background-color: transparent;
+    min-height: max-content;
+    width: fit-content;
     display: flex;
-    align-items: center;
-		.home-wrapper{
-			height: fit-content;
-			width: 100%;
-			display: flex;
-			align-items: center;
-			flex-flow: column;
-			align-self: center;
-			.cards-wrapper {
-				background-color: transparent;
-				min-height: max-content;
-				width: fit-content;
-				display: flex;
-				justify-content: center;
-				box-sizing: border-box;
-		
-				.cards {
-					background-color: transparent;
-					width: fit-content;
-					max-width: 90vw;
-					height: fit-content;
-					gap: 10px;
-					display: grid;
-					grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-					justify-items: center;
-					margin-top: 20px;
-					margin-bottom: 20px;
-					.ghost {
-						opacity: 0.5;
-					}
-				}
-			}
-		}	
-	}
+    justify-content: center;
+    box-sizing: border-box;
+    .cards {
+      background-color: transparent;
+      width: fit-content;
+      max-width: 90vw;
+      height: fit-content;
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      justify-items: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      .ghost {
+        opacity: 0.5;
+      }
+    }
+  }
 </style>
