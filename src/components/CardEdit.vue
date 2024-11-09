@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import Card from "./Card.vue";
 
-import { ref, toRaw, Ref, watch } from "vue";
+import { ref, Ref, watch } from "vue";
 import { useCardsStore } from "../store/Cards"
 import { useModalsStore } from "../store/Modals";
 import { useFilesStore } from "../store/Files";
@@ -80,7 +80,7 @@ function deleteCard(): void {
 
 function saveCard(): void {
   if (cStore.isNewCard) {
-    cStore.cards.push(ref(structuredClone(toRaw(cStore.getEditedCard().value))))
+    cStore.saveEditedCard()
     mStore.isSnackbarAddedCardEnabled = true
   } else {
     cStore.applyEditedCardChanges()
