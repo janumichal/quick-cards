@@ -63,6 +63,7 @@ import { ref, Ref, watch } from "vue";
 import { useCardsStore } from "../store/Cards"
 import { useModalsStore } from "../store/Modals";
 import { useFilesStore } from "../store/Files";
+import { iFile } from "../Interfaces/FileInterface";
 
 const cStore = useCardsStore()
 const mStore = useModalsStore()
@@ -95,6 +96,20 @@ function closeEditModal() {
 }
 
 watch(
+    () => mStore.isCardEditEnabled,
+    () => {
+      if(mStore.isCardEditEnabled){
+        const image: iFile|null = cStore.getEditedCard().value.image
+        if(image !== null){
+          cardImage.value = new File([], image.name)
+        } else {
+          cardImage.value = null
+        }
+      }
+    }
+  )
+
+watch(
     () => cardImage.value,
     () => {
       if(cardImage.value !== null){
@@ -111,4 +126,4 @@ watch(
 <style lang="scss" scoped>
 @use "../scss" as *;
 
-</style>../store/Modals
+</style>

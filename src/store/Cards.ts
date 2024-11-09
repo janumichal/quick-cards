@@ -34,7 +34,7 @@ export const useCardsStore = defineStore("cards", () => {
 
   function saveEditedCard():void{
     cards.value.push(ref(structuredClone(toRaw(getEditedCard().value))))
-
+    dStore.saveCards()
   }
 
   function getEditedCard():Ref<iCard>{

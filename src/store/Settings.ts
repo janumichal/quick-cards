@@ -78,7 +78,6 @@ export const useSettingsStore = defineStore("settings", () => {
         settings.value = new_settings[0]
       })
     }
-
     setBackgroundColor(settings.value.backgroundColor)
     if (settings.value.isBackgroundImageEnabled) {
       setBackgroundImage(settings.value.backgroundImage)
