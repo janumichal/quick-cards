@@ -35,7 +35,7 @@
                 <v-switch v-model="sStore.settings.cardNameEnabled"></v-switch>
               </div>
               <div class="d-flex justify-space-between align-center">
-                <span>Card edit</span>
+                <span>Card edit button</span>
                 <v-switch v-model="sStore.settings.cardEditEnabled"></v-switch>
               </div>
               <div class="d-flex justify-space-between align-center">

@@ -15,7 +15,7 @@
               <v-text-field label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
               <v-file-input v-model="cardImage" label="Optional Background Image" chips persistent-clear></v-file-input>
             </div>
-            <v-divider 
+            <v-divider
               class="mx-5"
               vertical></v-divider>
             <div class="d-flex flex-column ga-5">
@@ -112,11 +112,13 @@ watch(
 watch(
     () => cardImage.value,
     () => {
-      if(cardImage.value !== null){
+      if (cardImage.value !== null){
         const image: File = cardImage.value
         fStore.convertFileToString(image).then(res => {
           cStore.getEditedCard().value.image = {name: image.name, data: res}
         })
+      } else {
+        cStore.getEditedCard().value.image = null
       }
     }
   )
