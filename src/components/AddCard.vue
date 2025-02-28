@@ -1,7 +1,7 @@
 <template>
   <div @click="addNewCard()">
     <v-hover v-slot="{ isHovering, props }">
-      <v-card width="200px" v-bind:="props"
+      <v-card :width="sStore.settings.cardSize" v-bind:="props"
         class="w-fit-content ma-auto d-flex flex-column align-center cursor-pointer"
         color="transparent" flat>
         <v-responsive :aspect-ratio="sStore.settings.cardAspectRatioWidth / sStore.settings.cardAspectRatioHeight" class="w-100 rounded-lg elevation-2">

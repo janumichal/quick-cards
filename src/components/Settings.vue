@@ -96,6 +96,36 @@
               
             </v-card-text>
           </v-card>
+
+          <v-card class="mb-5">
+            <v-card-title>
+              <v-icon start size="small">mdi-arrow-expand-all</v-icon>
+              Card Size
+            </v-card-title>
+            <v-card-text>
+              <div class="d-flex justify-space-between align-center">
+                <v-number-input
+                  label="Size in pixels"
+                  :min="1"
+                  v-model="sStore.settings.cardSize"
+                  class="mt-3"
+                  density="compact"
+                  variant="solo-filled"
+                  flat hide-details></v-number-input>
+              </div>
+              <div class="d-flex flex-column align-center">
+                <v-btn 
+                v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
+                class="mt-3 w-fit-content"
+                @click="sStore.restoreDefaultCardSize()"
+                color="primary">
+                <v-icon start>mdi-history</v-icon>
+                Default Size
+              </v-btn>
+              </div>
+              
+            </v-card-text>
+          </v-card>
           
           <v-card>
             <v-card-title>

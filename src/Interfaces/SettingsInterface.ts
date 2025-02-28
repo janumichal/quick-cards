@@ -12,4 +12,5 @@ export interface iSettings {
     cardEditEnabled: boolean
     cardAspectRatioWidth: number
     cardAspectRatioHeight: number
+    cardSize: number
 }

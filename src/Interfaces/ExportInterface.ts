@@ -13,4 +13,5 @@ export interface iExport {
     cardEditEnabled: boolean
     cardAspectRatioWidth: number
     cardAspectRatioHeight: number
+    cardSize: number
 }

@@ -6,7 +6,7 @@
         :class="cardProps.isPreview? 'cursor-default': ''"
         :href="cardProps.card.value.url">
         <v-card 
-          width="200px"
+          :width="sStore.settings.cardSize"
           v-bind:="props"
           class="w-fit-content ma-auto d-flex flex-column align-center rounded-0" 
           color="transparent"

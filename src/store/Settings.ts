@@ -21,7 +21,8 @@ export const useSettingsStore = defineStore("settings", () => {
       cardNameEnabled: true,
       cardEditEnabled: true,
       cardAspectRatioWidth: 16,
-      cardAspectRatioHeight: 9
+      cardAspectRatioHeight: 9,
+      cardSize: 200,
     }
 
   const settings: Ref<iSettings> = ref(defaultSettings)
@@ -57,6 +58,7 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.cardEditEnabled = new_settings.cardEditEnabled
           settings.value.cardAspectRatioWidth = new_settings.cardAspectRatioWidth
           settings.value.cardAspectRatioHeight = new_settings.cardAspectRatioHeight
+          settings.value.cardSize = new_settings.cardSize
           dStore.saveCards()
           dStore.saveSettings()
         }
@@ -109,7 +111,10 @@ export const useSettingsStore = defineStore("settings", () => {
   function restoreDefaultAspectRatio() {
     settings.value.cardAspectRatioHeight = defaultSettings.cardAspectRatioHeight;
     settings.value.cardAspectRatioWidth = defaultSettings.cardAspectRatioWidth;
+  }
 
+  function restoreDefaultCardSize() {
+    settings.value.cardSize = defaultSettings.cardSize
   }
 
   watch(
@@ -143,6 +148,6 @@ export const useSettingsStore = defineStore("settings", () => {
     init, 
     exportSettings, importSettings,
     setBackgroundImage, setBackgroundColor,
-    restoreDefaultColor, restoreDefaultAspectRatio
+    restoreDefaultColor, restoreDefaultAspectRatio, restoreDefaultCardSize
   }
 })
