@@ -3,9 +3,8 @@
     <v-navigation-drawer 
       v-model="mStore.isSettingsPanelOpen" 
       elevation="5" width="350" location="right" 
-      class="px-5"
       temporary tile>
-      <div class="d-flex flex-column justify-space-between h-100">
+      <div class="d-flex flex-column justify-space-between h-100 mx-5">
         <div>
           <v-btn 
             id="settings-btn"
