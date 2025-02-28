@@ -24,14 +24,14 @@ body {
 .v-switch{
   padding-left: 12px;
   padding-right: 12px;
-  .v-selection-control{
+  .v-selection-control {
     min-height: fit-content !important;
-    .v-switch__track{
+    .v-switch__track {
       height: 20px;
       min-width: 40px;
       opacity: .8;
     }
-    .v-switch__thumb{
+    .v-switch__thumb {
       height: 15px;
       width: 15px;
       transform: scale(1);
@@ -39,19 +39,19 @@ body {
   }
 }
 
-.w-fit-content{
+.w-fit-content {
   width: fit-content;
 }
 
-.h-fit-content{
+.h-fit-content {
   height: fit-content;
 }
 
-.min-h-fit-content{
+.min-h-fit-content {
   min-height: fit-content;
 }
 
-.text-outline{
+.text-outline {
   text-shadow:
       -1px -1px 0 #000,
       0 -1px 0 #000,
@@ -63,15 +63,35 @@ body {
       -1px 0 0 #000;
 }
 
-.bg-surface-opacity{
-  background-color: RGBA(46, 44, 52, 0.5);
+.bg-surface-opacity-70 {
+  background-color: RGBA(46, 44, 52, 0.7);
 }
 
-.bg-size-cover{
+.bg-surface-opacity-100 {
+  background-color: RGBA(46, 44, 52, 1);
+}
+
+.bg-size-cover {
   background-size: cover;
   background-position: center;
 }
 
-.z-index-1{
+.z-index-1 {
   z-index: 1;
+}
+
+.text-subtitle-2:empty {
+  min-height: 1.6em;
+}
+
+.opatity-animated {
+  transition: opacity .2s ease-out;
+}
+
+.bg-opacity-animated {
+  transition: background-color .2s ease-out;
+}
+
+.border-opacity-animated {
+  transition: border .2s ease-out;
 }

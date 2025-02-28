@@ -8,11 +8,12 @@
         <v-card 
           width="200px"
           v-bind:="props"
-          class="w-fit-content ma-auto d-flex flex-column align-center pa-2 rounded-lg bg-surface-opacity" 
-          :color="isHovering? '' : 'transparent'"
+          class="w-fit-content ma-auto d-flex flex-column align-center rounded-0" 
+          color="transparent"
           flat>
-          <v-responsive :aspect-ratio="16/9" class="w-100 rounded-lg elevation-2">
-            <div class="w-100 h-100 bg-size-cover pa-1" ref="card_background">
+          <v-responsive :aspect-ratio="sStore.settings.cardAspectRatioWidth / sStore.settings.cardAspectRatioHeight" 
+          class="w-100 elevation-2 rounded-lg">
+            <div class="w-100 h-100 bg-size-cover pa-2 border-radius-10" ref="card_background">
               <v-btn 
                 v-if="sStore.settings.cardEditEnabled"
                 @click="onEdit($event)"
@@ -25,12 +26,16 @@
                 <v-tooltip v-if="isHovering" activator="parent" location="bottom">Edit</v-tooltip>
               </v-btn>
             </div>
-            <div class="w-100 h-100 rounded-lg border-lg border-opacity-25 position-absolute top-0"></div>
+            <div 
+            class="w-100 h-100 border-lg rounded-lg position-absolute top-0 border-surface border-opacity-animated top-div"
+            :class="isHovering ? 'border-opacity-75' : 'border-opacity-0'">
+            </div>
           </v-responsive>
           <v-card-title v-if="sStore.settings.cardNameEnabled"
-            class="py-0 px-4 mt-1 w-fit-content
-            rounded-pill 
-            text-center font-weight-bold text-subtitle-2 text-outline">
+            class="py-0 px-4 mt-2 w-fit-content max-w-100
+            rounded-pill
+            text-center font-weight-bold text-subtitle-2 text-outline bg-opacity-animated"
+            :class="cardProps.card.value.name ? (isHovering ? 'bg-surface-opacity-100' : 'bg-surface-opacity-70') : ''">
             {{ cardProps.card.value.name }}
           </v-card-title>
         </v-card>
@@ -85,8 +90,8 @@ async function onEdit(event: Event): Promise<void> {
 }
 
 onMounted(() => {
-  setImage(cardProps.card.value.image)
-  setColor(cardProps.card.value.color)
+    setImage(cardProps.card.value.image)
+    setColor(cardProps.card.value.color)
 })
 
 watchDeep(
@@ -101,4 +106,10 @@ watchDeep(
 
 <style lang="scss" scoped>
 @use "../scss" as *;
+.border-radius-10 {
+  border-radius: 10px;
+}
+.max-w-100 {
+  max-width: 100%;
+}
 </style>

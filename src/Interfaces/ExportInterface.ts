@@ -11,4 +11,6 @@ export interface iExport {
     isAddCardButtonEnabled: boolean
     cardNameEnabled: boolean
     cardEditEnabled: boolean
+    cardAspectRatioWidth: number
+    cardAspectRatioHeight: number
 }

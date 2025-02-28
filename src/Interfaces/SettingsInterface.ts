@@ -10,4 +10,6 @@ export interface iSettings {
     isAddCardButtonEnabled: boolean
     cardNameEnabled: boolean
     cardEditEnabled: boolean
+    cardAspectRatioWidth: number
+    cardAspectRatioHeight: number
 }

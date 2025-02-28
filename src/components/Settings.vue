@@ -3,20 +3,20 @@
     <v-navigation-drawer 
       v-model="mStore.isSettingsPanelOpen" 
       elevation="5" width="350" location="right" 
-      class="px-5 py-3"
+      class="px-5"
       temporary tile>
       <div class="d-flex flex-column justify-space-between h-100">
         <div>
           <v-btn 
             id="settings-btn"
-            class="position-absolute" 
+            class="position-absolute mt-3" 
             style="left: -50px;" 
             @click="mStore.isSettingsPanelOpen = !mStore.isSettingsPanelOpen" 
             :icon="mStore.isSettingsPanelOpen ? 'mdi-close' : 'mdi-cog' "
             density="comfortable" 
             elevation="1"></v-btn>
           <v-tooltip v-if="!mStore.isSettingsPanelOpen" activator="#settings-btn" location="start">Settings</v-tooltip>
-          <v-card class="mb-5">
+          <v-card class="mb-5 mt-3">
             <v-card-title>
               <v-icon start size="small">mdi-cards</v-icon>
               Cards
@@ -49,11 +49,52 @@
                   :min="1"
                   :disabled="!sStore.settings.isLimitColumnsEnabled"
                   v-model="sStore.settings.columnCount"
-                  class="mt-1"
+                  class="mt-1 mb-3"
                   density="compact"
                   variant="solo-filled"
                   flat hide-details></v-number-input>
               </div>
+            </v-card-text>
+          </v-card>
+
+          <v-card class="mb-5">
+            <v-card-title>
+              <v-icon start size="small">mdi-aspect-ratio</v-icon>
+              Card Aspect Ratio
+            </v-card-title>
+            <v-card-text>
+              <div class="d-flex justify-space-between align-center">
+                <v-number-input
+                  label="Width"
+                  :min="1"
+                  v-model="sStore.settings.cardAspectRatioWidth"
+                  class="mt-3"
+                  density="compact"
+                  variant="solo-filled"
+                  flat hide-details></v-number-input>
+              </div>
+              <div class="d-flex justify-space-between align-center">
+                <v-number-input
+                  label="Height"
+                  :min="1"
+                  v-model="sStore.settings.cardAspectRatioHeight"
+                  class="mt-3"
+                  density="compact"
+                  variant="solo-filled"
+                  flat hide-details></v-number-input>
+              </div>
+              <div class="d-flex flex-column align-center">
+                <v-btn 
+                v-if="sStore.settings.cardAspectRatioHeight != sStore.defaultSettings.cardAspectRatioHeight ||
+                sStore.settings.cardAspectRatioWidth != sStore.defaultSettings.cardAspectRatioWidth"
+                class="mt-3 w-fit-content"
+                @click="sStore.restoreDefaultAspectRatio()"
+                color="primary">
+                <v-icon start>mdi-history</v-icon>
+                Default Aspect Ratio
+              </v-btn>
+              </div>
+              
             </v-card-text>
           </v-card>
           
@@ -105,7 +146,7 @@
             </v-card-text>
           </v-card>
         </div>
-        <div class="d-flex justify-space-around mt-4">
+        <div class="d-flex justify-space-around mt-4 pb-3">
           <v-btn @click="sStore.importSettings()" variant="tonal">
             <v-icon start>mdi-import</v-icon>
             Import

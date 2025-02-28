@@ -19,7 +19,9 @@ export const useSettingsStore = defineStore("settings", () => {
       backgroundColor: "#464352",
       backgroundImage: null,
       cardNameEnabled: true,
-      cardEditEnabled: true
+      cardEditEnabled: true,
+      cardAspectRatioWidth: 16,
+      cardAspectRatioHeight: 9
     }
 
   const settings: Ref<iSettings> = ref(defaultSettings)
@@ -53,6 +55,8 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.isAddCardButtonEnabled = new_settings.isAddCardButtonEnabled
           settings.value.cardNameEnabled = new_settings.cardNameEnabled
           settings.value.cardEditEnabled = new_settings.cardEditEnabled
+          settings.value.cardAspectRatioWidth = new_settings.cardAspectRatioWidth
+          settings.value.cardAspectRatioHeight = new_settings.cardAspectRatioHeight
           dStore.saveCards()
           dStore.saveSettings()
         }
@@ -102,6 +106,12 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.backgroundColor = defaultSettings.backgroundColor;
   }
 
+  function restoreDefaultAspectRatio() {
+    settings.value.cardAspectRatioHeight = defaultSettings.cardAspectRatioHeight;
+    settings.value.cardAspectRatioWidth = defaultSettings.cardAspectRatioWidth;
+
+  }
+
   watch(
     () => settings.value,
     () => {
@@ -133,6 +143,6 @@ export const useSettingsStore = defineStore("settings", () => {
     init, 
     exportSettings, importSettings,
     setBackgroundImage, setBackgroundColor,
-    restoreDefaultColor
+    restoreDefaultColor, restoreDefaultAspectRatio
   }
 })

@@ -109,7 +109,7 @@ function setWrapperWidth(columns?: number):void{
 			cardsElement.value.style.width = `fit-content`
 		}else{
 			var width:number = 200
-			var gap:number = 10
+			var gap:number = 20
 			if(columns != undefined){
 				cardsElement.value.style.width = `min(${width*columns + gap*(columns-1)}px,100%`
 			}
@@ -151,7 +151,7 @@ watch(
       width: fit-content;
       max-width: 90vw;
       height: fit-content;
-      gap: 10px;
+      gap: 20px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       justify-items: center;

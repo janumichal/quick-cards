@@ -113,6 +113,9 @@ watch(
     () => cardImage.value,
     () => {
       if (cardImage.value !== null){
+        if (cardImage.value.size == 0) {
+          return;
+        }
         const image: File = cardImage.value
         fStore.convertFileToString(image).then(res => {
           cStore.getEditedCard().value.image = {name: image.name, data: res}
