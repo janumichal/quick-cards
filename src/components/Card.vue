@@ -23,7 +23,6 @@
                 density="comfortable"
                 class="d-flex ml-auto opacity-0 z-index-1" :class="isHovering? 'opacity-80':''">
                 <v-icon size="20">mdi-pencil</v-icon>
-                <v-tooltip v-if="isHovering" activator="parent" location="bottom">Edit</v-tooltip>
               </v-btn>
             </div>
             <div 

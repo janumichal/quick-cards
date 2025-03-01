@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, Transition } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import 'vuetify/styles'
@@ -78,6 +78,8 @@ const vuetify = createVuetify({
       mode: "hex",
       dotSize: 20,
       modes: ['hex']
+    },
+    VBtn: {
     }
   }
 })

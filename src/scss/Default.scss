@@ -22,8 +22,6 @@ body {
 }
 
 .v-switch{
-  padding-left: 12px;
-  padding-right: 12px;
   .v-selection-control {
     min-height: fit-content !important;
     .v-switch__track {
@@ -94,4 +92,8 @@ body {
 
 .border-opacity-animated {
   transition: border .2s ease-out;
+}
+
+.v-btn .v-btn__overlay {
+  transition: all .2s ease-out !important;
 }

@@ -7,20 +7,18 @@
       <div class="d-flex flex-column justify-space-between h-100 mx-5">
         <div>
           <v-btn 
-            id="settings-btn"
             class="position-absolute mt-3" 
             style="left: -50px;" 
             @click="mStore.isSettingsPanelOpen = !mStore.isSettingsPanelOpen" 
             :icon="mStore.isSettingsPanelOpen ? 'mdi-close' : 'mdi-cog' "
             density="comfortable" 
             elevation="1"></v-btn>
-          <v-tooltip v-if="!mStore.isSettingsPanelOpen" activator="#settings-btn" location="start">Settings</v-tooltip>
           <v-card class="mb-5 mt-3">
             <v-card-title>
               <v-icon start size="small">mdi-cards</v-icon>
               Cards
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="pt-2">
               <div class="d-flex justify-space-between align-center">
                 <span>Add card button</span>
                 <v-switch v-model="sStore.settings.isAddCardButtonEnabled"></v-switch>
@@ -37,31 +35,16 @@
                 <span>Card edit button</span>
                 <v-switch v-model="sStore.settings.cardEditEnabled"></v-switch>
               </div>
-              <div class="d-flex justify-space-between align-center">
-                <span>Limit columns</span>
-                <v-switch v-model="sStore.settings.isLimitColumnsEnabled"></v-switch>
-              </div>
-
-              <div class="d-flex justify-space-between align-center">
-                <v-number-input
-                  label="Number of columns"
-                  :min="1"
-                  :disabled="!sStore.settings.isLimitColumnsEnabled"
-                  v-model="sStore.settings.columnCount"
-                  class="mt-1 mb-3"
-                  density="compact"
-                  variant="solo-filled"
-                  flat hide-details></v-number-input>
-              </div>
             </v-card-text>
           </v-card>
 
           <v-card class="mb-5">
             <v-card-title>
               <v-icon start size="small">mdi-aspect-ratio</v-icon>
-              Card Aspect Ratio
+              Layout
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="pt-2">
+              <span>Card Aspect ratio</span>
               <div class="d-flex justify-space-between align-center">
                 <v-number-input
                   label="Width"
@@ -82,27 +65,21 @@
                   variant="solo-filled"
                   flat hide-details></v-number-input>
               </div>
+              
+              <v-divider class="mt-3 mb-2"></v-divider>
+
+              <span>Card Size</span>
               <div class="d-flex flex-column align-center">
                 <v-btn 
-                v-if="sStore.settings.cardAspectRatioHeight != sStore.defaultSettings.cardAspectRatioHeight ||
-                sStore.settings.cardAspectRatioWidth != sStore.defaultSettings.cardAspectRatioWidth"
-                class="mt-3 w-fit-content"
-                @click="sStore.restoreDefaultAspectRatio()"
-                color="primary">
+                  v-if="sStore.settings.cardAspectRatioHeight != sStore.defaultSettings.cardAspectRatioHeight ||
+                  sStore.settings.cardAspectRatioWidth != sStore.defaultSettings.cardAspectRatioWidth"
+                  class="mt-3 w-fit-content"
+                  @click="sStore.restoreDefaultAspectRatio()"
+                  color="primary">
                 <v-icon start>mdi-history</v-icon>
                 Default Aspect Ratio
               </v-btn>
               </div>
-              
-            </v-card-text>
-          </v-card>
-
-          <v-card class="mb-5">
-            <v-card-title>
-              <v-icon start size="small">mdi-arrow-expand-all</v-icon>
-              Card Size
-            </v-card-title>
-            <v-card-text>
               <div class="d-flex justify-space-between align-center">
                 <v-number-input
                   label="Size in pixels"
@@ -115,18 +92,36 @@
               </div>
               <div class="d-flex flex-column align-center">
                 <v-btn 
-                v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
-                class="mt-3 w-fit-content"
-                @click="sStore.restoreDefaultCardSize()"
-                color="primary">
-                <v-icon start>mdi-history</v-icon>
-                Default Size
-              </v-btn>
+                  v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
+                  class="mt-3 w-fit-content"
+                  @click="sStore.restoreDefaultCardSize()"
+                  color="primary">
+                  <v-icon start>mdi-history</v-icon>
+                  Default Size
+                </v-btn>
+              </div>
+
+              <v-divider class="mt-3"></v-divider>
+
+              <div class="d-flex justify-space-between align-center">
+                <span>Limit columns</span>
+                <v-switch v-model="sStore.settings.isLimitColumnsEnabled"></v-switch>
+              </div>
+              <div class="d-flex justify-space-between align-center">
+                <v-number-input
+                  label="Number of columns"
+                  :min="1"
+                  :disabled="!sStore.settings.isLimitColumnsEnabled"
+                  v-model="sStore.settings.columnCount"
+                  class="mt-1"
+                  density="compact"
+                  variant="solo-filled"
+                  flat hide-details></v-number-input>
               </div>
               
             </v-card-text>
           </v-card>
-          
+
           <v-card>
             <v-card-title>
               <v-icon start size="small">mdi-wall</v-icon>

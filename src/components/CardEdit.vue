@@ -23,8 +23,9 @@
             </div>
           </div>
           <v-card-actions class="pa-0 mt-3 min-h-fit-content">
-            <v-btn color="warning" @click="deleteConfirmationEnabled=true" v-if="!cStore.isNewCard">Delete</v-btn>
-            <v-btn class="ml-auto" color="success" @click="saveCard()">{{ cStore.isNewCard ? "Add Card" : "Save"}}</v-btn>
+            <v-btn variant="outlined" color="warning" @click="deleteCard()" v-if="!cStore.isNewCard">Delete</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn variant="outlined" color="success" @click="saveCard()">{{ cStore.isNewCard ? "Add Card" : "Save"}}</v-btn>
           </v-card-actions>
         </v-card-text>
       </v-card>
@@ -36,20 +37,6 @@
         <v-card-text class="pa-5">
           <Card :is-preview="true" :card="cStore.getEditedCard()"></Card>
         </v-card-text>
-      </v-card>
-    </div>
-  </v-dialog>
-
-  <v-dialog v-model="deleteConfirmationEnabled">
-    <div class="d-flex flex-wrap w-fit-content ga-7 ma-auto align-center justify-center">
-      <v-card class="w-fit-content">
-        <v-card-text class="pa-5">
-          Are you sure you want to delete this card?
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="warning" @click="deleteCard()" v-if="!cStore.isNewCard">Delete</v-btn>
-          <v-btn class="ml-auto" @click="deleteConfirmationEnabled=false">Cancel</v-btn>
-        </v-card-actions>
       </v-card>
     </div>
   </v-dialog>
@@ -70,10 +57,8 @@ const mStore = useModalsStore()
 const fStore = useFilesStore()
 
 const cardImage: Ref<File|null> = ref(null)
-const deleteConfirmationEnabled : Ref<boolean> = ref(false)
 
 function deleteCard(): void {
-  deleteConfirmationEnabled.value = false
   cStore.deleteEditedCard()
   closeEditModal()
   mStore.isSnackbarDeletedCardEnabled = true
