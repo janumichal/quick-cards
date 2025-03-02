@@ -35,6 +35,10 @@
                 <span>Card edit button</span>
                 <v-switch v-model="sStore.settings.cardEditEnabled"></v-switch>
               </div>
+              <div class="d-flex justify-space-between align-center">
+                <span>Spacer on hover effect</span>
+                <v-switch v-model="sStore.settings.spacerOnHoverEffectEnabled"></v-switch>
+              </div>
             </v-card-text>
           </v-card>
 

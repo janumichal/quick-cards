@@ -2,7 +2,7 @@
   <div>
     <v-hover v-slot="{ isHovering, props }" :disabled="cardProps.isPreview">
       <a class="text-decoration-none text-white"
-        @click="!isHovering ? $event.preventDefault(): ''"
+        @click="(!isHovering || cardProps.card.value.isSpacer) ? $event.preventDefault(): ''"
         :class="(cardProps.isPreview || cardProps.card.value.isSpacer)? 'cursor-default': ''"
         :href="cardProps.card.value.url">
         <v-card 
@@ -28,7 +28,7 @@
             </div>
             <div 
             class="w-100 h-100 border-lg rounded-lg position-absolute top-0 border-surface border-opacity-animated top-div"
-            :class="isHovering ? 'border-opacity-75' : 'border-opacity-0'">
+            :class="(isHovering && sStore.settings.spacerOnHoverEffectEnabled) ? 'border-opacity-75' : 'border-opacity-0'">
             </div>
           </v-responsive>
           <v-card-title v-if="sStore.settings.cardNameEnabled"

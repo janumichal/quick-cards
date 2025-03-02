@@ -23,6 +23,7 @@ export const useSettingsStore = defineStore("settings", () => {
       cardAspectRatioWidth: 16,
       cardAspectRatioHeight: 9,
       cardSize: 200,
+      spacerOnHoverEffectEnabled: true
     }
 
   const settings: Ref<iSettings> = ref(defaultSettings)
@@ -59,6 +60,7 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.cardAspectRatioWidth = new_settings.cardAspectRatioWidth
           settings.value.cardAspectRatioHeight = new_settings.cardAspectRatioHeight
           settings.value.cardSize = new_settings.cardSize
+          settings.value.spacerOnHoverEffectEnabled = new_settings.spacerOnHoverEffectEnabled
           dStore.saveCards()
           dStore.saveSettings()
         }
