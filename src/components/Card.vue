@@ -28,7 +28,7 @@
             </div>
             <div 
             class="w-100 h-100 border-lg rounded-lg position-absolute top-0 border-surface border-opacity-animated top-div"
-            :class="(isHovering && sStore.settings.spacerOnHoverEffectEnabled) ? 'border-opacity-75' : 'border-opacity-0'">
+            :class="(isHovering && (!cardProps.card.value.isSpacer || sStore.settings.spacerOnHoverEffectEnabled)) ? 'border-opacity-75' : 'border-opacity-0'">
             </div>
           </v-responsive>
           <v-card-title v-if="sStore.settings.cardNameEnabled"
