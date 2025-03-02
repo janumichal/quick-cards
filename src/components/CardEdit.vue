@@ -9,23 +9,41 @@
           <v-btn class="ml-auto" icon="mdi-close" density="comfortable" elevation="1" @click="closeEditModal()"></v-btn>
         </v-card-title>
         <v-card-text class="pa-5 ">
+
           <div class="d-flex flex-row align-center">
             <div class="d-flex flex-column ga-5 h-fit-content">
-              <v-text-field label="Name" v-model="cStore.getEditedCard().value.name"></v-text-field>
-              <v-text-field label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
-              <v-file-input v-model="cardImage" label="Optional Background Image" chips persistent-clear></v-file-input>
+              <v-btn-toggle
+                class="w-100 mt-3"
+                v-model="cStore.getEditedCard().value.isSpacer">
+                <v-btn 
+                  width="50%"
+                  :value="false">
+                  <v-icon start>mdi-card</v-icon>
+                  <span>Card</span>
+                </v-btn>
+                <v-btn 
+                  width="50%"
+                  :value="true">
+                  <v-icon start>mdi-arrow-split-vertical</v-icon>
+                  <span>Spacer</span>
+                </v-btn>
+              </v-btn-toggle>
+
+              <v-text-field :disabled="cStore.getEditedCard().value.isSpacer" label="Name" v-model="cStore.getEditedCard().value.name"></v-text-field>
+              <v-text-field :disabled="cStore.getEditedCard().value.isSpacer" label="URL" v-model="cStore.getEditedCard().value.url"></v-text-field>
+              <v-file-input :disabled="cStore.getEditedCard().value.isSpacer" v-model="cardImage" label="Optional Background Image" chips persistent-clear></v-file-input>
             </div>
             <v-divider
               class="mx-5"
               vertical></v-divider>
             <div class="d-flex flex-column ga-5">
-              <v-color-picker v-model="cStore.getEditedCard().value.color"></v-color-picker>
+              <v-color-picker :disabled="cStore.getEditedCard().value.isSpacer" v-model="cStore.getEditedCard().value.color"></v-color-picker>
             </div>
           </div>
           <v-card-actions class="pa-0 mt-3 min-h-fit-content">
             <v-btn variant="outlined" color="warning" @click="deleteCard()" v-if="!cStore.isNewCard">Delete</v-btn>
             <v-spacer></v-spacer>
-            <v-btn variant="outlined" color="success" @click="saveCard()">{{ cStore.isNewCard ? "Add Card" : "Save"}}</v-btn>
+            <v-btn variant="outlined" color="success" @click="saveCard()">{{ cStore.isNewCard ? (cStore.getEditedCard().value.isSpacer? "Add Spacer" : "Add Card") : "Save"}}</v-btn>
           </v-card-actions>
         </v-card-text>
       </v-card>

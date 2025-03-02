@@ -16,7 +16,7 @@
           <v-card class="mb-5 mt-3">
             <v-card-title>
               <v-icon start size="small">mdi-cards</v-icon>
-              Cards
+              General
             </v-card-title>
             <v-card-text class="pt-2">
               <div class="d-flex justify-space-between align-center">
@@ -65,21 +65,22 @@
                   variant="solo-filled"
                   flat hide-details></v-number-input>
               </div>
-              
-              <v-divider class="mt-3 mb-2"></v-divider>
-
-              <span>Card Size</span>
               <div class="d-flex flex-column align-center">
                 <v-btn 
                   v-if="sStore.settings.cardAspectRatioHeight != sStore.defaultSettings.cardAspectRatioHeight ||
                   sStore.settings.cardAspectRatioWidth != sStore.defaultSettings.cardAspectRatioWidth"
                   class="mt-3 w-fit-content"
                   @click="sStore.restoreDefaultAspectRatio()"
-                  color="primary">
-                <v-icon start>mdi-history</v-icon>
-                Default Aspect Ratio
+                  color="primary"
+                  round
+                  density="compact"
+                  icon="mdi-history">
               </v-btn>
               </div>
+              
+              <v-divider class="mt-3 mb-2"></v-divider>
+
+              <span>Card Size</span>
               <div class="d-flex justify-space-between align-center">
                 <v-number-input
                   label="Size in pixels"
@@ -95,9 +96,10 @@
                   v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
                   class="mt-3 w-fit-content"
                   @click="sStore.restoreDefaultCardSize()"
-                  color="primary">
-                  <v-icon start>mdi-history</v-icon>
-                  Default Size
+                  color="primary"
+                  round
+                  density="compact"
+                  icon="mdi-history">
                 </v-btn>
               </div>
 
@@ -117,6 +119,31 @@
                   density="compact"
                   variant="solo-filled"
                   flat hide-details></v-number-input>
+              </div>
+
+              <v-divider class="mt-3 mb-2"></v-divider>
+
+              <span>Card spacing</span>
+              <div class="d-flex justify-space-between align-center">
+                <v-number-input
+                  label="Gap size in pixels"
+                  :min="1"
+                  v-model="sStore.settings.cardSize"
+                  class="mt-3"
+                  density="compact"
+                  variant="solo-filled"
+                  flat hide-details></v-number-input>
+              </div>
+              <div class="d-flex flex-column align-center">
+                <v-btn 
+                  v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
+                  class="mt-3 w-fit-content"
+                  @click="sStore.restoreDefaultCardSize()"
+                  color="primary"
+                  round
+                  density="compact"
+                  icon="mdi-history">
+                </v-btn>
               </div>
               
             </v-card-text>
@@ -155,9 +182,10 @@
                       v-if="sStore.settings.backgroundColor != sStore.defaultSettings.backgroundColor"
                       class="mt-3"
                       @click="sStore.restoreDefaultColor()"
-                      color="primary">
-                      <v-icon start>mdi-history</v-icon>
-                      Default color
+                      color="primary"
+                      round
+                      density="compact"
+                      icon="mdi-history">
                     </v-btn>
                 </div>
                 <div v-if="sStore.settings.isBackgroundImageEnabled">

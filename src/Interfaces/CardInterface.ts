@@ -5,4 +5,5 @@ export interface iCard {
   name: string
   color: string
   image: iFile|null
+  isSpacer: boolean
 }
