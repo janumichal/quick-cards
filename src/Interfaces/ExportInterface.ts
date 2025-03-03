@@ -14,5 +14,6 @@ export interface iExport {
     cardAspectRatioWidth: number
     cardAspectRatioHeight: number
     cardSize: number
+    gap: number
     spacerOnHoverEffectEnabled: boolean
 }

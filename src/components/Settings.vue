@@ -132,7 +132,7 @@
                 <v-number-input
                   label="Gap size in pixels"
                   :min="1"
-                  v-model="sStore.settings.cardSize"
+                  v-model="sStore.settings.gap"
                   class="mt-3"
                   density="compact"
                   variant="solo-filled"
@@ -140,9 +140,9 @@
               </div>
               <div class="d-flex flex-column align-center">
                 <v-btn 
-                  v-if="sStore.settings.cardSize != sStore.defaultSettings.cardSize"
+                  v-if="sStore.settings.gap != sStore.defaultSettings.gap"
                   class="mt-3 w-fit-content"
-                  @click="sStore.restoreDefaultCardSize()"
+                  @click="sStore.restoreDefaultGap()"
                   color="primary"
                   round
                   density="compact"

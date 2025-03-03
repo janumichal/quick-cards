@@ -9,7 +9,7 @@
 						v-model="cStore.cards"
 						tag="div"
 						class="cards"
-            :style="`--column-width: ${sStore.settings.cardSize}px;`"
+            :style="`--column-width: ${sStore.settings.cardSize}px; --cardGap: ${sStore.settings.gap}px`"
 						id="cards-grid"
 						item-key="(item) => item.value"
 						:animation="200"
@@ -110,7 +110,7 @@ function setWrapperWidth(columns?: number):void{
 			cardsElement.value.style.width = `fit-content`
 		}else{
 			var width:number = sStore.settings.cardSize
-			var gap:number = 20
+			var gap:number = sStore.settings.gap
 			if(columns != undefined){
 				cardsElement.value.style.width = `min(${width*columns + gap*(columns-1)}px,100%`
 			}
@@ -150,7 +150,7 @@ watch(
       width: fit-content;
       max-width: 90vw;
       height: fit-content;
-      gap: 20px;
+      gap: var(--cardGap);
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(var(--column-width), 1fr));
       justify-items: center;

@@ -1,4 +1,4 @@
-import { createApp, Transition } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 import 'vuetify/styles'

@@ -13,5 +13,6 @@ export interface iSettings {
     cardAspectRatioWidth: number
     cardAspectRatioHeight: number
     cardSize: number
+    gap: number
     spacerOnHoverEffectEnabled: boolean
 }

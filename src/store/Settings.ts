@@ -23,6 +23,7 @@ export const useSettingsStore = defineStore("settings", () => {
       cardAspectRatioWidth: 16,
       cardAspectRatioHeight: 9,
       cardSize: 200,
+      gap: 20,
       spacerOnHoverEffectEnabled: true
     }
 
@@ -50,6 +51,7 @@ export const useSettingsStore = defineStore("settings", () => {
           cStore.cards = new_settings.cards.map(e => ref(e))
           settings.value.backgroundColor = new_settings.backgroundColor
           settings.value.backgroundImage = new_settings.backgroundImage
+          setBackgroundImage(settings.value.backgroundImage)
           settings.value.isBackgroundImageEnabled = new_settings.isBackgroundImageEnabled
           settings.value.columnCount = new_settings.columnCount
           settings.value.isLimitColumnsEnabled = new_settings.isLimitColumnsEnabled
@@ -60,6 +62,7 @@ export const useSettingsStore = defineStore("settings", () => {
           settings.value.cardAspectRatioWidth = new_settings.cardAspectRatioWidth
           settings.value.cardAspectRatioHeight = new_settings.cardAspectRatioHeight
           settings.value.cardSize = new_settings.cardSize
+          settings.value.gap = new_settings.gap
           settings.value.spacerOnHoverEffectEnabled = new_settings.spacerOnHoverEffectEnabled
           dStore.saveCards()
           dStore.saveSettings()
@@ -119,6 +122,10 @@ export const useSettingsStore = defineStore("settings", () => {
     settings.value.cardSize = defaultSettings.cardSize
   }
 
+  function restoreDefaultGap() {
+    settings.value.gap = defaultSettings.gap
+  }
+
   watch(
     () => settings.value,
     () => {
@@ -150,6 +157,6 @@ export const useSettingsStore = defineStore("settings", () => {
     init, 
     exportSettings, importSettings,
     setBackgroundImage, setBackgroundColor,
-    restoreDefaultColor, restoreDefaultAspectRatio, restoreDefaultCardSize
+    restoreDefaultColor, restoreDefaultAspectRatio, restoreDefaultCardSize, restoreDefaultGap
   }
 })
